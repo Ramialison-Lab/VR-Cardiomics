@@ -39,7 +39,7 @@ public class InputControl : MonoBehaviour
         {
             foreach (SliceBehavior slice in slices)
             {
-                slice.Reset(); 
+                slice.Reset();
             }
         }
     }
