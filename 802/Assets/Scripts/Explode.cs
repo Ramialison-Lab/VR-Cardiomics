@@ -64,13 +64,12 @@ public class Explode : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-
             Vector3 next;
             Vector3 current;
 
             if (exploded == 1)
             {
-                next = new Vector3(startPositions[i].x + (-150.0F + (75 * i)), startPositions[i].y + 0.0F, startPositions[i].z + 0.0F);
+                next = new Vector3(startPositions[i].x + (-1F*i), startPositions[i].y + 0.0F, startPositions[i].z + 0.0F);
             }
             else
             {
