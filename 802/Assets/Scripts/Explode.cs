@@ -17,6 +17,7 @@ public class Explode : MonoBehaviour
 
     public Button expandBtn;
     public Button resetBtn;
+    public GameObject player;
 
     Vector3[] startPositions = new Vector3[5];
     // Position of slices at load
@@ -33,7 +34,7 @@ public class Explode : MonoBehaviour
     // Record the start position for each of the slices
     void Start()
     {
-		
+        player = GameObject.Find("LocalAvatar");
         for (int i = 0; i < 5; i++)
         {
             startPositions[i] = GameObject.Find(slices[i]).transform.position;
@@ -69,7 +70,8 @@ public class Explode : MonoBehaviour
 
             if (exploded == 1)
             {
-                next = new Vector3(startPositions[i].x + (-1F*i), startPositions[i].y + 0.0F, startPositions[i].z + 0.0F);
+                next = new Vector3(startPositions[i].x + (-1F * i)+2F, startPositions[i].y , startPositions[i].z + 0.0F);
+
             }
             else
             {
