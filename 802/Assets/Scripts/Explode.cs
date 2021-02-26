@@ -67,10 +67,11 @@ public class Explode : MonoBehaviour
         {
             Vector3 next;
             Vector3 current;
-
             if (exploded == 1)
             {
-                next = new Vector3(startPositions[i].x + (-1F * i)+2F, startPositions[i].y , startPositions[i].z + 0.0F);
+
+
+                next = new Vector3(startPositions[i].x + (-1F * i)+2F, startPositions[i].y, startPositions[i].z + 0.0F);
 
             }
             else
@@ -105,6 +106,7 @@ public class Explode : MonoBehaviour
         float t = 0f;
         while (t < 1)
         {
+
             t += Time.deltaTime / duration;
             GameObject.Find(slices[i]).transform.position = Vector3.Lerp(current, next, t);
             yield return null;

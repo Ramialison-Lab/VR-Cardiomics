@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputControl : MonoBehaviour
 {
     private SliceBehavior[] slices;
+    private HandleBehavior handle;
     public GameObject rightHand;
     public GameObject leftHand;
     private bool currentlyResize = false;
@@ -18,6 +19,8 @@ public class InputControl : MonoBehaviour
     void Start()
     {
         slices = Object.FindObjectsOfType<SliceBehavior>();
+        handle = Object.FindObjectOfType<HandleBehavior>();
+        
     }
 
     void Update()
@@ -31,17 +34,22 @@ public class InputControl : MonoBehaviour
                 {
                     resizeModel(GameObject.Find(slice.name));
                 }
+
             }
         }
 
         // HotKey reset method
-        if (OVRInput.Get(OVRInput.Button.One))
+        if (OVRInput.Get(OVRInput.Button.Two))
         {
             foreach (SliceBehavior slice in slices)
             {
                 slice.Reset();
             }
+
+            handle.Reset();
         }
+
+
     }
     private void resizeModel(GameObject prominentObject)
     {
@@ -64,4 +72,5 @@ public class InputControl : MonoBehaviour
 
         }
     }
+
 }

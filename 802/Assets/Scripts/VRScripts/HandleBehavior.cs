@@ -1,45 +1,52 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class SliceBehavior : MonoBehaviour
+public class HandleBehavior : MonoBehaviour
 {
+    public GameObject heart;
     private Vector3 spawnPos;
     private Quaternion spawnRot;
     public Vector3 original;
-    public bool snapedIn =true;
+    private Vector3 movement;
+
+    public Transform tofollow;
+    private Vector3 offset;
 
     void Start()
     {
-        //Store default position of GameObject
+        heart = GameObject.Find("Heart");
         spawnPos = this.gameObject.transform.position;
         spawnRot = this.gameObject.transform.rotation;
-        original = new Vector3(this.gameObject.transform.localScale.x, this.gameObject.transform.localScale.y, this.gameObject.transform.localScale.z);
+
+        offset = this.gameObject.transform.position - heart.transform.position;
     }
 
+    // Update is called once per frame
     void Update()
     {
-        //Control of kinematic if GameObject is not currently grabbed
+
+        original = new Vector3(this.gameObject.transform.localScale.x, this.gameObject.transform.localScale.y, this.gameObject.transform.localScale.z);
+
         _ = this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed ? this.gameObject.GetComponent<Rigidbody>().isKinematic = false : this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-        if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed) snapedIn = false;
+        if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
+        {
+            //  movement = this.gameObject.transform.position - original;
+
+            heart.transform.position = Vector3.Lerp(heart.transform.position, this.gameObject.transform.position - offset, 0.2f);
+            heart.transform.rotation = this.gameObject.transform.rotation;
+
+        }
     }
 
     public void Reset()
     {
-        // Reset position, rotation and size of each slice
         this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
         this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
         this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
 
         this.gameObject.transform.rotation = spawnRot;
         this.gameObject.transform.localScale = original;
-        snapedIn = true;
     }
-
-
-    //Returns if selected object is currently grabbed
-    public bool isGrabbed()
-    {
-        return this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
-    }
-
 }
