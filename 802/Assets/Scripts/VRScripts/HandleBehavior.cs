@@ -6,20 +6,18 @@ public class HandleBehavior : MonoBehaviour
 {
     public GameObject heart;
     private Vector3 spawnPos;
+    private Vector3[] savePos;
     private Quaternion spawnRot;
     public Vector3 original;
     private Vector3 movement;
-
-    public Transform tofollow;
-    private Vector3 offset;
+    private SliceBehavior[] slices;
 
     void Start()
     {
         heart = GameObject.Find("Heart");
         spawnPos = this.gameObject.transform.position;
         spawnRot = this.gameObject.transform.rotation;
-
-        offset = this.gameObject.transform.position - heart.transform.position;
+        slices = Object.FindObjectsOfType<SliceBehavior>();
     }
 
     // Update is called once per frame
@@ -32,10 +30,14 @@ public class HandleBehavior : MonoBehaviour
 
         if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
-            //  movement = this.gameObject.transform.position - original;
 
-            heart.transform.position = Vector3.Lerp(heart.transform.position, this.gameObject.transform.position - offset, 0.2f);
-            heart.transform.rotation = this.gameObject.transform.rotation;
+            foreach (SliceBehavior slice in slices)
+            {
+                if (!slice.snapedIn)
+                {
+
+                }
+            }
 
         }
     }
@@ -49,4 +51,6 @@ public class HandleBehavior : MonoBehaviour
         this.gameObject.transform.rotation = spawnRot;
         this.gameObject.transform.localScale = original;
     }
+
+
 }

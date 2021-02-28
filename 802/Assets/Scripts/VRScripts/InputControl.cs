@@ -19,7 +19,6 @@ public class InputControl : MonoBehaviour
     void Start()
     {
         slices = Object.FindObjectsOfType<SliceBehavior>();
-        handle = Object.FindObjectOfType<HandleBehavior>();
         
     }
 

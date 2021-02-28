@@ -21,6 +21,7 @@ public class SliceBehavior : MonoBehaviour
         _ = this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed ? this.gameObject.GetComponent<Rigidbody>().isKinematic = false : this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
         if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed) snapedIn = false;
+
     }
 
     public void Reset()
@@ -41,5 +42,6 @@ public class SliceBehavior : MonoBehaviour
     {
         return this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
     }
+
 
 }
