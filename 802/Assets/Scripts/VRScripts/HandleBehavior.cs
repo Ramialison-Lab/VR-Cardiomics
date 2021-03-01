@@ -35,7 +35,6 @@ public class HandleBehavior : MonoBehaviour
             {
                 if (!slice.snapedIn)
                 {
-
                 }
             }
 
@@ -51,6 +50,5 @@ public class HandleBehavior : MonoBehaviour
         this.gameObject.transform.rotation = spawnRot;
         this.gameObject.transform.localScale = original;
     }
-
 
 }
