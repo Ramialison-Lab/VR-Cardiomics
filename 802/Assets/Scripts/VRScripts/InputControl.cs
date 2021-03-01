@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class InputControl : MonoBehaviour
 {
@@ -13,17 +15,35 @@ public class InputControl : MonoBehaviour
     private float initalize;
     private float start;
     private float save;
+    public InputField inputfield;
+    public GameObject keyboard;
+    public GameObject GeneMenu;
 
 
     // Start is called before the first frame update
     void Start()
     {
         slices = Object.FindObjectsOfType<SliceBehavior>();
-        handle = Object.FindObjectOfType<HandleBehavior>();
-        
+        handle = Object.FindObjectOfType<HandleBehavior>();                
     }
 
     void Update()
+    {
+        controllerInput();
+        interactionCheck();
+        menuCheck();
+    }
+
+    // ControllerInput by buttons
+    private void controllerInput()
+    {
+        // HotKey reset method
+        if (OVRInput.Get(OVRInput.Button.Two)) callReset();
+        if (OVRInput.Get(OVRInput.Button.Start)) callGeneMenu();
+    }
+
+    // Check for interaction with heart model
+    private void interactionCheck()
     {
         foreach (SliceBehavior slice in slices)
         {
@@ -34,23 +54,12 @@ public class InputControl : MonoBehaviour
                 {
                     resizeModel(GameObject.Find(slice.name));
                 }
-
             }
         }
-
-        // HotKey reset method
-        if (OVRInput.Get(OVRInput.Button.Two))
-        {
-            foreach (SliceBehavior slice in slices)
-            {
-                slice.Reset();
-            }
-
-            handle.Reset();
-        }
-
-
     }
+
+
+    // Resizefunction of slices
     private void resizeModel(GameObject prominentObject)
     {
         {
@@ -71,6 +80,29 @@ public class InputControl : MonoBehaviour
             }
 
         }
+    }
+
+    // Reset function
+    private void callReset()
+    {
+        foreach (SliceBehavior slice in slices)
+        {
+            slice.Reset();
+        }
+        handle.Reset();
+    }
+
+
+    private void callGeneMenu()
+    {
+        // GeneMenu.SetActive(true);
+        GeneMenu.SetActive(true);
+        Debug.Log("Menu");
+    }
+    private void menuCheck()
+    {
+        if (inputfield.isFocused) keyboard.SetActive(true);
+
     }
 
 }
