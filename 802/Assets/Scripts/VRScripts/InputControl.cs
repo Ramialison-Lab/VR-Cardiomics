@@ -8,6 +8,7 @@ public class InputControl : MonoBehaviour
 {
     private SliceBehavior[] slices;
     private HandleBehavior handle;
+    private GameObject heart_handle;
     public GameObject rightHand;
     public GameObject leftHand;
     private bool currentlyResize = false;
@@ -28,6 +29,7 @@ public class InputControl : MonoBehaviour
         slices = Object.FindObjectsOfType<SliceBehavior>();
         handle = Object.FindObjectOfType<HandleBehavior>();
         keyboardScript = Object.FindObjectOfType<Keyboard>();
+        heart_handle = GameObject.Find("Heart_Grabber");
     }
 
     void Update()
@@ -42,7 +44,7 @@ public class InputControl : MonoBehaviour
     {
         // HotKey reset method
         if (OVRInput.Get(OVRInput.Button.Two)) callReset();
-        if (OVRInput.Get(OVRInput.Button.Start)) callGeneMenu();
+        if (OVRInput.GetUp(OVRInput.Button.Start)) callGeneMenu();
     }
 
     // Check for interaction with heart model
@@ -58,7 +60,48 @@ public class InputControl : MonoBehaviour
                     resizeModel(GameObject.Find(slice.name));
                 }
             }
+            if (handle.isGrabbed())
+            {
+                if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
+                {
+                  //  resizeHandle();
+                }
+            }
+
         }
+    }
+
+    //TBD resize function for handle
+    private void resizeHandle()
+    {
+        foreach (SliceBehavior slice in slices)
+        {
+            slice.transform.SetParent(GameObject.Find("HeartParent").transform);
+        }
+
+            // heart_handle.transform.DetachChildren();
+           // heart_handle.transform.SetParent(null);
+
+        {
+            // Resize function work around because of increased object sizes due to import
+            if (currentlyResize)
+            {
+                heart_handle.transform.position = rightHand.transform.position;
+                heart_handle.transform.localScale = new Vector3(initalize, initalize, initalize);
+                fscale = (rightHand.transform.position - leftHand.transform.position).magnitude;
+                initalize = (fscale / start) * save;
+            }
+            // Resize initializing parameters
+            else
+            {
+                initalize = heart_handle.transform.localScale.x;
+                save = initalize;
+                start = (rightHand.transform.position - leftHand.transform.position).magnitude;
+                currentlyResize = true;
+            }
+
+        }
+
     }
 
 
@@ -96,11 +139,13 @@ public class InputControl : MonoBehaviour
     }
 
 
-    private void callGeneMenu()
+    public void callGeneMenu()
     {
+        if (GeneMenu.activeSelf) GeneMenu.SetActive(false);
         // GeneMenu.SetActive(true);
-        GeneMenu.SetActive(true);
+        else if (!GeneMenu.activeSelf) GeneMenu.SetActive(true);
     }
+
     private void menuCheck()
     {
         if (inputfield.isFocused && menuReset)

@@ -51,4 +51,9 @@ public class HandleBehavior : MonoBehaviour
         this.gameObject.transform.localScale = original;
     }
 
+    public bool isGrabbed()
+    {
+        return this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+    }
+
 }

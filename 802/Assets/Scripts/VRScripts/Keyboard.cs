@@ -15,6 +15,7 @@ public class Keyboard : MonoBehaviour
     private string input;
     private string buffer;
     public GameObject keyboardObject;
+    private InputControl inputcontrol;
 
     // Update is called once per frame
     void Update()
@@ -50,23 +51,42 @@ public class Keyboard : MonoBehaviour
 
     public void readButton()
     {
-        if(EventSystem.current.currentSelectedGameObject.name == "Enter")
-        {
 
-            keyboardObject.SetActive(false);
-        }
-        if (EventSystem.current.currentSelectedGameObject.name == "Clear") { 
-            buffer = "";
-            inputfield.text = "";
-        }
-
-        else
+        switch (EventSystem.current.currentSelectedGameObject.name)
         {
-            if (EventSystem.current.currentSelectedGameObject.name != "Enter")
-            {
+            case ("Enter"):
+                keyboardObject.SetActive(false);
+                break;
+            case ("Clear"):
+                buffer = "";
+                inputfield.text = "";
+                break;
+            case ("Close"):
+                Object.FindObjectOfType<InputControl>().enableKeyboard();
+                break;
+            default:
                 buffer = buffer + EventSystem.current.currentSelectedGameObject.name;
                 inputfield.text = buffer;
-            }
+                break;
         }
+        //if (EventSystem.current.currentSelectedGameObject.name == "Enter")
+        //{
+
+        //    keyboardObject.SetActive(false);
+        //}
+        //if (EventSystem.current.currentSelectedGameObject.name == "Clear") { 
+        //    buffer = "";
+        //    inputfield.text = "";
+        //}
+        //if (EventSystem.current.currentSelectedGameObject.name == "Close")
+        //{
+        //    Object.FindObjectOfType<InputControl>().enableKeyboard();
+        //}
+        //else if (EventSystem.current.currentSelectedGameObject.name != "Enter")
+        //    {
+        //        buffer = buffer + EventSystem.current.currentSelectedGameObject.name;
+        //        inputfield.text = buffer;
+        //    }
+        
     }
 }
