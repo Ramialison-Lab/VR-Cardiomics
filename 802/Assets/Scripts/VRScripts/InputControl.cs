@@ -18,13 +18,16 @@ public class InputControl : MonoBehaviour
     public InputField inputfield;
     public GameObject keyboard;
     public GameObject GeneMenu;
+    private Keyboard keyboardScript;
+    private bool menuReset = true;
 
 
     // Start is called before the first frame update
     void Start()
     {
         slices = Object.FindObjectsOfType<SliceBehavior>();
-        handle = Object.FindObjectOfType<HandleBehavior>();                
+        handle = Object.FindObjectOfType<HandleBehavior>();
+        keyboardScript = Object.FindObjectOfType<Keyboard>();
     }
 
     void Update()
@@ -97,12 +100,26 @@ public class InputControl : MonoBehaviour
     {
         // GeneMenu.SetActive(true);
         GeneMenu.SetActive(true);
-        Debug.Log("Menu");
     }
     private void menuCheck()
     {
-        if (inputfield.isFocused) keyboard.SetActive(true);
+        if (inputfield.isFocused && menuReset)
+        {
+            keyboard.SetActive(true);
+            keyboardScript.wake();
+            menuReset = false;
+        }
+        
+    }
 
+    public void enableKeyboard()
+    {
+        if (keyboard.activeSelf) { keyboard.SetActive(false);}
+        else if(!keyboard.activeSelf){
+            keyboard.SetActive(true);
+            keyboardScript.wake();
+            menuReset = false;
+        }
     }
 
 }

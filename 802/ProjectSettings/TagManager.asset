@@ -10,6 +10,7 @@ TagManager:
   - cloneC
   - moreC
   - slice
+  - keyboard
   layers:
   - Default
   - TransparentFX
