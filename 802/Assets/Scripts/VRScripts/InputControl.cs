@@ -21,7 +21,7 @@ public class InputControl : MonoBehaviour
     public GameObject GeneMenu;
     private Keyboard keyboardScript;
     private bool menuReset = true;
-
+    public GameObject settingsMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +45,8 @@ public class InputControl : MonoBehaviour
         // HotKey reset method
         if (OVRInput.Get(OVRInput.Button.Two)) callReset();
         if (OVRInput.GetUp(OVRInput.Button.Start)) callGeneMenu();
+        if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
+
     }
 
     // Check for interaction with heart model
@@ -129,7 +131,7 @@ public class InputControl : MonoBehaviour
     }
 
     // Reset function
-    private void callReset()
+    public void callReset()
     {
         foreach (SliceBehavior slice in slices)
         {
@@ -137,7 +139,6 @@ public class InputControl : MonoBehaviour
         }
         handle.Reset();
     }
-
 
     public void callGeneMenu()
     {
@@ -167,4 +168,8 @@ public class InputControl : MonoBehaviour
         }
     }
 
+    public void callOptions()
+    {
+        settingsMenu.SetActive(true);
+    }
 }

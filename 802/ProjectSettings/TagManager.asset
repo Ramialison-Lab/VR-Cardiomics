@@ -11,6 +11,7 @@ TagManager:
   - moreC
   - slice
   - keyboard
+  - controllerButton
   layers:
   - Default
   - TransparentFX

@@ -25,7 +25,6 @@ public class SliceBehavior : MonoBehaviour
 
         if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
-            Debug.Log("SnappedOut");
             snapedIn = false;
             this.gameObject.transform.SetParent(null);
         }
