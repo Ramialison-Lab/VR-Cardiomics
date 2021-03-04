@@ -319,7 +319,7 @@ public class Colour : MonoBehaviour
                 computeDistancesP(geneIndex);
                 //baseGene = currentGene;
             }
-
+            Debug.Log(SentenceCase(geneName));
             // Update current gene info
             gText.text = "Current gene: " + SentenceCase(geneName);
             SetGeneSetLabels("", "");

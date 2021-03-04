@@ -25,7 +25,7 @@ public class PanelScript : MonoBehaviour
 
     void Start()
     {
-        LH.SetActive(false);
+       // LH.SetActive(false);
     }
 
     // Fills the data grid of the 'ListHolder' table and makes it visible
@@ -48,6 +48,7 @@ public class PanelScript : MonoBehaviour
         GameObject[] gameObjects1 = GameObject.FindGameObjectsWithTag("more");
         foreach (GameObject target in gameObjects1)
         {
+
             GameObject.Destroy(target);
         }
 			
@@ -81,7 +82,6 @@ public class PanelScript : MonoBehaviour
 
     private void add20(bool more = false)
     {
-
         int rows = 20;
 
         if (rows > Colour.valuesCount - upto)
@@ -94,6 +94,9 @@ public class PanelScript : MonoBehaviour
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("more");
             foreach (GameObject target in gameObjects)
             {
+
+                Debug.Log(target.transform.name);
+
                 GameObject.Destroy(target);
             }
         }
