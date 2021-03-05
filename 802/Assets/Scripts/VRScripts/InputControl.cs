@@ -22,6 +22,8 @@ public class InputControl : MonoBehaviour
     private Keyboard keyboardScript;
     private bool menuReset = true;
     public GameObject settingsMenu;
+    public GameObject player;
+    private Vector3 pos;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,8 @@ public class InputControl : MonoBehaviour
         handle = Object.FindObjectOfType<HandleBehavior>();
         keyboardScript = Object.FindObjectOfType<Keyboard>();
         heart_handle = GameObject.Find("Heart_Grabber");
+        pos = GeneMenu.transform.TransformPoint(GeneMenu.transform.position);
+
     }
 
     void Update()
@@ -142,9 +146,18 @@ public class InputControl : MonoBehaviour
 
     public void callGeneMenu()
     {
-        if (GeneMenu.activeSelf) GeneMenu.SetActive(false);
-        // GeneMenu.SetActive(true);
-        else if (!GeneMenu.activeSelf) GeneMenu.SetActive(true);
+        if (GeneMenu.activeSelf)
+        {
+           // GeneMenu.transform.SetParent(player.transform);
+            GeneMenu.SetActive(false);
+        }
+        else if (!GeneMenu.activeSelf)
+        {
+           // OVRPose track = OVRManager.tracker.GetPose();
+            GeneMenu.SetActive(true);
+            //GeneMenu.transform.SetParent(null);
+            //GeneMenu.transform.position = new Vector3(pos.x +1f, pos.y -1f, pos.z+1.5f);
+        }
     }
 
     private void menuCheck()
