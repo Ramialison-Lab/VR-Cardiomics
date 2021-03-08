@@ -18,6 +18,7 @@ public class Explode : MonoBehaviour
     public Button expandBtn;
     public Button resetBtn;
     public GameObject player;
+    private bool explode =false;
 
     Vector3[] startPositions = new Vector3[5];
     // Position of slices at load
@@ -59,6 +60,16 @@ public class Explode : MonoBehaviour
     // If the slices are exploded pull them in, or vice versa
     public void Splode()
     {
+        if (GameObject.Find("HeartCopy(Clone)") != null && explode)
+        {
+            GameObject.Find("HeartCopy(Clone)").transform.Translate(0, 0, -1.0f);
+            explode = !explode;
+        }
+        else if(GameObject.Find("HeartCopy(Clone)") != null && !explode)
+        {
+            GameObject.Find("HeartCopy(Clone)").transform.Translate(0, 0, 1.0f);
+            explode = !explode;
+        }
 
         expandBtn.interactable = false;
         resetBtn.interactable = false;

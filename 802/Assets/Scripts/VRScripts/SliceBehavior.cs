@@ -8,6 +8,7 @@ public class SliceBehavior : MonoBehaviour
     private Transform heart;
     public Vector3 original;
     public bool snapedIn =true;
+    public bool copy= false;
 
     void Start()
     {
@@ -25,6 +26,10 @@ public class SliceBehavior : MonoBehaviour
 
         if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
+            if (this.gameObject.transform.parent.parent.name != null)
+            {
+                if (this.gameObject.transform.parent.parent.name == "HeartCopy(Clone)") copy = true;
+            }
             snapedIn = false;
             this.gameObject.transform.SetParent(null);
         }
@@ -56,6 +61,20 @@ public class SliceBehavior : MonoBehaviour
     public bool isGrabbed()
     {
         return this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+    }
+
+    public void instantiateSlices()
+    {        //Store default position of GameObject
+        spawnPos = this.gameObject.transform.position;
+        spawnRot = this.gameObject.transform.rotation;
+        original = new Vector3(this.gameObject.transform.localScale.x, this.gameObject.transform.localScale.y, this.gameObject.transform.localScale.z);
+        heart = this.gameObject.transform.parent;
+
+    }
+
+    public void selfDestruct()
+    {
+        Destroy(this.gameObject);
     }
 
 }

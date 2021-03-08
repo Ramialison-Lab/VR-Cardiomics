@@ -101,8 +101,6 @@ public class Colour : MonoBehaviour
 
     public InputField geneCopyField;
 
-    private bool colorTog = false;
-
     // Run on initial load
     void Start()
     {
@@ -705,12 +703,6 @@ public class Colour : MonoBehaviour
 
            GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
     }
-
-    public void colorToggle(){
-
-        colorTog = !colorTog;
-        }
-
 
     // Resets the colour of all the heart pieces back to white
     public void resetColour()

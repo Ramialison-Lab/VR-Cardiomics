@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class InputControl : MonoBehaviour
 {
     private SliceBehavior[] slices;
+    private SliceBehavior[] copySlices;
     private HandleBehavior handle;
     private GameObject heart_handle;
     public GameObject rightHand;
@@ -138,8 +139,15 @@ public class InputControl : MonoBehaviour
     // Reset function
     public void callReset()
     {
+        slices = Object.FindObjectsOfType<SliceBehavior>();
+
+        Destroy(GameObject.Find("HeartCopy(Clone)"));
+
+
+
         foreach (SliceBehavior slice in slices)
         {
+            if (slice.copy == true) { slice.selfDestruct(); }
             slice.Reset();
         }
         handle.Reset();
@@ -188,7 +196,8 @@ public class InputControl : MonoBehaviour
     }
     public void combinedView()
     {
-        Instantiate(copy);
+        if (GameObject.Find("HeartCopy(Clone)") == null)  
+            Instantiate(copy);
 
     }
 }
