@@ -24,6 +24,7 @@ public class InputControl : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject player;
     private Vector3 pos;
+    public GameObject copy;
 
     // Start is called before the first frame update
     void Start()
@@ -184,5 +185,10 @@ public class InputControl : MonoBehaviour
     public void callOptions()
     {
         settingsMenu.SetActive(true);
+    }
+    public void combinedView()
+    {
+        Instantiate(copy);
+
     }
 }

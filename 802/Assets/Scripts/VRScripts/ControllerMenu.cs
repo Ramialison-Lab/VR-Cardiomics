@@ -12,26 +12,34 @@ public class ControllerMenu : MonoBehaviour
     private Vector3 spawnExpand;
     private Vector3 spawnReset;
     private Vector3 spawnCompare;
+    private bool operate = false; // to prevent copy from using attached Menu
 
 
     private void Start()
     {
-        buttons = GameObject.FindGameObjectsWithTag("controllerButton");
-        spawnCompare = compareBtn.transform.position;
-        spawnExpand = expandBtn.transform.position;
-        spawnReset = resetBtn.transform.position;
+        if (this.gameObject.transform.name == "Heart") operate = true;
+        if (operate)
+        {
+            buttons = GameObject.FindGameObjectsWithTag("controllerButton");
+            spawnCompare = compareBtn.transform.position;
+            spawnExpand = expandBtn.transform.position;
+            spawnReset = resetBtn.transform.position;
+        }
 
     }
     void Update()
     {
-        if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
+        if (operate)
         {
-            menuCollapse();
-        }
+            if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
+            {
+                menuCollapse();
+            }
 
-        if (!this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
-        {
-            menuExpand();
+            if (!this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
+            {
+                menuExpand();
+            }
         }
     }
 

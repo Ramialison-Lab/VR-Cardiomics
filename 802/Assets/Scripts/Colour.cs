@@ -57,6 +57,13 @@ public class Colour : MonoBehaviour
         "C_1", "C_2", "C_3", "C_4",
         "D_1", "D_2", "D_3",
         "E_1", "E_2", "E_3" };
+
+    public static string[] copyhp = new string[18] {
+        "Copy_A_1", "Copy_A_2", "Copy_A_3", "Copy_A_4",
+        "Copy_B_1", "Copy_B_2", "Copy_B_3", "Copy_B_4",
+        "Copy_C_1", "Copy_C_2", "Copy_C_3", "Copy_C_4",
+        "Copy_D_1", "Copy_D_2", "Copy_D_3",
+        "Copy_E_1", "Copy_E_2", "Copy_E_3" };
     public static int valuesCount = 0;
 
     private float maxValue;
@@ -92,6 +99,9 @@ public class Colour : MonoBehaviour
     public Text mText;
     // Mode text
 
+    public InputField geneCopyField;
+
+    private bool colorTog = false;
 
     // Run on initial load
     void Start()
@@ -306,9 +316,13 @@ public class Colour : MonoBehaviour
     public void ColourFromText(string geneName, bool panel = false)
     {
         SetMaxValue();
+
         currentGene = geneName.Trim();
+        string copyGene = geneCopyField.text;
+        Debug.Log(copyGene);
         CurrentGeneSet = null;
         int geneIndex = FindIndexOfGene(geneName);
+        int copyGeneIndex = FindIndexOfGene(copyGene.Trim());
 
         // If the gene name was found, load that dataset into the pieces
         if (geneIndex > -1)
@@ -319,7 +333,6 @@ public class Colour : MonoBehaviour
                 computeDistancesP(geneIndex);
                 //baseGene = currentGene;
             }
-            Debug.Log(SentenceCase(geneName));
             // Update current gene info
             gText.text = "Current gene: " + SentenceCase(geneName);
             SetGeneSetLabels("", "");
@@ -343,6 +356,48 @@ public class Colour : MonoBehaviour
             for (int i = 0; i < 18; i++)
             {
                 colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin);
+
+            }
+
+        }
+        else
+        {
+            // Update current gene info
+            gText.text = "Current gene: None";
+            resetColour();
+            //Debug.Log ("Gene with name " + geneName + " not found.");
+            content.GetComponent<PanelScript>().sleep();
+        }
+
+        if (copyGeneIndex > -1)
+        {
+
+            if (panel)
+            {
+                computeDistancesP(copyGeneIndex);
+                //baseGene = currentGene;
+            }
+          
+            float lMax = -1;
+            float lMin = 100;
+            if (norm)
+            { // Find the local min and max if in normalised mode
+                for (int i = 0; i < 18; i++)
+                {
+                    if (values[copyGeneIndex].Values[i] > lMax)
+                    {
+                        lMax = values[copyGeneIndex].Values[i];
+                    }
+                    if (values[copyGeneIndex].Values[i] < lMin)
+                    {
+                        lMin = values[copyGeneIndex].Values[i];
+                    }
+                }
+            }
+            for (int i = 0; i < 18; i++)
+            {
+                colourHeartPiece(copyhp[i], values[copyGeneIndex].Values[i], lMax, lMin);
+
             }
 
         }
@@ -421,13 +476,13 @@ public class Colour : MonoBehaviour
             }
 
 #if UNITY_EDITOR
-           // Debug.Log("geneName, geneIndex: " + geneName + ", " + geneIndex);
+            // Debug.Log("geneName, geneIndex: " + geneName + ", " + geneIndex);
 #endif
 
 #if UNITY_EDITOR
             for (int i = 0; i < 18; i++)
             {
-             //   Debug.Log("Gene: " + geneName + ", Piece " + i.ToString() + ", Value: " + expressionForGene[i].ToString());
+                //   Debug.Log("Gene: " + geneName + ", Piece " + i.ToString() + ", Value: " + expressionForGene[i].ToString());
             }
 #endif
             // sum
@@ -647,10 +702,14 @@ public class Colour : MonoBehaviour
         g.SetKeys(gck, new GradientAlphaKey[0]); // Make all colours visible
 
         // Associate a decimal with a colour and change the heart piece
-        GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
 
+           GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
     }
 
+    public void colorToggle(){
+
+        colorTog = !colorTog;
+        }
 
 
     // Resets the colour of all the heart pieces back to white
