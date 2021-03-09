@@ -20,17 +20,19 @@ public class PanelScript : MonoBehaviour
     public GameObject SH;
     // Access to the script holder (to use 'Colour' class methods)
     public Scrollbar SB;
-
+    public GameObject combinedView;
     private int upto;
 
     void Start()
     {
-       // LH.SetActive(false);
+        // LH.SetActive(false);
     }
 
     // Fills the data grid of the 'ListHolder' table and makes it visible
     public void generateTable(int geneId)
     {
+        combinedView.SetActive(true);
+
 
         upto = 1;
 
@@ -161,11 +163,15 @@ public class PanelScript : MonoBehaviour
     public void wake()
     {
         LH.SetActive(true);
+        combinedView.SetActive(true);
+
     }
 
     public void sleep()
     {
         LH.SetActive(false);
+        combinedView.SetActive(false);
+
     }
 
 }

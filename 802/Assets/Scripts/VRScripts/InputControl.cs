@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class InputControl : MonoBehaviour
 {
     private SliceBehavior[] slices;
-    private SliceBehavior[] copySlices;
     private HandleBehavior handle;
     private GameObject heart_handle;
     public GameObject rightHand;
@@ -26,6 +25,8 @@ public class InputControl : MonoBehaviour
     public GameObject player;
     private Vector3 pos;
     public GameObject copy;
+    public Camera camera;
+    public GameObject geneInfo;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,13 @@ public class InputControl : MonoBehaviour
         controllerInput();
         interactionCheck();
         menuCheck();
+    }
+
+    void LateUpdate()
+    {
+        //Object follows view of main camera
+        geneInfo.transform.LookAt(camera.transform);
+        geneInfo.transform.rotation = Quaternion.LookRotation(camera.transform.forward);
     }
 
     // ControllerInput by buttons
@@ -112,7 +120,6 @@ public class InputControl : MonoBehaviour
 
     }
 
-
     // Resizefunction of slices
     private void resizeModel(GameObject prominentObject)
     {
@@ -143,8 +150,6 @@ public class InputControl : MonoBehaviour
 
         Destroy(GameObject.Find("HeartCopy(Clone)"));
 
-
-
         foreach (SliceBehavior slice in slices)
         {
             if (slice.copy == true) { slice.selfDestruct(); }
@@ -157,15 +162,11 @@ public class InputControl : MonoBehaviour
     {
         if (GeneMenu.activeSelf)
         {
-           // GeneMenu.transform.SetParent(player.transform);
             GeneMenu.SetActive(false);
         }
         else if (!GeneMenu.activeSelf)
         {
-           // OVRPose track = OVRManager.tracker.GetPose();
             GeneMenu.SetActive(true);
-            //GeneMenu.transform.SetParent(null);
-            //GeneMenu.transform.position = new Vector3(pos.x +1f, pos.y -1f, pos.z+1.5f);
         }
     }
 
