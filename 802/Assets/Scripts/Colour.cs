@@ -100,6 +100,8 @@ public class Colour : MonoBehaviour
     // Mode text
 
     public InputField geneCopyField;
+    public Text geneText;
+    public Text geneOriginalText;
 
     // Run on initial load
     void Start()
@@ -317,7 +319,7 @@ public class Colour : MonoBehaviour
 
         currentGene = geneName.Trim();
         string copyGene = geneCopyField.text;
-        Debug.Log(copyGene);
+
         CurrentGeneSet = null;
         int geneIndex = FindIndexOfGene(geneName);
         int copyGeneIndex = FindIndexOfGene(copyGene.Trim());
@@ -354,7 +356,7 @@ public class Colour : MonoBehaviour
             for (int i = 0; i < 18; i++)
             {
                 colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin);
-
+                geneOriginalText.text = SentenceCase(geneName);
             }
 
         }
@@ -395,6 +397,7 @@ public class Colour : MonoBehaviour
             for (int i = 0; i < 18; i++)
             {
                 colourHeartPiece(copyhp[i], values[copyGeneIndex].Values[i], lMax, lMin);
+                GameObject.Find("GeneName").GetComponentInChildren<Text>().text = SentenceCase(copyGene);
 
             }
 

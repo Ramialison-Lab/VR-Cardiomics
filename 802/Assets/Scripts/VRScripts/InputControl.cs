@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 
 public class InputControl : MonoBehaviour
@@ -27,6 +29,14 @@ public class InputControl : MonoBehaviour
     public GameObject copy;
     public Camera camera;
     public GameObject geneInfo;
+    public OVRCameraRig cam;
+    public GameObject trackerSphere;
+    [SerializeField] private Material highlightMaterial;
+    [SerializeField] private Material defaultMaterial;
+
+    [SerializeField] private string selectableTag = "slice";
+    private Transform _selection;
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +46,8 @@ public class InputControl : MonoBehaviour
         keyboardScript = Object.FindObjectOfType<Keyboard>();
         heart_handle = GameObject.Find("Heart_Grabber");
         pos = GeneMenu.transform.TransformPoint(GeneMenu.transform.position);
+        Debug.Log("hoch " + Screen.height);
+        Debug.Log("breit " +Screen.width);
 
     }
 
@@ -46,11 +58,18 @@ public class InputControl : MonoBehaviour
         menuCheck();
     }
 
+
     void LateUpdate()
     {
         //Object follows view of main camera
         geneInfo.transform.LookAt(camera.transform);
         geneInfo.transform.rotation = Quaternion.LookRotation(camera.transform.forward);
+
+        if (GameObject.Find("GeneName") != null)
+        {
+            GameObject.Find("GeneName").transform.LookAt(camera.transform);
+            GameObject.Find("GeneName").transform.rotation = Quaternion.LookRotation(camera.transform.forward);
+        }
     }
 
     // ControllerInput by buttons
@@ -60,6 +79,54 @@ public class InputControl : MonoBehaviour
         if (OVRInput.Get(OVRInput.Button.Two)) callReset();
         if (OVRInput.GetUp(OVRInput.Button.Start)) callGeneMenu();
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
+        if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
+
+            if (_selection != null)
+        {
+            var selectionRenderer = _selection.GetComponent<Renderer>();
+            selectionRenderer.material = defaultMaterial;
+            _selection = null;
+        }
+
+
+        // var ray = Camera.main.ScreenPointToRay(cam.centerEyeAnchor.transform.position);
+        //var ray = Camera.current.ScreenPointToRay(Input.mousePosition);
+
+
+        //if trackerspehere collides with slice
+        //var ray = Camera.current.ScreenPointToRay(trackerSphere.transform.position);
+
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        //    var selection = hit.transform;
+        //    if (selection.CompareTag(selectableTag))
+        //    {
+        //        var selectionRenderer = selection.GetComponent<Renderer>();
+        //        if (selectionRenderer != null)
+        //        {
+
+        //            selectionRenderer.material = highlightMaterial;
+        //        }
+        //        _selection = selection;
+
+        //    }
+
+        //}
+
+    }
+
+    private void sliceDetector()
+    {
+        foreach (SliceBehavior slice in slices)
+        {
+            if (slice.selected == true)
+            {
+                slice.GetComponent<Renderer>().material = highlightMaterial;
+
+                //TBD SliceNames for Compare Menu
+            }
+        }
 
     }
 

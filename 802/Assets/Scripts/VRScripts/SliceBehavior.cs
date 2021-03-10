@@ -9,6 +9,7 @@ public class SliceBehavior : MonoBehaviour
     public Vector3 original;
     public bool snapedIn =true;
     public bool copy= false;
+    public bool selected;
 
     void Start()
     {
@@ -75,6 +76,16 @@ public class SliceBehavior : MonoBehaviour
     public void selfDestruct()
     {
         Destroy(this.gameObject);
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        selected = true;
+    }
+    private void OnCollisionExit(Collision col)
+    {
+        selected = false;
+
     }
 
 }
