@@ -78,7 +78,7 @@ public class Selection : MonoBehaviour
 
     }
 
-    private void outAdd(string hName, int comp)
+    public void outAdd(string hName, int comp)
     {
         if (comp == 1)
         {
@@ -88,10 +88,10 @@ public class Selection : MonoBehaviour
         {
             Compare.pieces2.Add(hName);
         }
-        makeOutline(hName);
+        //makeOutline(hName);
     }
 
-    private void outRemove(string hName, int comp)
+    public void outRemove(string hName, int comp)
     {
         if (comp == 1)
         {

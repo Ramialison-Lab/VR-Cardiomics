@@ -31,11 +31,9 @@ public class InputControl : MonoBehaviour
     public GameObject geneInfo;
     public OVRCameraRig cam;
     public GameObject trackerSphere;
-    [SerializeField] private Material highlightMaterial;
+    [SerializeField] private Material highlightMaterialGroup1;
+    [SerializeField] private Material highlightMaterialGroup2;
     [SerializeField] private Material defaultMaterial;
-
-    [SerializeField] private string selectableTag = "slice";
-    private Transform _selection;
 
 
     // Start is called before the first frame update
@@ -46,16 +44,18 @@ public class InputControl : MonoBehaviour
         keyboardScript = Object.FindObjectOfType<Keyboard>();
         heart_handle = GameObject.Find("Heart_Grabber");
         pos = GeneMenu.transform.TransformPoint(GeneMenu.transform.position);
-        Debug.Log("hoch " + Screen.height);
-        Debug.Log("breit " +Screen.width);
-
+        foreach (SliceBehavior slice in slices)
+        {
+            slice.GetComponent<Renderer>().material = defaultMaterial;
+        }
     }
 
-    void Update()
+        void Update()
     {
         controllerInput();
         interactionCheck();
         menuCheck();
+        //Debug.Log(Compare.pieces1.Count);
     }
 
 
@@ -81,50 +81,57 @@ public class InputControl : MonoBehaviour
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
         if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
 
-            if (_selection != null)
-        {
-            var selectionRenderer = _selection.GetComponent<Renderer>();
-            selectionRenderer.material = defaultMaterial;
-            _selection = null;
-        }
 
-
-        // var ray = Camera.main.ScreenPointToRay(cam.centerEyeAnchor.transform.position);
-        //var ray = Camera.current.ScreenPointToRay(Input.mousePosition);
-
-
-        //if trackerspehere collides with slice
-        //var ray = Camera.current.ScreenPointToRay(trackerSphere.transform.position);
-
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit))
-        //{
-        //    var selection = hit.transform;
-        //    if (selection.CompareTag(selectableTag))
-        //    {
-        //        var selectionRenderer = selection.GetComponent<Renderer>();
-        //        if (selectionRenderer != null)
-        //        {
-
-        //            selectionRenderer.material = highlightMaterial;
-        //        }
-        //        _selection = selection;
-
-        //    }
-
-        //}
 
     }
 
     private void sliceDetector()
     {
-        foreach (SliceBehavior slice in slices)
+        if (Compare.first == 1)
         {
-            if (slice.selected == true)
+            foreach (SliceBehavior slice in slices)
             {
-                slice.GetComponent<Renderer>().material = highlightMaterial;
+                if (slice.selected == true)
+                {
 
-                //TBD SliceNames for Compare Menu
+                    if (slice.GetComponent<Renderer>().material.name == "HighlightGroup1 (Instance)")
+                    {
+                        slice.GetComponent<Renderer>().material = defaultMaterial;
+                        Object.FindObjectOfType<Selection>().outRemove(slice.name, 1);
+                        Debug.Log(slice.name);
+                        
+                    }
+                    else if (slice.GetComponent<Renderer>().material.name == "HeartDefault (Instance)")
+                    {
+                        slice.GetComponent<Renderer>().material = highlightMaterialGroup1;
+                        Object.FindObjectOfType<Selection>().outAdd(slice.name, 1);
+                    }
+                }
+            }
+        }
+        if (Compare.first == 2)
+        {
+            foreach (SliceBehavior slice in slices)
+            {
+                if (slice.selected == true)
+                {
+                    if (slice.GetComponent<Renderer>().material.name == "HighlightGroup1 (Instance)")
+                    {
+                        Debug.Log("This piece is already selected for Group 1.");
+                    }
+                    else if (slice.GetComponent<Renderer>().material.name == "HighlightGroup2 (Instance)")
+                    {
+                        slice.GetComponent<Renderer>().material = defaultMaterial;
+                        Object.FindObjectOfType<Selection>().outRemove(slice.name, 2);
+
+                    }
+                    else if (slice.GetComponent<Renderer>().material.name == "HeartDefault (Instance)")
+                    {
+                        slice.GetComponent<Renderer>().material = highlightMaterialGroup2;
+                        Object.FindObjectOfType<Selection>().outAdd(slice.name, 2);
+
+                    }
+                }
             }
         }
 
