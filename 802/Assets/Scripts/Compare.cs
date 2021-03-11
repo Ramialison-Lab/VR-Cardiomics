@@ -183,7 +183,6 @@ public class Compare : MonoBehaviour
     // Sets up a web thread to download and process the contrasts
     System.Collections.IEnumerator requestContrasts()
     {
-
         string url = "http://3d-cardiomics.erc.monash.edu/contrast/serve.php?m=" + pieceString;
 
         Debug.Log(pieceString);

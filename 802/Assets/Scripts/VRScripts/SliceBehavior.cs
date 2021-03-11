@@ -2,82 +2,66 @@
 
 public class SliceBehavior : MonoBehaviour
 {
-    private Vector3 spawnPos;
     private Quaternion spawnRot;
-    private Vector3 savePos;
     private Transform heart;
     public Vector3 original;
-    public bool snapedIn =true;
-    public bool copy= false;
+    private Vector3 spawnPos;
+    public bool snapedIn = true;
+    public bool copy = false;
     public bool selected;
 
     void Start()
     {
-        //Store default position of GameObject
-        spawnPos = this.gameObject.transform.position;
-        spawnRot = this.gameObject.transform.rotation;
-        original = new Vector3(this.gameObject.transform.localScale.x, this.gameObject.transform.localScale.y, this.gameObject.transform.localScale.z);
-        heart = this.gameObject.transform.parent;
+        spawnPos = transform.position;
+        spawnRot = transform.rotation;
+        original = transform.localScale;
+        heart = transform.parent;
     }
-
     void Update()
     {
         //Control of kinematic if GameObject is not currently grabbed
-        _ = this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed ? this.gameObject.GetComponent<Rigidbody>().isKinematic = false : this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
-        if (this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed)
+        _ = transform.GetComponent<OVRGrabbable>().isGrabbed ? GetComponent<Rigidbody>().isKinematic = false : GetComponent<Rigidbody>().isKinematic = true;
+        if (transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
-            if (this.gameObject.transform.parent.parent.name != null)
+            if (transform.parent.parent.name != null)
             {
-                if (this.gameObject.transform.parent.parent.name == "HeartCopy(Clone)") copy = true;
+                if (transform.parent.parent.name == "HeartCopy(Clone)") copy = true;
             }
             snapedIn = false;
-            this.gameObject.transform.SetParent(null);
+            transform.SetParent(null);
         }
-
     }
-
     public void Reset()
     {
         if (!snapedIn)
         {
-            Debug.Log("hello");
-           // savePos = this.gameObject.transform.position;
-            this.gameObject.transform.SetParent(heart);
-           // this.gameObject.transform.position = savePos;
+            transform.SetParent(heart);
             snapedIn = true;
         }
         // Reset position, rotation and size of each slice
-        this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
-        this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
-        this.gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
-
-        this.gameObject.transform.rotation = spawnRot;
-        this.gameObject.transform.localScale = original;
+        transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
+        transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
+        transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
+        transform.rotation = spawnRot;
+        transform.localScale = original;
         snapedIn = true;
     }
-
-
-    //Returns if selected object is currently grabbed
     public bool isGrabbed()
     {
-        return this.gameObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        return transform.GetComponent<OVRGrabbable>().isGrabbed;
     }
-
     public void instantiateSlices()
     {        //Store default position of GameObject
-        spawnPos = this.gameObject.transform.position;
-        spawnRot = this.gameObject.transform.rotation;
-        original = new Vector3(this.gameObject.transform.localScale.x, this.gameObject.transform.localScale.y, this.gameObject.transform.localScale.z);
-        heart = this.gameObject.transform.parent;
+        spawnPos = transform.position;
+        spawnRot = transform.rotation;
+        original = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        heart = transform.parent;
 
     }
-
     public void selfDestruct()
     {
         Destroy(this.gameObject);
     }
-
     private void OnCollisionEnter(Collision col)
     {
         selected = true;
@@ -85,7 +69,6 @@ public class SliceBehavior : MonoBehaviour
     private void OnCollisionExit(Collision col)
     {
         selected = false;
-
     }
 
 }

@@ -1,36 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-
-
 
 public class InputControl : MonoBehaviour
 {
+    //Classes
     private SliceBehavior[] slices;
     private HandleBehavior handle;
-    private GameObject heart_handle;
-    public GameObject rightHand;
-    public GameObject leftHand;
-    private bool currentlyResize = false;
-    private float fscale;
-    private float initalize;
-    private float start;
-    private float save;
+    //Values
+    private float fscale, initalize, start, save;
+    //UI Elements
     public InputField inputfield;
-    public GameObject keyboard;
-    public GameObject GeneMenu;
     private Keyboard keyboardScript;
-    private bool menuReset = true;
+    //Bools
+    private bool menuReset = true;    
+    private bool currentlyResize = false;
+    //GameObjects
     public GameObject settingsMenu;
     public GameObject player;
-    private Vector3 pos;
     public GameObject copy;
-    public Camera camera;
     public GameObject geneInfo;
-    public OVRCameraRig cam;
     public GameObject trackerSphere;
+    public GameObject detector;
+    public GameObject keyboard;
+    public GameObject geneMenu;
+    private GameObject heart_handle;
+    //LocalAvatar and Scene Elements
+    public Camera cam; //CenterEye
+    public GameObject rightHand;
+    public GameObject leftHand;
+    //Materials
     [SerializeField] private Material highlightMaterialGroup1;
     [SerializeField] private Material highlightMaterialGroup2;
     [SerializeField] private Material defaultMaterial;
@@ -43,46 +41,25 @@ public class InputControl : MonoBehaviour
         handle = Object.FindObjectOfType<HandleBehavior>();
         keyboardScript = Object.FindObjectOfType<Keyboard>();
         heart_handle = GameObject.Find("Heart_Grabber");
-        pos = GeneMenu.transform.TransformPoint(GeneMenu.transform.position);
-        foreach (SliceBehavior slice in slices)
-        {
-            slice.GetComponent<Renderer>().material = defaultMaterial;
-        }
+
+        foreach (SliceBehavior slice in slices) slice.GetComponent<Renderer>().material = defaultMaterial;
     }
 
-        void Update()
+    void Update()
     {
         controllerInput();
         interactionCheck();
         menuCheck();
-        //Debug.Log(Compare.pieces1.Count);
-    }
-
-
-    void LateUpdate()
-    {
-        //Object follows view of main camera
-        geneInfo.transform.LookAt(camera.transform);
-        geneInfo.transform.rotation = Quaternion.LookRotation(camera.transform.forward);
-
-        if (GameObject.Find("GeneName") != null)
-        {
-            GameObject.Find("GeneName").transform.LookAt(camera.transform);
-            GameObject.Find("GeneName").transform.rotation = Quaternion.LookRotation(camera.transform.forward);
-        }
+        detectorActivation();
     }
 
     // ControllerInput by buttons
     private void controllerInput()
     {
-        // HotKey reset method
         if (OVRInput.Get(OVRInput.Button.Two)) callReset();
         if (OVRInput.GetUp(OVRInput.Button.Start)) callGeneMenu();
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
         if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
-
-
-
     }
 
     private void sliceDetector()
@@ -93,13 +70,10 @@ public class InputControl : MonoBehaviour
             {
                 if (slice.selected == true)
                 {
-
                     if (slice.GetComponent<Renderer>().material.name == "HighlightGroup1 (Instance)")
                     {
                         slice.GetComponent<Renderer>().material = defaultMaterial;
                         Object.FindObjectOfType<Selection>().outRemove(slice.name, 1);
-                        Debug.Log(slice.name);
-                        
                     }
                     else if (slice.GetComponent<Renderer>().material.name == "HeartDefault (Instance)")
                     {
@@ -123,21 +97,22 @@ public class InputControl : MonoBehaviour
                     {
                         slice.GetComponent<Renderer>().material = defaultMaterial;
                         Object.FindObjectOfType<Selection>().outRemove(slice.name, 2);
-
                     }
                     else if (slice.GetComponent<Renderer>().material.name == "HeartDefault (Instance)")
                     {
                         slice.GetComponent<Renderer>().material = highlightMaterialGroup2;
                         Object.FindObjectOfType<Selection>().outAdd(slice.name, 2);
-
                     }
                 }
             }
         }
 
     }
-
-    // Check for interaction with heart model
+    private void detectorActivation()
+    {
+        if (Compare.first != 0) detector.SetActive(true);
+        if (Compare.first == 0) detector.SetActive(false);
+    }
     private void interactionCheck()
     {
         foreach (SliceBehavior slice in slices)
@@ -160,41 +135,28 @@ public class InputControl : MonoBehaviour
 
         }
     }
-
-    //TBD resize function for handle
     private void resizeHandle()
-    {
+    {    
+        //TBD resize function for handle
+
         foreach (SliceBehavior slice in slices)
         {
             slice.transform.SetParent(GameObject.Find("HeartParent").transform);
-        }
-
-            // heart_handle.transform.DetachChildren();
-           // heart_handle.transform.SetParent(null);
-
+        }        
+        if (currentlyResize)
         {
-            // Resize function work around because of increased object sizes due to import
-            if (currentlyResize)
-            {
-                heart_handle.transform.position = rightHand.transform.position;
-                heart_handle.transform.localScale = new Vector3(initalize, initalize, initalize);
-                fscale = (rightHand.transform.position - leftHand.transform.position).magnitude;
-                initalize = (fscale / start) * save;
-            }
-            // Resize initializing parameters
-            else
-            {
-                initalize = heart_handle.transform.localScale.x;
-                save = initalize;
-                start = (rightHand.transform.position - leftHand.transform.position).magnitude;
-                currentlyResize = true;
-            }
-
+            heart_handle.transform.position = rightHand.transform.position;
+            heart_handle.transform.localScale = new Vector3(initalize, initalize, initalize);
+            initalize = ((rightHand.transform.position - leftHand.transform.position).magnitude / start) * save;
         }
-
+        else
+        {
+            initalize = heart_handle.transform.localScale.x;
+            save = initalize;
+            start = (rightHand.transform.position - leftHand.transform.position).magnitude;
+            currentlyResize = true;
+        }
     }
-
-    // Resizefunction of slices
     private void resizeModel(GameObject prominentObject)
     {
         {
@@ -216,8 +178,6 @@ public class InputControl : MonoBehaviour
 
         }
     }
-
-    // Reset function
     public void callReset()
     {
         slices = Object.FindObjectsOfType<SliceBehavior>();
@@ -231,19 +191,17 @@ public class InputControl : MonoBehaviour
         }
         handle.Reset();
     }
-
     public void callGeneMenu()
     {
-        if (GeneMenu.activeSelf)
+        if (geneMenu.activeSelf)
         {
-            GeneMenu.SetActive(false);
+            geneMenu.SetActive(false);
         }
-        else if (!GeneMenu.activeSelf)
+        else if (!geneMenu.activeSelf)
         {
-            GeneMenu.SetActive(true);
+            geneMenu.SetActive(true);
         }
     }
-
     private void menuCheck()
     {
         if (inputfield.isFocused && menuReset)
@@ -254,7 +212,6 @@ public class InputControl : MonoBehaviour
         }
         
     }
-
     public void enableKeyboard()
     {
         if (keyboard.activeSelf) { keyboard.SetActive(false);}
@@ -264,7 +221,6 @@ public class InputControl : MonoBehaviour
             menuReset = false;
         }
     }
-
     public void callOptions()
     {
         settingsMenu.SetActive(true);
@@ -274,5 +230,16 @@ public class InputControl : MonoBehaviour
         if (GameObject.Find("HeartCopy(Clone)") == null)  
             Instantiate(copy);
 
+    }
+    void LateUpdate()
+    {
+    geneInfo.transform.LookAt(cam.transform);
+    geneInfo.transform.rotation = Quaternion.LookRotation(cam.transform.forward);
+
+        if (GameObject.Find("GeneName") != null)
+        {
+            GameObject.Find("GeneName").transform.LookAt(cam.transform);
+            GameObject.Find("GeneName").transform.rotation = Quaternion.LookRotation(cam.transform.forward);
+        }
     }
 }
