@@ -6,11 +6,13 @@ public class InputControl : MonoBehaviour
     //Classes
     private SliceBehavior[] slices;
     private HandleBehavior handle;
+    private Explode explode;
     //Values
     private float fscale, initalize, start, save;
     //UI Elements
     public InputField inputfield;
     private Keyboard keyboardScript;
+    public Text geneText;
     //Bools
     private bool menuReset = true;    
     private bool currentlyResize = false;
@@ -40,6 +42,7 @@ public class InputControl : MonoBehaviour
         slices = Object.FindObjectsOfType<SliceBehavior>();
         handle = Object.FindObjectOfType<HandleBehavior>();
         keyboardScript = Object.FindObjectOfType<Keyboard>();
+        explode = Object.FindObjectOfType<Explode>();
         heart_handle = GameObject.Find("Heart_Grabber");
 
         foreach (SliceBehavior slice in slices) slice.GetComponent<Renderer>().material = defaultMaterial;
@@ -59,9 +62,9 @@ public class InputControl : MonoBehaviour
         if (OVRInput.Get(OVRInput.Button.Two)) callReset();
         if (OVRInput.GetUp(OVRInput.Button.Start)) callGeneMenu();
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
+        if (OVRInput.GetUp(OVRInput.Button.Three)) callExplode();
         if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
     }
-
     private void sliceDetector()
     {
         if (Compare.first == 1)
@@ -230,6 +233,18 @@ public class InputControl : MonoBehaviour
         if (GameObject.Find("HeartCopy(Clone)") == null)  
             Instantiate(copy);
 
+    }
+    public void resetGeneText()
+    {
+        geneText.text = "";
+    }
+    public void keyboardOnExit()
+    {
+        if (keyboard.activeSelf) keyboard.SetActive(false);
+    }
+    private void callExplode()
+    {
+        explode.Splode();
     }
     void LateUpdate()
     {

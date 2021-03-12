@@ -640,6 +640,7 @@ namespace UnityEngine.EventSystems
                     // for positioning a circular gaze pointer
                     List<RaycastResult> results = new List<RaycastResult>();
                     physicsRaycaster.Spherecast(leftData, results, m_SpherecastRadius);
+                    Debug.Log("Here it comes" + leftData +" " + results +" "+ m_SpherecastRadius);
                     if (results.Count > 0 && results[0].distance < raycast.distance)
                     {
                         position = results[0].worldPosition;
