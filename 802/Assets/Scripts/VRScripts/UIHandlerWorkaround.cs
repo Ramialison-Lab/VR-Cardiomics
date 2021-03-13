@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class UIHandlerWorkaround : MonoBehaviour
 {
     public GameObject sphere;
     void Update()
