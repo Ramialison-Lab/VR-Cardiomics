@@ -102,10 +102,12 @@ public class Colour : MonoBehaviour
     public InputField geneCopyField;
     public Text geneText;
     public Text geneOriginalText;
+    private LogFile logFile;
 
     // Run on initial load
     void Start()
     {
+        logFile = FindObjectOfType<LogFile>();
         // cache the array of all mouse gene names
         // allGeneNames = ValidGeneNames.names; // GetValidGeneNames();
         var _initValidGeneNamesAsync = StartCoroutine(InitValidGeneNames());
@@ -358,6 +360,7 @@ public class Colour : MonoBehaviour
                 colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin);
                 geneOriginalText.text = SentenceCase(geneName);
             }
+            logFile.writeToFile(SentenceCase(geneName), false);
 
         }
         else
@@ -398,8 +401,9 @@ public class Colour : MonoBehaviour
             {
                 colourHeartPiece(copyhp[i], values[copyGeneIndex].Values[i], lMax, lMin);
                 GameObject.Find("GeneName").GetComponentInChildren<Text>().text = SentenceCase(copyGene);
-
             }
+            logFile.writeToFile(SentenceCase(copyGene), true);
+
 
         }
         else

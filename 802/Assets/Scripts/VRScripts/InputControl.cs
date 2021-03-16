@@ -244,7 +244,49 @@ public class InputControl : MonoBehaviour
     }
     private void callExplode()
     {
-        explode.Splode();
+        //explode.Splode();
+        GameObject sliceA = GameObject.Find("Slice_A");
+        GameObject sliceB = GameObject.Find("Slice_B");
+        GameObject sliceC = GameObject.Find("Slice_C");
+        GameObject sliceD = GameObject.Find("Slice_D");
+        GameObject sliceE = GameObject.Find("Slice_E");
+        float scale = 12;
+        Vector3 startPos = sliceA.transform.position;
+        Vector3 pos = new Vector3(sliceA.transform.position.x + 2 * scale, sliceA.transform.position.y - 0.4f * scale, sliceA.transform.position.z);
+        lerpTo(sliceA, startPos, pos);
+
+        startPos = sliceB.transform.position;
+        pos = new Vector3(sliceB.transform.position.x + 1 * scale, sliceB.transform.position.y -0.2f * scale, sliceB.transform.position.z);
+        lerpTo(sliceB, startPos, pos);
+
+        startPos = sliceD.transform.position;
+        pos = new Vector3(sliceD.transform.position.x -1 * scale, sliceD.transform.position.y +0.2f * scale, sliceD.transform.position.z);
+        lerpTo(sliceD,startPos, pos);
+
+        startPos = sliceE.transform.position;
+        pos = new Vector3(sliceE.transform.position.x - 2 * scale, sliceE.transform.position.y + 0.4f * scale, sliceE.transform.position.z);
+        lerpTo(sliceE,startPos, pos);
+
+
+
+
+        heart_handle.transform.Rotate(-30,0,0);
+  //      sliceB.transform.Rotate(30, 0, 0);
+//        sliceC.transform.Rotate(30, 0, 0);
+    //    sliceD.transform.Rotate(30, 0, 0);
+      //  sliceE.transform.Rotate(30, 0, 0);
+
+
+
+
+
+
+    }
+
+    private void lerpTo(GameObject slice, Vector3 from, Vector3 to)
+    {
+        for(int i =0; i<20; i++)
+            slice.transform.position = Vector3.Lerp(from, to, 0.1f);
     }
     void LateUpdate()
     {
