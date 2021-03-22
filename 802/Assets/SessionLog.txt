@@ -1,15 +1,13 @@
 Logfile 
 
-16.03.2021 18:39:05
+22.03.2021 14:48:59
  
 *********************************************************
 
 Main Gene selected 				 Compared with 				 Timestamp 
 _________________________________________________________________________________
 
-Taar2				------- 				18:03:32
-Erich1				------- 				18:03:41
-Taar5				Taar5				18:03:41
-Ypel2				Taar5				18:03:46
-Taar8b				Taar8b				18:03:53
-Adh7				Taar8b				18:03:56
+Jaml /n The Combinded View Model was enabled at: 14:03:11
+				------- 				14:03:15
+Gm1979				Jaml				14:03:15
+The Combinded View Model was disabled at: 14:03:17 due to a reset.
