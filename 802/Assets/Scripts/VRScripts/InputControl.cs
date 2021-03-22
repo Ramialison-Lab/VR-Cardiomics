@@ -7,6 +7,7 @@ public class InputControl : MonoBehaviour
     private SliceBehavior[] slices;
     private HandleBehavior handle;
     private Explode explode;
+    private Colour colour;
     //Values
     private float fscale, initalize, start, save;
     //UI Elements
@@ -44,6 +45,7 @@ public class InputControl : MonoBehaviour
         keyboardScript = Object.FindObjectOfType<Keyboard>();
         explode = Object.FindObjectOfType<Explode>();
         heart_handle = GameObject.Find("Heart_Grabber");
+        colour = Object.FindObjectOfType<Colour>();
 
         foreach (SliceBehavior slice in slices) slice.GetComponent<Renderer>().material = defaultMaterial;
     }
@@ -267,22 +269,18 @@ public class InputControl : MonoBehaviour
         pos = new Vector3(sliceE.transform.position.x - 2 * scale, sliceE.transform.position.y + 0.4f * scale, sliceE.transform.position.z);
         lerpTo(sliceE,startPos, pos);
 
-
-
-
         heart_handle.transform.Rotate(-30,0,0);
-  //      sliceB.transform.Rotate(30, 0, 0);
-//        sliceC.transform.Rotate(30, 0, 0);
+    //    sliceB.transform.Rotate(30, 0, 0);
+    //    sliceC.transform.Rotate(30, 0, 0);
     //    sliceD.transform.Rotate(30, 0, 0);
-      //  sliceE.transform.Rotate(30, 0, 0);
-
-
-
-
-
-
+    //    sliceE.transform.Rotate(30, 0, 0);
     }
 
+    public void differenceMode()
+    {
+        callReset();
+
+    }
     private void lerpTo(GameObject slice, Vector3 from, Vector3 to)
     {
         for(int i =0; i<20; i++)
