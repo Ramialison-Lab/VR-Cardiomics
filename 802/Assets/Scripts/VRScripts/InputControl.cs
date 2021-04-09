@@ -10,6 +10,7 @@ public class InputControl : MonoBehaviour
     private Colour colour;
     //Values
     private float fscale, initalize, start, save;
+    private bool expand = false;
     //UI Elements
     public InputField inputfield;
     private Keyboard keyboardScript;
@@ -66,10 +67,16 @@ public class InputControl : MonoBehaviour
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
         if (OVRInput.GetUp(OVRInput.Button.Three)) callExplode();
         if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
+        
+    }
+
+    public void resetColour()
+    {
+        colour.resetColour();
     }
     private void sliceDetector()
     {
-        if (Compare.first == 1)
+            if (Compare.first == 1)
         {
             foreach (SliceBehavior slice in slices)
             {
@@ -195,6 +202,8 @@ public class InputControl : MonoBehaviour
             slice.Reset();
         }
         handle.Reset();
+
+        expand = false;
     }
     public void callGeneMenu()
     {
@@ -234,7 +243,6 @@ public class InputControl : MonoBehaviour
     {
         if (GameObject.Find("HeartCopy(Clone)") == null)  
             Instantiate(copy);
-
     }
     public void resetGeneText()
     {
@@ -246,6 +254,7 @@ public class InputControl : MonoBehaviour
     }
     private void callExplode()
     {
+        if (expand) return;
         //explode.Splode();
         GameObject sliceA = GameObject.Find("Slice_A");
         GameObject sliceB = GameObject.Find("Slice_B");
@@ -269,21 +278,15 @@ public class InputControl : MonoBehaviour
         pos = new Vector3(sliceE.transform.position.x - 2 * scale, sliceE.transform.position.y + 0.4f * scale, sliceE.transform.position.z);
         lerpTo(sliceE,startPos, pos);
 
-        heart_handle.transform.Rotate(-30,0,0);
-    //    sliceB.transform.Rotate(30, 0, 0);
-    //    sliceC.transform.Rotate(30, 0, 0);
-    //    sliceD.transform.Rotate(30, 0, 0);
-    //    sliceE.transform.Rotate(30, 0, 0);
+        expand = true;
     }
 
     public void differenceMode()
     {
         callReset();
-
     }
     private void lerpTo(GameObject slice, Vector3 from, Vector3 to)
     {
-        for(int i =0; i<20; i++)
             slice.transform.position = Vector3.Lerp(from, to, 0.1f);
     }
     void LateUpdate()

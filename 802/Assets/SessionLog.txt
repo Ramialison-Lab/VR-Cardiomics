@@ -1,22 +1,10 @@
 Logfile 
 
-22.03.2021 17:50:49
+09.04.2021 11:17:24
  
 *********************************************************
 
 Main Gene selected 				 Compared with 				 Timestamp 
 _________________________________________________________________________________
 
-H15				------- 				17:03:01
-A930018p22rik
-The Combinded View Model was enabled at: 17:03:03
-				------- 				17:03:06
-Sema4g				H15				17:03:06
-
-The Combinded View Model was enabled at: 17:03:10
-H18				H18				17:03:14
-Ndp				H18				17:03:16
-
-The Combinded View Model was enabled at: 17:03:18
-Vmn1r65				H18				17:03:20
-Vmn1r65				H18				17:03:21
+H2-d1
