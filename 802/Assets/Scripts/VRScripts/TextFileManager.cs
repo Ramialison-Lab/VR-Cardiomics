@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
 
 public class TextFileManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private string path;
+    public GameObject filename;
 
-    // Update is called once per frame
-    void Update()
+    public void writeTextfile()
     {
-        
+        path = Application.dataPath + "/SessionLog.txt";
+
     }
 }
