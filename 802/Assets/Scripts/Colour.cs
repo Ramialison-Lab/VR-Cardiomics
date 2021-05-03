@@ -454,18 +454,29 @@ public class Colour : MonoBehaviour
 
         copyMax = lMax;
         copyMin = lMin;
-        if (counterCopy > alength) counterCopy = 0;
+        if (counterCopy >= alength) counterCopy = 0;
     }
 
     public void calculateHeatMapData()
     {
-        for(int i = 0; i<=alength; i++)
+        for(int i = 0; i<alength; i++)
         {
             expHeatMap[i] = Math.Abs(expOriginal[i] - expCopy[i]);
         }
 
         heatMax = Math.Max(copyMax, originalMax);
         heatMin = Math.Min(copyMin, originalMin);
+       
+
+    }
+
+    public void colorHEatMap()
+    {
+        for (int i = 0; i < 18; i++)
+        {
+            colourHeartPiece(hp[i], expHeatMap[i], heatMax, heatMin);
+        }
+
     }
 
 
