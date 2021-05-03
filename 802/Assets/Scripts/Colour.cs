@@ -7,6 +7,7 @@ using System.Collections;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Linq;
+using System;
 
 /*****
  * 
@@ -98,15 +99,32 @@ public class Colour : MonoBehaviour
     // Allows you access to the geneBtn text
     public Text mText;
     // Mode text
-
+    private static int alength = 18;
     public InputField geneCopyField;
     public Text geneText;
     public Text geneOriginalText;
     private LogFile logFile;
 
+    public float[] expCopy;
+    public float[] expOriginal;
+    public float[] expHeatMap;
+    private float copyMax;
+    private float copyMin;
+    private float originalMax;
+    private float originalMin;
+    private float heatMax;
+    private float heatMin;
+    private int counterOriginal, counterCopy, counterHeatmap =  0;
+
+
     // Run on initial load
     void Start()
     {
+        expCopy = new float[alength];
+        expOriginal = new float[alength];
+        expHeatMap = new float[alength];
+
+
         logFile = FindObjectOfType<LogFile>();
         // cache the array of all mouse gene names
         // allGeneNames = ValidGeneNames.names; // GetValidGeneNames();
@@ -358,6 +376,7 @@ public class Colour : MonoBehaviour
             for (int i = 0; i < 18; i++)
             {
                 colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin);
+                safeOriginal(values[geneIndex].Values[i], lMax, lMin);
                 geneOriginalText.text = SentenceCase(geneName);
             }
             logFile.writeToFile(SentenceCase(geneName), false);
@@ -400,6 +419,7 @@ public class Colour : MonoBehaviour
             for (int i = 0; i < 18; i++)
             {
                 colourHeartPiece(copyhp[i], values[copyGeneIndex].Values[i], lMax, lMin);
+                safeCopy(values[copyGeneIndex].Values[i], lMax, lMin);
                 GameObject.Find("GeneName").GetComponentInChildren<Text>().text = SentenceCase(copyGene);
             }
             logFile.writeToFile(SentenceCase(copyGene), true);
@@ -415,6 +435,39 @@ public class Colour : MonoBehaviour
             content.GetComponent<PanelScript>().sleep();
         }
     }
+
+    private void safeOriginal(float exp, float lMax, float lMin)
+    {
+        expOriginal[counterOriginal] = exp;
+        counterOriginal++;
+
+        originalMax = lMax;
+        originalMin = lMin;
+        if (counterOriginal >= alength) counterOriginal = 0;
+
+    }
+
+    private void safeCopy(float exp, float lMax, float lMin)
+    {
+        expCopy[counterCopy] = exp;
+        counterCopy++;
+
+        copyMax = lMax;
+        copyMin = lMin;
+        if (counterCopy > alength) counterCopy = 0;
+    }
+
+    public void calculateHeatMapData()
+    {
+        for(int i = 0; i<=alength; i++)
+        {
+            expHeatMap[i] = Math.Abs(expOriginal[i] - expCopy[i]);
+        }
+
+        heatMax = Math.Max(copyMax, originalMax);
+        heatMin = Math.Min(copyMin, originalMin);
+    }
+
 
     public IEnumerator ColourByGeneSet(GeneSet geneset)
     {
@@ -647,8 +700,6 @@ public class Colour : MonoBehaviour
         valuesComp.Sort((s1, s2) => Mathf.Abs(s2.Value).CompareTo(Mathf.Abs(s1.Value))); // Sort so that those with most similarity are first
         content.GetComponent<PanelScript>().generateTable(found);
     }
-
-
 
     // Colours a given heart piece based on the expression value
     public void colourHeartPiece(string heartPiece, float exp, float lMax, float lMin)

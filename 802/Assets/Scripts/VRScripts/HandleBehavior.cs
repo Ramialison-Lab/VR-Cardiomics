@@ -9,7 +9,7 @@ public class HandleBehavior : MonoBehaviour
     public Vector3 original;
     private Vector3 movement;
     private Quaternion spawnRot;
-    public GameObject sphere;
+   // public GameObject sphere;
     public GameObject heart;
 
     void Start()
@@ -24,8 +24,8 @@ public class HandleBehavior : MonoBehaviour
     {
         original = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
         _ = transform.GetComponent<OVRGrabbable>().isGrabbed ? GetComponent<Rigidbody>().isKinematic = false : GetComponent<Rigidbody>().isKinematic = true;
-        if (transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(false);
-        if (!transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(true);
+     //   if (transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(false);
+     //   if (!transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(true);
     }
 
     public void Reset()
