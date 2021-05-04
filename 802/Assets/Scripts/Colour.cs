@@ -483,6 +483,10 @@ public class Colour : MonoBehaviour
 
     public void colorHEatMap()
     {
+
+        geneOriginalText.text = SentenceCase(currentGene) + " - " + SentenceCase(geneCopyField.text);
+        Destroy(GameObject.Find("HeartCopy(Clone)"));
+
         for (int i = 0; i < 18; i++)
         {
             colourHeartPiece(hp[i], expHeatMap[i], heatMax, heatMin);

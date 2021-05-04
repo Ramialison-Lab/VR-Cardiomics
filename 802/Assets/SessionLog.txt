@@ -1,6 +1,6 @@
 Logfile 
 
-03.05.2021 20:29:03
+04.05.2021 11:15:25
  
 *********************************************************
 
@@ -8,16 +8,18 @@ Main Gene selected 				 Compared with 				 Timestamp
 _________________________________________________________________________________
 
 H12
-The Combinded View Model was enabled at: 20:05:21
-				------- 				20:05:22
-Parn				H12				20:05:22
+The Combinded View Model was enabled at: 11:05:44
+				------- 				11:05:46
+Gm5849				H12				11:05:46
 
-The Combinded View Model was enabled at: 20:05:36
-H15				H15				20:05:38
-A930018p22rik				H15				20:05:44
-The Combinded View Model was disabled at: 20:05:10 due to a reset.
-Yars
-The Combinded View Model was enabled at: 20:05:20
-				------- 				20:05:21
-Gm595				Yars				20:05:21
-Dap3				Yars				20:05:37
+The Combinded View Model was enabled at: 11:05:52
+Mecr				H12				11:05:55
+H16
+The Combinded View Model was enabled at: 11:05:09
+				------- 				11:05:12
+Trhde				H16				11:05:12
+Trhde				------- 				11:05:28
+H1f0
+The Combinded View Model was enabled at: 11:05:30
+				------- 				11:05:33
+Smurf1				H1f0				11:05:33
