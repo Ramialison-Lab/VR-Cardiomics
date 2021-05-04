@@ -443,7 +443,13 @@ public class Colour : MonoBehaviour
 
         originalMax = lMax;
         originalMin = lMin;
-        if (counterOriginal >= alength) counterOriginal = 0;
+        calculateHeatMapData();
+
+        if (counterOriginal >= alength)
+        {
+            counterOriginal = 0;
+
+        }
 
     }
 
@@ -454,7 +460,12 @@ public class Colour : MonoBehaviour
 
         copyMax = lMax;
         copyMin = lMin;
-        if (counterCopy >= alength) counterCopy = 0;
+        calculateHeatMapData();
+
+        if (counterCopy >= alength)
+        {
+            counterCopy = 0;
+        }
     }
 
     public void calculateHeatMapData()
@@ -466,7 +477,7 @@ public class Colour : MonoBehaviour
 
         heatMax = Math.Max(copyMax, originalMax);
         heatMin = Math.Min(copyMin, originalMin);
-       
+
 
     }
 

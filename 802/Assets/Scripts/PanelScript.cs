@@ -21,6 +21,7 @@ public class PanelScript : MonoBehaviour
     // Access to the script holder (to use 'Colour' class methods)
     public Scrollbar SB;
     public GameObject combinedView;
+    public GameObject heatMap;
     private int upto;
 
     void Start()
@@ -32,7 +33,7 @@ public class PanelScript : MonoBehaviour
     public void generateTable(int geneId)
     {
         combinedView.SetActive(true);
-
+        heatMap.SetActive(true);
 
         upto = 1;
 
