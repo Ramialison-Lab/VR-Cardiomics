@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
 
 public class LogFile : MonoBehaviour
 {
     private string path;
+    private string genelistpath;
+    private bool genelist = false;
     private bool save =true;
     private bool compareModel;
+    private bool toggle = true;
+    private InputField geneInput;
     private void Start()
     {
+        geneInput = GameObject.Find("InputGene").GetComponentInChildren<InputField>();
         path = Application.dataPath + "/SessionLog.txt";
            File.WriteAllText(path, "Logfile \n\n" + System.DateTime.Now + "\n \n");
            File.AppendAllText(path, "*********************************************************\n\n");
@@ -59,5 +65,32 @@ public class LogFile : MonoBehaviour
             File.AppendAllText(path, gene);
         }
         save = copy;
+    }
+
+    public void exportGenelist(string str)
+    {
+        if (!genelist)
+        {
+            genelistpath = Application.dataPath + "/SimilarGeneList.txt";
+            File.WriteAllText(genelistpath, "Similar Genes compared to: " + SentenceCase(geneInput.text) + " \n\n" + System.DateTime.Now + "\n \n");
+            File.AppendAllText(genelistpath, "*********************************************************\n\n");
+            genelist = true;
+        }
+
+        if (genelist)
+        {
+            if (toggle) File.AppendAllText(genelistpath, SentenceCase(str) + " \t\t");
+            if (!toggle) File.AppendAllText(genelistpath, str + " \n");
+            toggle = !toggle;
+        }
+
+
+    }
+    public static string SentenceCase(string input)
+    {
+        if (input.Length < 1)
+            return input;
+        string sentence = input.ToLower();
+        return sentence[0].ToString().ToUpper() + sentence.Substring(1);
     }
 }

@@ -23,9 +23,14 @@ public class PanelScript : MonoBehaviour
     public GameObject combinedView;
     public GameObject heatMap;
     private int upto;
+    public ArrayList geneList = new ArrayList();
+    private LogFile logFile;
+    private bool geneToggle =false;
 
     void Start()
     {
+        logFile = FindObjectOfType<LogFile>();
+
         // LH.SetActive(false);
     }
 
@@ -133,6 +138,7 @@ public class PanelScript : MonoBehaviour
 
             //txt2.text = conf.ToString("+0.0000;-0.0000"); //.ToString ("+0.00;−0.00");
             txt2.text = conf.ToString("+00.00%;-00.00%");
+            addToListLog(geneName, txt2.text);
 
             newCell2.transform.SetParent(this.gameObject.transform, false); // Load column 1 in to table
 
@@ -159,6 +165,20 @@ public class PanelScript : MonoBehaviour
 
 
 
+    }
+    public void addToListLog(string gene, string similiarity)
+    {
+        geneList.Add(gene);
+        geneList.Add(similiarity);
+    }
+
+    public void writeSimilarGeneToLog()
+    {
+        geneToggle = false;
+        foreach(string str in geneList)
+        {
+            logFile.exportGenelist(str);
+        }
     }
 
     public void wake()
