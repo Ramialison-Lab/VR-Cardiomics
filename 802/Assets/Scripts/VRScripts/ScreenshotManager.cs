@@ -2,12 +2,6 @@
 using System.Collections;
 using System.IO;
 
-// Screen Recorder will save individual images of active scene in any resolution and of a specific image format
-// including raw, jpg, png, and ppm.  Raw and PPM are the fastest image formats for saving.
-//
-// You can compile these images into a video using ffmpeg:
-// ffmpeg -i screen_3840x2160_%d.ppm -y test.avi
-
 public class ScreenshotManager : MonoBehaviour
 {
     // 4k = 3840 x 2160   1080p = 1920 x 1080
