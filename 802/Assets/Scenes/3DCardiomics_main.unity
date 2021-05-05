@@ -5213,7 +5213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -183, y: -119}
+  m_AnchoredPosition: {x: -171.9, y: -115.8}
   m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &312135026
@@ -8424,8 +8424,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 850252143}
   m_HandleRect: {fileID: 850252141}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99997544
+  m_Value: 1
+  m_Size: 0.999975
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10618,7 +10618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0018310547}
+  m_AnchoredPosition: {x: 0, y: 0.005126953}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &591521243
@@ -21934,7 +21934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0040893555}
+  m_AnchoredPosition: {x: 0, y: -0.009094238}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1264725286
@@ -23092,7 +23092,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353452027}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.9987278}
+  m_LocalPosition: {x: 0, y: 0, z: 26}
   m_LocalScale: {x: 0.33333334, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2059909172}
@@ -23100,7 +23100,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0032693893, y: -4.3091316}
+  m_AnchoredPosition: {x: -0, y: -4.2}
   m_SizeDelta: {x: 80, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1353452029
@@ -23135,7 +23135,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Export current Selection
+  m_Text: Export current similar genes to txt format
 --- !u!222 &1353452030
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -30843,7 +30843,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 688863132}
   m_HandleRect: {fileID: 688863130}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99997586
   m_NumberOfSteps: 0
   m_OnValueChanged:
