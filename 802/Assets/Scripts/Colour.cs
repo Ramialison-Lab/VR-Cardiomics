@@ -114,7 +114,7 @@ public class Colour : MonoBehaviour
     private float originalMin;
     private float heatMax;
     private float heatMin;
-    private int counterOriginal, counterCopy, counterHeatmap =  0;
+    private int counterOriginal, counterCopy =  0;
 
 
     // Run on initial load
@@ -483,9 +483,9 @@ public class Colour : MonoBehaviour
 
     public void colorHEatMap()
     {
-
         geneOriginalText.text = SentenceCase(currentGene) + " - " + SentenceCase(geneCopyField.text);
-        Destroy(GameObject.Find("HeartCopy(Clone)"));
+        //Destroy(GameObject.Find("HeartCopy(Clone)"));
+        GetComponent<InputControl>().callReset();
 
         for (int i = 0; i < 18; i++)
         {
@@ -784,8 +784,8 @@ public class Colour : MonoBehaviour
         g.SetKeys(gck, new GradientAlphaKey[0]); // Make all colours visible
 
         // Associate a decimal with a colour and change the heart piece
-
-           GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
+        GameObject.Find(heartPiece).GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
+        GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
     }
 
     // Resets the colour of all the heart pieces back to white

@@ -280,7 +280,6 @@ public class InputControl : MonoBehaviour
 
         expand = true;
     }
-
     private void lerpTo(GameObject slice, Vector3 from, Vector3 to)
     {
             slice.transform.position = Vector3.Lerp(from, to, 0.1f);
