@@ -1923,7 +1923,7 @@ public class OVRManager : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		Debug.Log("[OVRManager] OnDestroy");
+		// Debug.Log("[OVRManager] OnDestroy");
 		OVRManagerinitialized = false;
 	}
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class InputControl : MonoBehaviour
@@ -37,7 +38,6 @@ public class InputControl : MonoBehaviour
     [SerializeField] private Material highlightMaterialGroup2;
     [SerializeField] private Material defaultMaterial;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +74,11 @@ public class InputControl : MonoBehaviour
     {
         colour.resetColour();
     }
+    IEnumerator waiter_not_that_waiter_just_waiter()
+    {
+        yield return new WaitForSeconds(0.2f);
+        OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.RTouch);
+    }
     private void sliceDetector()
     {
             if (Compare.first == 1)
@@ -82,6 +87,9 @@ public class InputControl : MonoBehaviour
             {
                 if (slice.selected == true)
                 {
+                    OVRInput.SetControllerVibration(0.2f, 0.2f, OVRInput.Controller.RTouch);
+                    waiter_not_that_waiter_just_waiter();
+
                     if (slice.GetComponent<Renderer>().material.name == "HighlightGroup1 (Instance)")
                     {
                         slice.GetComponent<Renderer>().material = defaultMaterial;
@@ -201,9 +209,30 @@ public class InputControl : MonoBehaviour
             if (slice.copy == true) { slice.selfDestruct(); }
             slice.Reset();
         }
+
+        resetColour();
+        geneText.text = "";
         handle.Reset();
 
         expand = false;
+    }
+
+    public void callResetHeatMap()
+    {
+        slices = Object.FindObjectsOfType<SliceBehavior>();
+
+        Destroy(GameObject.Find("HeartCopy(Clone)"));
+
+        foreach (SliceBehavior slice in slices)
+        {
+            if (slice.copy == true) { slice.selfDestruct(); }
+            slice.Reset();
+        }
+
+        handle.Reset();
+
+        expand = false;
+
     }
     public void callGeneMenu()
     {

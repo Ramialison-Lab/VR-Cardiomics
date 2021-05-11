@@ -23,12 +23,16 @@ public class SliceBehavior : MonoBehaviour
         _ = transform.GetComponent<OVRGrabbable>().isGrabbed ? GetComponent<Rigidbody>().isKinematic = false : GetComponent<Rigidbody>().isKinematic = true;
         if (transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
-            if (transform.parent.parent.name != null)
+            if (transform.parent.parent.name == "HeartCopy(Clone)")
+                return;
             {
-                if (transform.parent.parent.name == "HeartCopy(Clone)") copy = true;
+                if (transform.parent.parent.name != null)
+                {
+                    if (transform.parent.parent.name == "HeartCopy(Clone)") copy = true;
+                }
+                snapedIn = false;
+                transform.SetParent(null);
             }
-            snapedIn = false;
-            transform.SetParent(null);
         }
     }
     public void Reset()

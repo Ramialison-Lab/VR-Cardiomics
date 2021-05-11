@@ -484,8 +484,7 @@ public class Colour : MonoBehaviour
     public void colorHEatMap()
     {
         geneOriginalText.text = SentenceCase(currentGene) + " - " + SentenceCase(geneCopyField.text);
-        //Destroy(GameObject.Find("HeartCopy(Clone)"));
-        GetComponent<InputControl>().callReset();
+        GetComponent<InputControl>().callResetHeatMap();
 
         for (int i = 0; i < 18; i++)
         {
@@ -584,7 +583,7 @@ public class Colour : MonoBehaviour
         {
             var _warningMsg = "WARNING: Some genes in the geneset are valid mouse genes but are absent from the expression dataset: " + string.Join(", ", missingGenes);
             Debug.Log(_warningMsg);
-            JsAlert(_warningMsg);
+            //JsAlert(_warningMsg);
         }
 
         // divide by number of genes in the set to obtain the average
