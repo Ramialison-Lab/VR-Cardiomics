@@ -177,6 +177,7 @@ public class Colour : MonoBehaviour
 
         scripts.GetComponent<Explode>().Reset();
 
+        //TBD COMMENT NEXT 2 LINES
         GameObject.Find("MainCamera").GetComponent<CameraRotation>().Reset();
         GameObject.Find("MainCamera").GetComponent<Selection>().Reset();
         if (compare) compare.reset();
