@@ -4,7 +4,15 @@
 
 3D-Cardiomics provides a framework to map multi dimensional data (such as intensity and location of gene expression) on to 3D models in a heatmap-like manner in VR. In our use case the intensity is the level of gene expression of those expressed in the adult heart, and the location is this expression level in 18 discrete pieces of the heart as measured by RNA-seq. 
 
-## Important Files
+## Supported Devices
+
+Currently fully supported VR devices include:
+
+..* Oculus Quest
+..* Oculus Rift
+
+
+## Upload Files
 
 Gene Expressions are stored under the following path
 
@@ -12,7 +20,7 @@ Gene Expressions are stored under the following path
 Assets/Resources/
 ```
 
-A sample of fake gene expressions is provided under:
+A sample of fake gene expressions is provided at:
 
 ```
 Assets/Resources/fake_mouse_expression_data.txt
