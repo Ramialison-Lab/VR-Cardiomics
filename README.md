@@ -8,8 +8,8 @@
 
 Currently fully supported VR devices include:
 
-..* Oculus Quest
-..* Oculus Rift
+* Oculus Quest
+* Oculus Rift
 
 
 ## Upload Files
