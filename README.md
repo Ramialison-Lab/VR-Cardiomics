@@ -1,4 +1,4 @@
-# 3DheartProject
+# 3D-cardiomics-VR
 
 ## Overview
 
