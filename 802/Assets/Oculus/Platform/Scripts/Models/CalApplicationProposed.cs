@@ -2,21 +2,17 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
 
-  public class CalApplicationProposed
-  {
-    public readonly UInt64 ID;
-
-
-    public CalApplicationProposed(IntPtr o)
+    public class CalApplicationProposed
     {
-      ID = CAPI.ovr_CalApplicationProposed_GetID(o);
+        public readonly UInt64 ID;
+
+
+        public CalApplicationProposed(IntPtr o)
+        {
+            ID = CAPI.ovr_CalApplicationProposed_GetID(o);
+        }
     }
-  }
 
 }

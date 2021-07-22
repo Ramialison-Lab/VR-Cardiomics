@@ -1,10 +1,10 @@
 namespace Oculus.Platform
 {
-  using System;
+    using System;
 
-  [Serializable]
-  public sealed class OculusStandalonePlatformResponse
-  {
-    public string access_token;
-  }
+    [Serializable]
+    public sealed class OculusStandalonePlatformResponse
+    {
+        public string access_token;
+    }
 }

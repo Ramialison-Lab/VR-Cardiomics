@@ -167,7 +167,8 @@ namespace OVRSimpleJSON // SimpleJSON
             }
             public KeyValuePair<string, JSONNode> Current
             {
-                get {
+                get
+                {
                     if (type == Type.Array)
                         return new KeyValuePair<string, JSONNode>(string.Empty, m_Array.Current);
                     else if (type == Type.Object)
@@ -339,7 +340,7 @@ namespace OVRSimpleJSON // SimpleJSON
             get
             {
                 double v = 0.0;
-                if (double.TryParse(Value,NumberStyles.Float, CultureInfo.InvariantCulture, out v))
+                if (double.TryParse(Value, NumberStyles.Float, CultureInfo.InvariantCulture, out v))
                     return v;
                 return 0.0;
             }
@@ -505,7 +506,8 @@ namespace OVRSimpleJSON // SimpleJSON
         private static StringBuilder m_EscapeBuilder;
         internal static StringBuilder EscapeBuilder
         {
-            get {
+            get
+            {
                 if (m_EscapeBuilder == null)
                     m_EscapeBuilder = new StringBuilder();
                 return m_EscapeBuilder;

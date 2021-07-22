@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 
 /*****
  * 
@@ -59,7 +58,7 @@ public class PanelScript : MonoBehaviour
 
             GameObject.Destroy(target);
         }
-			
+
         // Start making rows of table
         add20(false);
 
@@ -96,7 +95,7 @@ public class PanelScript : MonoBehaviour
         {
             rows = Colour.valuesCount - upto;
         }
-			
+
         if (more)
         {
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("more");

@@ -7,10 +7,7 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 
-using System;
 using UnityEngine;
-using System.Collections;
-using JetBrains.Annotations;
 using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEngine.SceneManagement;
@@ -24,12 +21,12 @@ public class LocomotionController : MonoBehaviour
     public OVRCameraRig CameraRig;
     //public CharacterController CharacterController;
     public CapsuleCollider CharacterController;
-	//public OVRPlayerController PlayerController;
-	public SimpleCapsuleWithStickMovement PlayerController;
+    //public OVRPlayerController PlayerController;
+    public SimpleCapsuleWithStickMovement PlayerController;
 
     void Start()
     {
-		/*
+        /*
         if (CharacterController == null)
         {
             CharacterController = GetComponentInParent<CharacterController>();
@@ -38,10 +35,10 @@ public class LocomotionController : MonoBehaviour
 		*/
         //if (PlayerController == null)
         //{
-            //PlayerController = GetComponentInParent<OVRPlayerController>();
+        //PlayerController = GetComponentInParent<OVRPlayerController>();
         //}
         //Assert.IsNotNull(PlayerController);
-        if(CameraRig == null)
+        if (CameraRig == null)
         {
             CameraRig = FindObjectOfType<OVRCameraRig>();
         }
@@ -49,5 +46,5 @@ public class LocomotionController : MonoBehaviour
 #if UNITY_EDITOR
         OVRPlugin.SendEvent("locomotion_controller", (SceneManager.GetActiveScene().name == "Locomotion").ToString(), "sample_framework");
 #endif
-	}
+    }
 }

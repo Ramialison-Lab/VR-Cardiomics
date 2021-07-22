@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-
-using UnityEngine;
-using System.IO;
-
-// TODO: use JsonUtility in modern Unity
+﻿// TODO: use JsonUtility in modern Unity
 // using UnityEngine.JSONSerializeModule
 using Boomlagoon.JSON;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 public class FileUpload : MonoBehaviour
 {
@@ -27,9 +24,9 @@ public class FileUpload : MonoBehaviour
     {
         yield return null;
 
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         JsCreateHiddenFileInput();
-        #endif
+#endif
 
         // var genes = LoadPresetGeneSet("geneset");
         // StartCoroutine(GameObject.Find("ScriptHolder").GetComponent<Colour>().ColourByGeneSet(genes));
@@ -37,15 +34,16 @@ public class FileUpload : MonoBehaviour
 
     public void ShowFileUploadDialog()
     {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         JsShowFileInput();
-        #endif
+#endif
     }
 
     public void OnReceiveUpload(string jsonText)
     {
         GeneSet genes = null;
-        try {
+        try
+        {
             loadingSpinner.SetActive(true);
             var json = JSONObject.Parse(jsonText);
             var filename = json.GetString("filename");
@@ -58,7 +56,8 @@ public class FileUpload : MonoBehaviour
 
             DebugLogGeneSet(genes);
         }
-        catch {
+        catch
+        {
             loadingSpinner.SetActive(false);
         }
 
@@ -78,7 +77,8 @@ public class FileUpload : MonoBehaviour
 
             DebugLogGeneSet(genes);
         }
-        catch {
+        catch
+        {
             loadingSpinner.SetActive(false);
         }
 

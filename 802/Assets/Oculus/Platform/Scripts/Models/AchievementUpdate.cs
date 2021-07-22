@@ -2,23 +2,19 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
 
-  public class AchievementUpdate
-  {
-    public readonly bool JustUnlocked;
-    public readonly string Name;
-
-
-    public AchievementUpdate(IntPtr o)
+    public class AchievementUpdate
     {
-      JustUnlocked = CAPI.ovr_AchievementUpdate_GetJustUnlocked(o);
-      Name = CAPI.ovr_AchievementUpdate_GetName(o);
+        public readonly bool JustUnlocked;
+        public readonly string Name;
+
+
+        public AchievementUpdate(IntPtr o)
+        {
+            JustUnlocked = CAPI.ovr_AchievementUpdate_GetJustUnlocked(o);
+            Name = CAPI.ovr_AchievementUpdate_GetName(o);
+        }
     }
-  }
 
 }

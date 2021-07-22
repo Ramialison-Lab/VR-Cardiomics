@@ -1,13 +1,12 @@
-using UnityEngine;
-using UnityEngine.UI;
-
+using System;
+using System.Collections;
 // Needed to access onscreen elements
 using System.Collections.Generic;
-using System.Collections;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Linq;
-using System;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using UnityEngine.UI;
 
 /*****
  * 
@@ -91,6 +90,8 @@ public class Colour : MonoBehaviour
     public Sprite normEnabledSprite;
     public Sprite normDisabledSprite;
 
+    public string csvName = "dataset2207";
+
     public Sprite colourBlind;
 
     public GameObject loadingSpinner;
@@ -114,7 +115,7 @@ public class Colour : MonoBehaviour
     private float originalMin;
     private float heatMax;
     private float heatMin;
-    private int counterOriginal, counterCopy =  0;
+    private int counterOriginal, counterCopy = 0;
 
 
     // Run on initial load
@@ -177,8 +178,6 @@ public class Colour : MonoBehaviour
 
         scripts.GetComponent<Explode>().Reset();
 
-        //TBD COMMENT NEXT 2 LINES
-        GameObject.Find("MainCamera").GetComponent<CameraRotation>().Reset();
         GameObject.Find("MainCamera").GetComponent<Selection>().Reset();
         if (compare) compare.reset();
         if (dpanel) dpanel.GetComponentInChildren<dPanel>().reset();
@@ -190,7 +189,7 @@ public class Colour : MonoBehaviour
 #if USE_REAL_DATA
         var csvFilenameBase = "fernP2_real";
 #else
-        var csvFilenameBase = "fake_mouse_expression_data";
+        var csvFilenameBase = csvName;
 #endif
         TextAsset textAsset = Resources.Load(csvFilenameBase) as TextAsset; //string input =  result.text;
         string[] wArray = textAsset.text.Split("\n"[0]);
@@ -253,7 +252,8 @@ public class Colour : MonoBehaviour
         return -1;
     }
 
-    public void InitExpressionDataNameIndexMapping() {
+    public void InitExpressionDataNameIndexMapping()
+    {
         expressionDataNameIndexMapping = new Dictionary<string, int>(valuesCount);
         for (int i = 0; i < valuesCount; i++)
         {
@@ -293,7 +293,8 @@ public class Colour : MonoBehaviour
             }
             allGeneNames.Add(line.Trim().ToLower());
             count++;
-            if ((count % yield_every) == 0) {
+            if ((count % yield_every) == 0)
+            {
                 // yield return null;
                 // Debug.Log(allGeneNames.Count);
                 yield return new WaitForSeconds(.05f);
@@ -400,7 +401,7 @@ public class Colour : MonoBehaviour
                 computeDistancesP(copyGeneIndex);
                 //baseGene = currentGene;
             }
-          
+
             float lMax = -1;
             float lMin = 100;
             if (norm)
@@ -471,7 +472,7 @@ public class Colour : MonoBehaviour
 
     public void calculateHeatMapData()
     {
-        for(int i = 0; i<alength; i++)
+        for (int i = 0; i < alength; i++)
         {
             expHeatMap[i] = Math.Abs(expOriginal[i] - expCopy[i]);
         }
@@ -504,7 +505,8 @@ public class Colour : MonoBehaviour
         loadingSpinner.SetActive(true);
 
         // allGeneNames gets populated on startup - we can't do anything until it's filled
-        while (!_allGenes_ready) {
+        while (!_allGenes_ready)
+        {
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -535,7 +537,8 @@ public class Colour : MonoBehaviour
                 //JsAlert(geneName + " is not a valid gene name.");
 #endif
                 //return;
-                if (count % yield_every == 0) {
+                if (count % yield_every == 0)
+                {
                     yield return new WaitForSeconds(yield_time);
                 }
                 continue;
@@ -575,7 +578,8 @@ public class Colour : MonoBehaviour
                 averageValues[i] += expressionForGene[i];
             }
 
-            if (count % yield_every == 0) {
+            if (count % yield_every == 0)
+            {
                 yield return new WaitForSeconds(yield_time);
             }
         }

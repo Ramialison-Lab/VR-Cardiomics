@@ -21,7 +21,7 @@ namespace OVRTouchSample
         Controller
     }
 
-	// Stores pose-specific data such as the animation id and allowing gestures.
+    // Stores pose-specific data such as the animation id and allowing gestures.
     public class HandPose : MonoBehaviour
     {
         [SerializeField]

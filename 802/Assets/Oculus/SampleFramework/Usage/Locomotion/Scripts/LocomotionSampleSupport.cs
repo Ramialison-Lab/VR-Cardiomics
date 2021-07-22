@@ -9,13 +9,11 @@ language governing permissions and limitations under the license.
 
 #define DEBUG_LOCOMOTION_PANEL
 
-using UnityEngine;
-using System.Collections;
 using System.Diagnostics;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
 public class LocomotionSampleSupport : MonoBehaviour
 {
@@ -25,7 +23,7 @@ public class LocomotionSampleSupport : MonoBehaviour
     {
         get
         {
-            return lc.GetComponent<LocomotionTeleport>(); 
+            return lc.GetComponent<LocomotionTeleport>();
         }
     }
 
@@ -44,7 +42,7 @@ public class LocomotionSampleSupport : MonoBehaviour
         {
             Debug.LogError("Need EventSystem");
         }
-		SetupTwoStickTeleport();
+        SetupTwoStickTeleport();
 
         // SAMPLE-ONLY HACK:
         // Due to restrictions on how Unity project settings work, we just hackily set up default
@@ -55,7 +53,7 @@ public class LocomotionSampleSupport : MonoBehaviour
 
     public void Update()
     {
-        if(OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
+        if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
         {
             if (inMenu) DebugUIBuilder.instance.Hide();
             else DebugUIBuilder.instance.Show();
@@ -236,7 +234,7 @@ public class LocomotionSampleSupport : MonoBehaviour
         orient.Thumbstick = OVRInput.Controller.Touch;
     }
 
-	/*
+    /*
     void SetupRightTurnLeftTeleport()
     {
         SetupTeleportDefaults();

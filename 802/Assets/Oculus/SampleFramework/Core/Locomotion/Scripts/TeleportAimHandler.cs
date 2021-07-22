@@ -7,9 +7,8 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// TeleportAimHandler will provide a series of points in the world that represent the series of line 
@@ -20,34 +19,34 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class TeleportAimHandler : TeleportSupport
 {
-	/// <summary>
-	/// The LocomotionTeleport supports one aim handler at a time. Call the base OnEnable to make sure LocomotionTeleport
-	/// is valid, then assign the current aim handler to this object.
-	/// </summary>
-	protected override void OnEnable()
-	{
-		base.OnEnable();
-		LocomotionTeleport.AimHandler = this;
-	}
+    /// <summary>
+    /// The LocomotionTeleport supports one aim handler at a time. Call the base OnEnable to make sure LocomotionTeleport
+    /// is valid, then assign the current aim handler to this object.
+    /// </summary>
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LocomotionTeleport.AimHandler = this;
+    }
 
-	/// <summary>
-	/// When this component is disabled, make sure to clear the LocomotionTeleport's aim handler but only if this is
-	/// still the active handler. It's an unlikely edge case but it's more robust to make sure a different aim handler
-	/// wasn't enabled before this was disabled.
-	/// </summary>
-	protected override void OnDisable()
-	{
-		if (LocomotionTeleport.AimHandler == this)
-		{
-			LocomotionTeleport.AimHandler = null;
-		}
-		base.OnDisable();
-	}
+    /// <summary>
+    /// When this component is disabled, make sure to clear the LocomotionTeleport's aim handler but only if this is
+    /// still the active handler. It's an unlikely edge case but it's more robust to make sure a different aim handler
+    /// wasn't enabled before this was disabled.
+    /// </summary>
+    protected override void OnDisable()
+    {
+        if (LocomotionTeleport.AimHandler == this)
+        {
+            LocomotionTeleport.AimHandler = null;
+        }
+        base.OnDisable();
+    }
 
-	/// <summary>
-	/// GetPoints provides the core purpose of this class: Return a sequence of points that represents the line segment
-	/// or segments that should be collision tested against the world.
-	/// </summary>
-	/// <returns></returns>
-	public abstract void GetPoints(List<Vector3> points);
+    /// <summary>
+    /// GetPoints provides the core purpose of this class: Return a sequence of points that represents the line segment
+    /// or segments that should be collision tested against the world.
+    /// </summary>
+    /// <returns></returns>
+    public abstract void GetPoints(List<Vector3> points);
 }

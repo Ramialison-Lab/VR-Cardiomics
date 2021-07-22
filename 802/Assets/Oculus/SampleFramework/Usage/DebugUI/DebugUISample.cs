@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -10,7 +8,7 @@ public class DebugUISample : MonoBehaviour
     bool inMenu;
     private Text sliderText;
 
-	void Start ()
+    void Start()
     {
         DebugUIBuilder.instance.AddButton("Button Pressed", LogButtonPressed);
         DebugUIBuilder.instance.AddLabel("Label");
@@ -22,24 +20,24 @@ public class DebugUISample : MonoBehaviour
         sliderText.text = sliderPrefab.GetComponentInChildren<Slider>().value.ToString();
         DebugUIBuilder.instance.AddDivider();
         DebugUIBuilder.instance.AddToggle("Toggle", TogglePressed);
-        DebugUIBuilder.instance.AddRadio("Radio1", "group", delegate(Toggle t) { RadioPressed("Radio1", "group", t); }) ;
-        DebugUIBuilder.instance.AddRadio("Radio2", "group", delegate(Toggle t) { RadioPressed("Radio2", "group", t); }) ;
+        DebugUIBuilder.instance.AddRadio("Radio1", "group", delegate (Toggle t) { RadioPressed("Radio1", "group", t); });
+        DebugUIBuilder.instance.AddRadio("Radio2", "group", delegate (Toggle t) { RadioPressed("Radio2", "group", t); });
         DebugUIBuilder.instance.AddLabel("Secondary Tab", 1);
-		DebugUIBuilder.instance.AddDivider(1);
-        DebugUIBuilder.instance.AddRadio("Side Radio 1", "group2", delegate(Toggle t) { RadioPressed("Side Radio 1", "group2", t); }, DebugUIBuilder.DEBUG_PANE_RIGHT);
-        DebugUIBuilder.instance.AddRadio("Side Radio 2", "group2", delegate(Toggle t) { RadioPressed("Side Radio 2", "group2", t); }, DebugUIBuilder.DEBUG_PANE_RIGHT);
+        DebugUIBuilder.instance.AddDivider(1);
+        DebugUIBuilder.instance.AddRadio("Side Radio 1", "group2", delegate (Toggle t) { RadioPressed("Side Radio 1", "group2", t); }, DebugUIBuilder.DEBUG_PANE_RIGHT);
+        DebugUIBuilder.instance.AddRadio("Side Radio 2", "group2", delegate (Toggle t) { RadioPressed("Side Radio 2", "group2", t); }, DebugUIBuilder.DEBUG_PANE_RIGHT);
 
         DebugUIBuilder.instance.Show();
         inMenu = true;
-	}
+    }
 
     public void TogglePressed(Toggle t)
     {
-        Debug.Log("Toggle pressed. Is on? "+t.isOn);
+        Debug.Log("Toggle pressed. Is on? " + t.isOn);
     }
     public void RadioPressed(string radioLabel, string group, Toggle t)
     {
-        Debug.Log("Radio value changed: "+radioLabel+", from group "+group+". New value: "+t.isOn);
+        Debug.Log("Radio value changed: " + radioLabel + ", from group " + group + ". New value: " + t.isOn);
     }
 
     public void SliderPressed(float f)
@@ -50,7 +48,7 @@ public class DebugUISample : MonoBehaviour
 
     void Update()
     {
-        if(OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
+        if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
         {
             if (inMenu) DebugUIBuilder.instance.Hide();
             else DebugUIBuilder.instance.Show();

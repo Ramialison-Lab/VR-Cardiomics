@@ -3,19 +3,19 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum MatchmakingStatApproach : int
-  {
-    [Description("UNKNOWN")]
-    Unknown,
+    public enum MatchmakingStatApproach : int
+    {
+        [Description("UNKNOWN")]
+        Unknown,
 
-    [Description("TRAILING")]
-    Trailing,
+        [Description("TRAILING")]
+        Trailing,
 
-    [Description("SWINGY")]
-    Swingy,
+        [Description("SWINGY")]
+        Swingy,
 
-  }
+    }
 
 }

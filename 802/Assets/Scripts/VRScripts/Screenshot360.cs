@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -28,7 +26,7 @@ public class Screenshot360 : MonoBehaviour
     private Texture2D screenShot;
     private bool isProcessing;
     private int rnd = 0;
-   // public Camera[] camera;
+    // public Camera[] camera;
 
     private void Start()
     {

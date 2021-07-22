@@ -2,23 +2,19 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
 
-  public class CloudStorageConflictMetadata
-  {
-    public readonly CloudStorageMetadata Local;
-    public readonly CloudStorageMetadata Remote;
-
-
-    public CloudStorageConflictMetadata(IntPtr o)
+    public class CloudStorageConflictMetadata
     {
-      Local = new CloudStorageMetadata(CAPI.ovr_CloudStorageConflictMetadata_GetLocal(o));
-      Remote = new CloudStorageMetadata(CAPI.ovr_CloudStorageConflictMetadata_GetRemote(o));
+        public readonly CloudStorageMetadata Local;
+        public readonly CloudStorageMetadata Remote;
+
+
+        public CloudStorageConflictMetadata(IntPtr o)
+        {
+            Local = new CloudStorageMetadata(CAPI.ovr_CloudStorageConflictMetadata_GetLocal(o));
+            Remote = new CloudStorageMetadata(CAPI.ovr_CloudStorageConflictMetadata_GetRemote(o));
+        }
     }
-  }
 
 }

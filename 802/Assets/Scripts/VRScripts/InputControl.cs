@@ -17,7 +17,7 @@ public class InputControl : MonoBehaviour
     private Keyboard keyboardScript;
     public Text geneText;
     //Bools
-    private bool menuReset = true;    
+    private bool menuReset = true;
     private bool currentlyResize = false;
     //GameObjects
     public GameObject settingsMenu;
@@ -67,28 +67,31 @@ public class InputControl : MonoBehaviour
         if (OVRInput.GetUp(OVRInput.Button.Four)) callOptions();
         if (OVRInput.GetUp(OVRInput.Button.Three)) callExplode();
         if (OVRInput.GetUp(OVRInput.Button.One)) sliceDetector();
-        
     }
 
     public void resetColour()
     {
         colour.resetColour();
     }
-    IEnumerator waiter_not_that_waiter_just_waiter()
+    IEnumerator waitFunction()
     {
         yield return new WaitForSeconds(0.2f);
         OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.RTouch);
     }
+
+    // Detection of single slices for group selection
     private void sliceDetector()
     {
-            if (Compare.first == 1)
+        // selection of slices for first group
+        if (Compare.first == 1)
         {
             foreach (SliceBehavior slice in slices)
             {
                 if (slice.selected == true)
                 {
-                    OVRInput.SetControllerVibration(0.2f, 0.2f, OVRInput.Controller.RTouch);
-                    waiter_not_that_waiter_just_waiter();
+                    // Haptic Feedback (Vibration)
+                    // OVRInput.SetControllerVibration(0.2f, 0.2f, OVRInput.Controller.RTouch);
+                    // waitFunction();
 
                     if (slice.GetComponent<Renderer>().material.name == "HighlightGroup1 (Instance)")
                     {
@@ -103,6 +106,8 @@ public class InputControl : MonoBehaviour
                 }
             }
         }
+
+        // selection of slices for second group
         if (Compare.first == 2)
         {
             foreach (SliceBehavior slice in slices)
@@ -128,6 +133,7 @@ public class InputControl : MonoBehaviour
         }
 
     }
+    // Activates slice detection if group selection is used
     private void detectorActivation()
     {
         if (Compare.first != 0) detector.SetActive(true);
@@ -149,20 +155,20 @@ public class InputControl : MonoBehaviour
             {
                 if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
                 {
-                  //  resizeHandle();
+                    //  resizeHandle();
                 }
             }
 
         }
     }
     private void resizeHandle()
-    {    
+    {
         //TBD resize function for handle
 
         foreach (SliceBehavior slice in slices)
         {
             slice.transform.SetParent(GameObject.Find("HeartParent").transform);
-        }        
+        }
         if (currentlyResize)
         {
             heart_handle.transform.position = rightHand.transform.position;
@@ -185,7 +191,7 @@ public class InputControl : MonoBehaviour
             {
                 prominentObject.transform.localScale = new Vector3(initalize, initalize, initalize);
                 fscale = (rightHand.transform.position - leftHand.transform.position).magnitude;
-                initalize = (fscale / start) * save; 
+                initalize = (fscale / start) * save;
             }
             // Resize initializing parameters
             else
@@ -253,12 +259,13 @@ public class InputControl : MonoBehaviour
             keyboardScript.wake();
             menuReset = false;
         }
-        
+
     }
     public void enableKeyboard()
     {
-        if (keyboard.activeSelf) { keyboard.SetActive(false);}
-        else if(!keyboard.activeSelf){
+        if (keyboard.activeSelf) { keyboard.SetActive(false); }
+        else if (!keyboard.activeSelf)
+        {
             keyboard.SetActive(true);
             keyboardScript.wake();
             menuReset = false;
@@ -270,7 +277,7 @@ public class InputControl : MonoBehaviour
     }
     public void combinedView()
     {
-        if (GameObject.Find("HeartCopy(Clone)") == null)  
+        if (GameObject.Find("HeartCopy(Clone)") == null)
             Instantiate(copy);
     }
     public void resetGeneText()
@@ -296,27 +303,27 @@ public class InputControl : MonoBehaviour
         lerpTo(sliceA, startPos, pos);
 
         startPos = sliceB.transform.position;
-        pos = new Vector3(sliceB.transform.position.x + 1 * scale, sliceB.transform.position.y -0.2f * scale, sliceB.transform.position.z);
+        pos = new Vector3(sliceB.transform.position.x + 1 * scale, sliceB.transform.position.y - 0.2f * scale, sliceB.transform.position.z);
         lerpTo(sliceB, startPos, pos);
 
         startPos = sliceD.transform.position;
-        pos = new Vector3(sliceD.transform.position.x -1 * scale, sliceD.transform.position.y +0.2f * scale, sliceD.transform.position.z);
-        lerpTo(sliceD,startPos, pos);
+        pos = new Vector3(sliceD.transform.position.x - 1 * scale, sliceD.transform.position.y + 0.2f * scale, sliceD.transform.position.z);
+        lerpTo(sliceD, startPos, pos);
 
         startPos = sliceE.transform.position;
         pos = new Vector3(sliceE.transform.position.x - 2 * scale, sliceE.transform.position.y + 0.4f * scale, sliceE.transform.position.z);
-        lerpTo(sliceE,startPos, pos);
+        lerpTo(sliceE, startPos, pos);
 
         expand = true;
     }
     private void lerpTo(GameObject slice, Vector3 from, Vector3 to)
     {
-            slice.transform.position = Vector3.Lerp(from, to, 0.1f);
+        slice.transform.position = Vector3.Lerp(from, to, 0.1f);
     }
     void LateUpdate()
     {
-    geneInfo.transform.LookAt(cam.transform);
-    geneInfo.transform.rotation = Quaternion.LookRotation(cam.transform.forward);
+        geneInfo.transform.LookAt(cam.transform);
+        geneInfo.transform.rotation = Quaternion.LookRotation(cam.transform.forward);
 
         if (GameObject.Find("GeneName") != null)
         {

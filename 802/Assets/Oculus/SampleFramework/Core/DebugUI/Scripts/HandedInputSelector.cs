@@ -9,10 +9,7 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using System;
 
 public class HandedInputSelector : MonoBehaviour
 {
@@ -27,7 +24,7 @@ public class HandedInputSelector : MonoBehaviour
 
     void Update()
     {
-        if(OVRInput.GetActiveController() == OVRInput.Controller.LTouch)
+        if (OVRInput.GetActiveController() == OVRInput.Controller.LTouch)
         {
             SetActiveController(OVRInput.Controller.LTouch);
         }
@@ -41,7 +38,7 @@ public class HandedInputSelector : MonoBehaviour
     void SetActiveController(OVRInput.Controller c)
     {
         Transform t;
-        if(c == OVRInput.Controller.LTouch)
+        if (c == OVRInput.Controller.LTouch)
         {
             t = m_CameraRig.leftHandAnchor;
         }

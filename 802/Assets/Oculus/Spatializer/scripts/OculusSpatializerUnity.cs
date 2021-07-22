@@ -18,11 +18,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Runtime.InteropServices;
 using AOT;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 public class OculusSpatializerUnity : MonoBehaviour
 {
@@ -315,11 +313,11 @@ public class OculusSpatializerUnity : MonoBehaviour
 
     // * * * * * * * * * * * * *
     // Import functions
-    public delegate void AudioRaycastCallback(Vector3 origin, Vector3 direction, 
-                                              out Vector3 point, out Vector3 normal, 
+    public delegate void AudioRaycastCallback(Vector3 origin, Vector3 direction,
+                                              out Vector3 point, out Vector3 normal,
                                               System.IntPtr data);
 
-	private const string strOSP = "AudioPluginOculusSpatializer";
+    private const string strOSP = "AudioPluginOculusSpatializer";
 
     [DllImport(strOSP)]
     private static extern int OSP_Unity_AssignRaycastCallback(AudioRaycastCallback callback, System.IntPtr data);

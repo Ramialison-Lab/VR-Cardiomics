@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.Diagnostics;
+using UnityEditor;
+using UnityEngine;
 
-public static class OVREditorUtil {
+public static class OVREditorUtil
+{
 
     [Conditional("UNITY_EDITOR_WIN"), Conditional("UNITY_STANDALONE_WIN"), Conditional("UNITY_ANDROID")]
     public static void SetupBoolField(Object target, string name, ref bool member, ref bool modified)
@@ -138,22 +137,22 @@ public static class OVREditorUtil {
         }
     }
 
-	[Conditional("UNITY_EDITOR_WIN"), Conditional("UNITY_STANDALONE_WIN"), Conditional("UNITY_ANDROID")]
-	public static void SetupInputField(Object target, string name, ref string member, ref bool modified)
-	{
-		SetupInputField(target, new GUIContent(name), ref member, ref modified);
-	}
+    [Conditional("UNITY_EDITOR_WIN"), Conditional("UNITY_STANDALONE_WIN"), Conditional("UNITY_ANDROID")]
+    public static void SetupInputField(Object target, string name, ref string member, ref bool modified)
+    {
+        SetupInputField(target, new GUIContent(name), ref member, ref modified);
+    }
 
-	[Conditional("UNITY_EDITOR_WIN"), Conditional("UNITY_STANDALONE_WIN"), Conditional("UNITY_ANDROID")]
-	public static void SetupInputField(Object target, GUIContent name, ref string member, ref bool modified)
-	{
-		EditorGUI.BeginChangeCheck();
-		string value = EditorGUILayout.TextField(name, member);
-		if (EditorGUI.EndChangeCheck())
-		{
-			Undo.RecordObject(target, "Changed " + name);
-			member = value;
-			modified = true;
-		}
-	}
+    [Conditional("UNITY_EDITOR_WIN"), Conditional("UNITY_STANDALONE_WIN"), Conditional("UNITY_ANDROID")]
+    public static void SetupInputField(Object target, GUIContent name, ref string member, ref bool modified)
+    {
+        EditorGUI.BeginChangeCheck();
+        string value = EditorGUILayout.TextField(name, member);
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(target, "Changed " + name);
+            member = value;
+            modified = true;
+        }
+    }
 }

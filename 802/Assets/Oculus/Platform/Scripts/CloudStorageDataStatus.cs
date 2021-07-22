@@ -3,31 +3,31 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum CloudStorageDataStatus : int
-  {
-    [Description("UNKNOWN")]
-    Unknown,
+    public enum CloudStorageDataStatus : int
+    {
+        [Description("UNKNOWN")]
+        Unknown,
 
-    [Description("IN_SYNC")]
-    InSync,
+        [Description("IN_SYNC")]
+        InSync,
 
-    [Description("NEEDS_DOWNLOAD")]
-    NeedsDownload,
+        [Description("NEEDS_DOWNLOAD")]
+        NeedsDownload,
 
-    [Description("REMOTE_DOWNLOADING")]
-    RemoteDownloading,
+        [Description("REMOTE_DOWNLOADING")]
+        RemoteDownloading,
 
-    [Description("NEEDS_UPLOAD")]
-    NeedsUpload,
+        [Description("NEEDS_UPLOAD")]
+        NeedsUpload,
 
-    [Description("LOCAL_UPLOADING")]
-    LocalUploading,
+        [Description("LOCAL_UPLOADING")]
+        LocalUploading,
 
-    [Description("IN_CONFLICT")]
-    InConflict,
+        [Description("IN_CONFLICT")]
+        InConflict,
 
-  }
+    }
 
 }

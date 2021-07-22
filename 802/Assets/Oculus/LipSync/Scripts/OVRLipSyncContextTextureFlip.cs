@@ -78,9 +78,9 @@ public class OVRLipSyncContextTextureFlip : MonoBehaviour
     /// <summary>
     /// Update this instance.
     /// </summary>
-    void Update ()
+    void Update()
     {
-        if((lipsyncContext != null) && (material != null))
+        if ((lipsyncContext != null) && (material != null))
         {
             // trap inputs and send signals to phoneme engine for testing purposes
 
@@ -125,12 +125,12 @@ public class OVRLipSyncContextTextureFlip : MonoBehaviour
         // This setting will run through all the Visemes, find the
         // one with the greatest amplitude and set it to max value.
         // all other visemes will be set to zero.
-        int   gV = -1;
+        int gV = -1;
         float gA = 0.0f;
 
         for (int i = 0; i < oldFrame.Visemes.Length; i++)
         {
-            if(oldFrame.Visemes[i] > gA)
+            if (oldFrame.Visemes[i] > gA)
             {
                 gV = i;
                 gA = oldFrame.Visemes[i];
@@ -141,7 +141,7 @@ public class OVRLipSyncContextTextureFlip : MonoBehaviour
         {
             Texture t = Textures[gV];
 
-            if(t != null)
+            if (t != null)
             {
                 material.SetTexture("_MainTex", t);
             }

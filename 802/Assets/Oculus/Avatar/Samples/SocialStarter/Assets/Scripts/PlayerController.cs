@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 using Oculus.Platform;
-using Oculus.Platform.Models;
+using UnityEngine;
 
 public class PlayerController : SocialPlatformManager
 {
@@ -68,7 +64,7 @@ public class PlayerController : SocialPlatformManager
             // Bring up friend invite list
             if (OVRInput.GetDown(OVRInput.Button.Three))
             {
-                Rooms.LaunchInvitableUserFlow (roomManager.roomID);
+                Rooms.LaunchInvitableUserFlow(roomManager.roomID);
             }
 
             // Toggle Camera

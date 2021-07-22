@@ -20,11 +20,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LipSyncDemo_Control : MonoBehaviour {
+public class LipSyncDemo_Control : MonoBehaviour
+{
 
     [Tooltip("Key used to rotate the demo object up to 45 degrees to the left.")]
     public KeyCode rotateLeftKey = KeyCode.LeftArrow;
@@ -38,11 +37,13 @@ public class LipSyncDemo_Control : MonoBehaviour {
     private float rotationMax = 45.0f;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (Input.GetKey(rotateLeftKey))
         {
             RotateObject(rotationAmount);

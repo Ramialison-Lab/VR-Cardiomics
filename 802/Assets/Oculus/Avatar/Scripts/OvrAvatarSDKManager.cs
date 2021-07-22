@@ -1,7 +1,7 @@
-using UnityEngine;
 using Oculus.Avatar;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public delegate void specificationCallback(IntPtr specification);
 public delegate void assetLoadedCallback(OvrAvatarAsset asset);
@@ -125,12 +125,12 @@ public class OvrAvatarSDKManager : MonoBehaviour
         CAPI.ovrAvatar_Shutdown();
     }
 
-	void Update()
-	{
-	    if (Instance == null)
-	    {
-	        return;
-	    }
+    void Update()
+    {
+        if (Instance == null)
+        {
+            return;
+        }
 #if AVATAR_DEBUG
         // Call before ovrAvatarMessage_Pop which flushes the state
         CAPI.ovrAvatar_DrawDebugLines();
@@ -138,12 +138,12 @@ public class OvrAvatarSDKManager : MonoBehaviour
 
         // Dispatch waiting avatar spec request
         if (avatarSpecificationQueue.Count > 0 &&
-	        (avatarSpecRequestAvailable ||
-	        Time.time - lastDispatchedAvatarSpecRequestTime >= AVATAR_SPEC_REQUEST_TIMEOUT))
-	    {
-	        avatarSpecRequestAvailable = false;
-	        AvatarSpecRequestParams avatarSpec = avatarSpecificationQueue.Dequeue();
-	        DispatchAvatarSpecificationRequest(avatarSpec);
+            (avatarSpecRequestAvailable ||
+            Time.time - lastDispatchedAvatarSpecRequestTime >= AVATAR_SPEC_REQUEST_TIMEOUT))
+        {
+            avatarSpecRequestAvailable = false;
+            AvatarSpecRequestParams avatarSpec = avatarSpecificationQueue.Dequeue();
+            DispatchAvatarSpecificationRequest(avatarSpec);
             lastDispatchedAvatarSpecRequestTime = Time.time;
             AvatarLogger.Log("Avatar spec request dispatched: " + avatarSpec._userId);
         }
@@ -224,7 +224,7 @@ public class OvrAvatarSDKManager : MonoBehaviour
                     break;
                 }
             case ovrAvatarMessageType.AvatarSpecification:
-            {
+                {
                     avatarSpecRequestAvailable = true;
                     ovrAvatarMessage_AvatarSpecification spec = CAPI.ovrAvatarMessage_GetAvatarSpecification(message);
                     HashSet<specificationCallback> callbackSet;

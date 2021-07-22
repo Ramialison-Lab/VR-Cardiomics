@@ -1,11 +1,9 @@
-using UnityEngine;
 using AOT;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using Oculus.Avatar;
 using Oculus.Platform;
 using Oculus.Platform.Models;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 
 // This class coordinates communication with the Oculus Platform

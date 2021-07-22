@@ -20,9 +20,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************************/
-using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSync
@@ -132,11 +132,11 @@ public class OVRLipSync : MonoBehaviour
 
     // * * * * * * * * * * * * *
     // Import functions
-    #if !UNITY_IOS || UNITY_EDITOR
+#if !UNITY_IOS || UNITY_EDITOR
     public const string strOVRLS = "OVRLipSync";
-    #else
+#else
     public const string strOVRLS = "__Internal";
-    #endif
+#endif
     [DllImport(strOVRLS)]
     private static extern int ovrLipSyncDll_Initialize(int samplerate, int buffersize);
     [DllImport(strOVRLS)]

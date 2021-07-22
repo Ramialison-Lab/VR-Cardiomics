@@ -7,8 +7,6 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 
-using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// This orientation handler doesn't actually do anything with the orientation at all; this is for users
@@ -17,12 +15,12 @@ using System.Collections;
 /// </summary>
 public class TeleportOrientationHandler360 : TeleportOrientationHandler
 {
-	protected override void InitializeTeleportDestination()
-	{
-	}
+    protected override void InitializeTeleportDestination()
+    {
+    }
 
-	protected override void UpdateTeleportDestination()
-	{
-		LocomotionTeleport.OnUpdateTeleportDestination(AimData.TargetValid, AimData.Destination, null, null);
-	}
+    protected override void UpdateTeleportDestination()
+    {
+        LocomotionTeleport.OnUpdateTeleportDestination(AimData.TargetValid, AimData.Destination, null, null);
+    }
 }

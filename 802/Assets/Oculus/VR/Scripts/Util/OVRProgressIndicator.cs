@@ -11,8 +11,6 @@ permissions and limitations under the License.
 ************************************************************************************/
 
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 /// <summary>
 /// Visualizes progress for operations such as loading.
@@ -34,7 +32,7 @@ public class OVRProgressIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        progressImage.sharedMaterial.SetFloat("_AlphaCutoff", 1-currentProgress);
+        progressImage.sharedMaterial.SetFloat("_AlphaCutoff", 1 - currentProgress);
 
     }
 }

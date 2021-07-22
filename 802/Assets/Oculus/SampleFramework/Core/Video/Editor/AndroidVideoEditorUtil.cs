@@ -3,11 +3,9 @@
 Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.  
 
 ************************************************************************************/
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.IO;
+using UnityEditor;
 
 public class AndroidVideoEditorUtil
 {
@@ -70,7 +68,7 @@ public class AndroidVideoEditorUtil
             if (File.Exists(gradleTemplatePath + ".DISABLED"))
             {
                 File.Move(disabledGradleTemplatePath, gradleTemplatePath);
-                File.Move(disabledGradleTemplatePath + ".meta", gradleTemplatePath+".meta");
+                File.Move(disabledGradleTemplatePath + ".meta", gradleTemplatePath + ".meta");
             }
             else
             {

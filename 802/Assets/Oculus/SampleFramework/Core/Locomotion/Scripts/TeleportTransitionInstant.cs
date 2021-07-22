@@ -7,8 +7,6 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 
-using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// This transition will move the player with no other side effects.
@@ -20,7 +18,7 @@ public class TeleportTransitionInstant : TeleportTransition
     /// without any delay or other side effects.
     /// </summary>
     protected override void LocomotionTeleportOnEnterStateTeleporting()
-	{
-		LocomotionTeleport.DoTeleport();
-	}
+    {
+        LocomotionTeleport.DoTeleport();
+    }
 }

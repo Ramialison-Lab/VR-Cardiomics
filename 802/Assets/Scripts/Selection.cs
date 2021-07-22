@@ -1,11 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
- // Needed to access onscreen elements
+﻿// Needed to access onscreen elements
 using System.Collections.Generic;
-using System.Globalization;
-using System;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 /*****
  * 
@@ -35,7 +32,7 @@ public class Selection : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Compare.first != 0 && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
         { // and not over a UI element?
-			
+
             Ray ray = CC.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -57,7 +54,7 @@ public class Selection : MonoBehaviour
                         outAdd(hName, 1);
                     }
                 }
-						
+
                 if (Compare.first == 2 && !Compare.pieces1.Contains(hName))
                 { // Red
                     if (Compare.pieces2.Contains(hName))
@@ -106,12 +103,12 @@ public class Selection : MonoBehaviour
 
     private void makeOutline(string oName)
     {
-		
+
         Material sMat = GameObject.Find(oName).transform.GetComponent<Renderer>().material;
         sMat.shader = Shader.Find("Outlined/Silhouetted Bumped Diffuse");
         if (Compare.first == 1)
         {
-            sMat.SetColor("_OutlineColor", new Color(0, 0, 1)); 
+            sMat.SetColor("_OutlineColor", new Color(0, 0, 1));
         }
         else
         {
@@ -142,7 +139,7 @@ public class Selection : MonoBehaviour
         {
             hp.Remove(piece);
         }
-			
+
         foreach (string piece in hp)
         {
             outAdd(piece, 2);
@@ -161,7 +158,7 @@ public class Selection : MonoBehaviour
             outRemove(hp, 2);
         }
     }
-		
+
     // Uncomment to take screenshots by pressing the 'K' key during runtime
 
 
@@ -211,5 +208,5 @@ public class Selection : MonoBehaviour
 	}
 	**/
 
-		
+
 }

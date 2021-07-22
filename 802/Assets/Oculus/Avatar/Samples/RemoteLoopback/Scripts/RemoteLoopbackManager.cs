@@ -1,10 +1,8 @@
-using UnityEngine;
-using System.Collections;
-using System;
-using System.IO;
 using Oculus.Avatar;
-using System.Runtime.InteropServices;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 public class RemoteLoopbackManager : MonoBehaviour
 {
@@ -29,7 +27,7 @@ public class RemoteLoopbackManager : MonoBehaviour
         [Range(0.0f, 1.0f)]
         public float LatencyWeight = 0.25f;  // How much the latest sample impacts the current latency
 
-        [Range(0,10)]
+        [Range(0, 10)]
         public int MaxSamples = 4; //How many samples in our window
 
         internal float AverageWindow = 0f;
@@ -118,7 +116,7 @@ public class RemoteLoopbackManager : MonoBehaviour
             }
         }
     }
-    
+
     void SendPacketData(byte[] data)
     {
         PacketLatencyPair PacketPair = new PacketLatencyPair();

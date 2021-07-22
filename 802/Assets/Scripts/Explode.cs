@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
- // Needed to access onscreen elements
-using System.Collections;
+// Needed to access onscreen elements
 
 /*****
  * 
@@ -18,7 +17,7 @@ public class Explode : MonoBehaviour
     public Button expandBtn;
     public Button resetBtn;
     public GameObject player;
-    private bool explode =false;
+    private bool explode = false;
 
     Vector3[] startPositions = new Vector3[5];
     // Position of slices at load
@@ -46,7 +45,7 @@ public class Explode : MonoBehaviour
     // Resets all slices back to their start positions
     public void Reset()
     {
-		
+
         explodeBtnTxt.text = "Expand";
         exploded = 1;
 
@@ -65,7 +64,7 @@ public class Explode : MonoBehaviour
             GameObject.Find("HeartCopy(Clone)").transform.Translate(0, 0, -1.0f);
             explode = !explode;
         }
-        else if(GameObject.Find("HeartCopy(Clone)") != null && !explode)
+        else if (GameObject.Find("HeartCopy(Clone)") != null && !explode)
         {
             GameObject.Find("HeartCopy(Clone)").transform.Translate(0, 0, 1.0f);
             explode = !explode;
@@ -82,7 +81,7 @@ public class Explode : MonoBehaviour
             {
 
 
-                next = new Vector3(startPositions[i].x + (-1F * i)+2F, startPositions[i].y, startPositions[i].z + 0.0F);
+                next = new Vector3(startPositions[i].x + (-1F * i) + 2F, startPositions[i].y, startPositions[i].z + 0.0F);
 
             }
             else
@@ -113,7 +112,7 @@ public class Explode : MonoBehaviour
     {
 
         float duration = 0.4f;
-	
+
         float t = 0f;
         while (t < 1)
         {

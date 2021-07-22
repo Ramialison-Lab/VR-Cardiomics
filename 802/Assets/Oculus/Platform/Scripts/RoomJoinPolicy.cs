@@ -3,28 +3,28 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum RoomJoinPolicy : int
-  {
-    [Description("NONE")]
-    None,
+    public enum RoomJoinPolicy : int
+    {
+        [Description("NONE")]
+        None,
 
-    [Description("EVERYONE")]
-    Everyone,
+        [Description("EVERYONE")]
+        Everyone,
 
-    [Description("FRIENDS_OF_MEMBERS")]
-    FriendsOfMembers,
+        [Description("FRIENDS_OF_MEMBERS")]
+        FriendsOfMembers,
 
-    [Description("FRIENDS_OF_OWNER")]
-    FriendsOfOwner,
+        [Description("FRIENDS_OF_OWNER")]
+        FriendsOfOwner,
 
-    [Description("INVITED_USERS")]
-    InvitedUsers,
+        [Description("INVITED_USERS")]
+        InvitedUsers,
 
-    [Description("UNKNOWN")]
-    Unknown,
+        [Description("UNKNOWN")]
+        Unknown,
 
-  }
+    }
 
 }

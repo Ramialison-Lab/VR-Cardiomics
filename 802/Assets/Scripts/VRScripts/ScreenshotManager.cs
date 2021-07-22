@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.IO;
+﻿using System.IO;
+using UnityEngine;
 
 public class ScreenshotManager : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class ScreenshotManager : MonoBehaviour
     public bool optimizeForManyScreenshots = true;
 
     // configure with raw, jpg, png, or ppm (simple raw format)
-    public enum Format { RAW, JPG, PNG};
+    public enum Format { RAW, JPG, PNG };
     public Format format = Format.PNG;
 
     // folder to write output (defaults to data path)
@@ -93,7 +92,7 @@ public class ScreenshotManager : MonoBehaviour
             }
 
             // get main camera and manually render scene into rt
-             // NOTE: added because there was no reference to camera in original script; must add this script to Camera
+            // NOTE: added because there was no reference to camera in original script; must add this script to Camera
             camera.targetTexture = renderTexture;
             camera.Render();
 

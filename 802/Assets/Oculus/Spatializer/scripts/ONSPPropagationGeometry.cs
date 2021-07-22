@@ -22,10 +22,10 @@ limitations under the License.
 ************************************************************************************/
 #define INCLUDE_TERRAIN_TREES
 
-using UnityEngine;
+using Oculus.Spatializer.Propagation;
 using System;
 using System.Collections.Generic;
-using Oculus.Spatializer.Propagation;
+using UnityEngine;
 
 public class ONSPPropagationGeometry : MonoBehaviour
 {
@@ -70,7 +70,7 @@ public class ONSPPropagationGeometry : MonoBehaviour
     /// Call this function to create geometry handle
     /// </summary>
     void CreatePropagationGeometry()
-    {        
+    {
         // Create Geometry
         if (ONSPPropagation.Interface.CreateAudioGeometry(out geometryHandle) != OSPSuccess)
         {
@@ -151,8 +151,8 @@ public class ONSPPropagationGeometry : MonoBehaviour
         if (!obj.activeInHierarchy)
             return;
 
-        MeshFilter[] meshes                 = obj.GetComponents<MeshFilter>();
-        Terrain[] terrains                  = obj.GetComponents<Terrain>();
+        MeshFilter[] meshes = obj.GetComponents<MeshFilter>();
+        Terrain[] terrains = obj.GetComponents<Terrain>();
         ONSPPropagationMaterial[] materials = obj.GetComponents<ONSPPropagationMaterial>();
 
         // Initialize the current material array to a new array if there are any new materials.

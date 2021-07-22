@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HandleBehavior : MonoBehaviour
 {
     private Vector3 spawnPos;
-    private Vector3[] savePos;
+    //  private Vector3[] savePos;
     public Vector3 original;
-    private Vector3 movement;
+    // private Vector3 movement;
     private Quaternion spawnRot;
-   // public GameObject sphere;
+    // public GameObject sphere;
     public GameObject heart;
 
     void Start()
@@ -19,24 +17,22 @@ public class HandleBehavior : MonoBehaviour
         spawnRot = transform.rotation;
     }
 
-    // Update is called once per frame
+    // Update checks if handle in use
     void Update()
     {
         original = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
         _ = transform.GetComponent<OVRGrabbable>().isGrabbed ? GetComponent<Rigidbody>().isKinematic = false : GetComponent<Rigidbody>().isKinematic = true;
-     //   if (transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(false);
-     //   if (!transform.GetComponent<OVRGrabbable>().isGrabbed) sphere.SetActive(true);
     }
 
+    // Resets handle to original position and rotation
     public void Reset()
     {
-        transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
-        transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
         transform.position = Vector3.Lerp(gameObject.transform.position, spawnPos, 0.2f);
         transform.rotation = spawnRot;
         transform.localScale = original;
     }
 
+    // Returns if handle is currently grabbed
     public bool isGrabbed()
     {
         return transform.GetComponent<OVRGrabbable>().isGrabbed;

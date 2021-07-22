@@ -115,15 +115,20 @@ public class OVRLipSyncSequence : ScriptableObject
         for (int x = 0; x < totalSamples + frameOffset; x += sSampleSize)
         {
             int remainingSamples = totalSamples - x;
-            if (remainingSamples >= sSampleSize) {
-              clip.GetData(samples, x);
-            } else if (remainingSamples > 0) {
-              float[] samples_clip = new float[remainingSamples * clip.channels];
-              clip.GetData(samples_clip, x);
-              Array.Copy(samples_clip, samples, samples_clip.Length);
-              Array.Clear(samples, samples_clip.Length, samples.Length - samples_clip.Length);
-            } else {
-              Array.Clear(samples, 0, samples.Length);
+            if (remainingSamples >= sSampleSize)
+            {
+                clip.GetData(samples, x);
+            }
+            else if (remainingSamples > 0)
+            {
+                float[] samples_clip = new float[remainingSamples * clip.channels];
+                clip.GetData(samples_clip, x);
+                Array.Copy(samples_clip, samples, samples_clip.Length);
+                Array.Clear(samples, samples_clip.Length, samples.Length - samples_clip.Length);
+            }
+            else
+            {
+                Array.Clear(samples, 0, samples.Length);
             }
 
             OVRLipSync.Frame frame = new OVRLipSync.Frame();

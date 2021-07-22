@@ -12,9 +12,6 @@ permissions and limitations under the License.
 ************************************************************************************/
 
 using UnityEngine;
-using System.Collections;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 abstract public class OVRCursor : MonoBehaviour
 {

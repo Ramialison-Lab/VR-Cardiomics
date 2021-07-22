@@ -1,6 +1,6 @@
+using Oculus.Avatar;
 using System.Collections;
 using System.Collections.Generic;
-using Oculus.Avatar;
 using UnityEngine;
 
 public class OvrAvatarTextureCopyManager : MonoBehaviour
@@ -25,15 +25,15 @@ public class OvrAvatarTextureCopyManager : MonoBehaviour
         public int DstElement;
 
         public CopyTextureParams(
-            Texture src, 
-            Texture dst, 
-            int mip, 
-            int srcSize, 
+            Texture src,
+            Texture dst,
+            int mip,
+            int srcSize,
             int dstElement)
         {
             Src = src;
             Dst = dst;
-            Mip = mip;  
+            Mip = mip;
             SrcSize = srcSize;
             DstElement = dstElement;
         }
@@ -59,7 +59,7 @@ public class OvrAvatarTextureCopyManager : MonoBehaviour
         }
     }
     private Dictionary<int, TextureSet> textureSets;
-    
+
     private const int TEXTURES_TO_COPY_QUEUE_CAPACITY = 256;
     private const int COPIES_PER_FRAME = 8;
 

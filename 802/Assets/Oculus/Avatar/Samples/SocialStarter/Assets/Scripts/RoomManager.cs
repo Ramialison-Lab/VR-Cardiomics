@@ -1,8 +1,6 @@
-using UnityEngine;
-using System;
-using System.Collections.Generic;
 using Oculus.Platform;
 using Oculus.Platform.Models;
+using System;
 
 // Helper class to manage Room creation, membership and invites.
 // Rooms are a mechanism to help Oculus users create a shared experience.

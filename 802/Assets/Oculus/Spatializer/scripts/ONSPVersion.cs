@@ -18,46 +18,46 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************************/
-using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 public class ONSPVersion : MonoBehaviour
 {
-	   // Import functions
+    // Import functions
     public const string strONSPS = "AudioPluginOculusSpatializer";
- 
-	[DllImport(strONSPS)]
+
+    [DllImport(strONSPS)]
     private static extern void ONSP_GetVersion(ref int Major, ref int Minor, ref int Patch);
 
-	/// <summary>
-	/// Awake this instance.
-	/// </summary>
-	void Awake()
-	{
+    /// <summary>
+    /// Awake this instance.
+    /// </summary>
+    void Awake()
+    {
         int major = 0;
-        int minor = 0; 
+        int minor = 0;
         int patch = 0;
 
         ONSP_GetVersion(ref major, ref minor, ref patch);
 
         String version = System.String.Format
         ("ONSP Version: {0:F0}.{1:F0}.{2:F0}", major, minor, patch);
-        
-        Debug.Log(version);
-	}
 
-	/// <summary>
-	/// Start this instance.
-	/// </summary>
+        Debug.Log(version);
+    }
+
+    /// <summary>
+    /// Start this instance.
+    /// </summary>
     void Start()
     {
     }
 
-	/// <summary>
-	/// Update this instance.
-	/// </summary>
+    /// <summary>
+    /// Update this instance.
+    /// </summary>
     void Update()
     {
-    }		
+    }
 }

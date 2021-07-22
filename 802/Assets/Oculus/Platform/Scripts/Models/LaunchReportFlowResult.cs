@@ -2,23 +2,19 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
 
-  public class LaunchReportFlowResult
-  {
-    public readonly bool DidCancel;
-    public readonly UInt64 UserReportId;
-
-
-    public LaunchReportFlowResult(IntPtr o)
+    public class LaunchReportFlowResult
     {
-      DidCancel = CAPI.ovr_LaunchReportFlowResult_GetDidCancel(o);
-      UserReportId = CAPI.ovr_LaunchReportFlowResult_GetUserReportId(o);
+        public readonly bool DidCancel;
+        public readonly UInt64 UserReportId;
+
+
+        public LaunchReportFlowResult(IntPtr o)
+        {
+            DidCancel = CAPI.ovr_LaunchReportFlowResult_GetDidCancel(o);
+            UserReportId = CAPI.ovr_LaunchReportFlowResult_GetUserReportId(o);
+        }
     }
-  }
 
 }

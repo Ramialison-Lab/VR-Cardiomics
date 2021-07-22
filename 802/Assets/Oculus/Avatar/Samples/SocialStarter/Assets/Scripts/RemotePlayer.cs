@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Oculus.Platform;
+using UnityEngine;
 
 public class RemotePlayer
 {

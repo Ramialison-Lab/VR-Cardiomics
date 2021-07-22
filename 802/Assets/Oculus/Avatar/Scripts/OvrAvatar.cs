@@ -599,7 +599,7 @@ public class OvrAvatar : MonoBehaviour
         if (EnableExpressive) Capabilities |= ovrAvatarCapabilities.Expressive;
 
         // Enable body tilt on 6dof devices
-        if(OVRPlugin.positionSupported)
+        if (OVRPlugin.positionSupported)
         {
             Capabilities |= ovrAvatarCapabilities.BodyTilt;
         }
@@ -733,7 +733,7 @@ public class OvrAvatar : MonoBehaviour
 
     void RecordFrame()
     {
-        if(UseSDKPackets)
+        if (UseSDKPackets)
         {
             RecordSDKFrame();
         }
@@ -1048,21 +1048,21 @@ public class OvrAvatar : MonoBehaviour
     }
 
     static ovrAvatarLights ovrLights = new ovrAvatarLights();
-	static void ExpressiveGlobalInit()
-	{
-		if (doneExpressiveGlobalInit)
-		{
-			return;
-		}
+    static void ExpressiveGlobalInit()
+    {
+        if (doneExpressiveGlobalInit)
+        {
+            return;
+        }
 
-		doneExpressiveGlobalInit = true;
+        doneExpressiveGlobalInit = true;
 
         // This array size has to match the 'MarshalAs' attribute in the ovrAvatarLights declaration.
         const int MAXSIZE = 16;
         ovrLights.lights = new ovrAvatarLight[MAXSIZE];
 
         InitializeLights();
-	}
+    }
 
     static void InitializeLights()
     {
@@ -1267,17 +1267,17 @@ public class OvrAvatar : MonoBehaviour
 
     public void UpdateVoiceData(short[] pcmData, int numChannels)
     {
-      if (lipsyncContext != null && micInput == null)
-      {
-          lipsyncContext.ProcessAudioSamplesRaw(pcmData, numChannels);
-      }
+        if (lipsyncContext != null && micInput == null)
+        {
+            lipsyncContext.ProcessAudioSamplesRaw(pcmData, numChannels);
+        }
     }
     public void UpdateVoiceData(float[] pcmData, int numChannels)
     {
-      if (lipsyncContext != null && micInput == null)
-      {
-          lipsyncContext.ProcessAudioSamplesRaw(pcmData, numChannels);
-      }
+        if (lipsyncContext != null && micInput == null)
+        {
+            lipsyncContext.ProcessAudioSamplesRaw(pcmData, numChannels);
+        }
     }
 
 

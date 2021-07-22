@@ -1,10 +1,8 @@
-using UnityEngine;
-using System.Collections;
 using System;
-using System.Collections.Generic;
-using Oculus.Avatar;
+using UnityEngine;
 
-public class OvrAvatarLocalDriver : OvrAvatarDriver {
+public class OvrAvatarLocalDriver : OvrAvatarDriver
+{
 
     Vector3 centerEyePosition = Vector3.zero;
     Quaternion centerEyeRotation = Quaternion.identity;

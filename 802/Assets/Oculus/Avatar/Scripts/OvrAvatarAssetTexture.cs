@@ -1,5 +1,5 @@
-using System;
 using Oculus.Avatar;
+using System;
 using UnityEngine;
 
 public class OvrAvatarAssetTexture : OvrAvatarAsset
@@ -7,7 +7,8 @@ public class OvrAvatarAssetTexture : OvrAvatarAsset
     public Texture2D texture;
     private const int ASTCHeaderSize = 16;
 
-    public OvrAvatarAssetTexture(UInt64 _assetId, IntPtr asset) {
+    public OvrAvatarAssetTexture(UInt64 _assetId, IntPtr asset)
+    {
         assetID = _assetId;
         ovrAvatarTextureAssetData textureAssetData = CAPI.ovrAvatarAsset_GetTextureData(asset);
         TextureFormat format;

@@ -1,17 +1,16 @@
-using UnityEngine;
-using System.Collections;
-using System;
 using Oculus.Avatar;
+using System;
+using UnityEngine;
 
 public class OvrAvatarSkinnedMeshRenderComponent : OvrAvatarRenderComponent
 {
     Shader surface;
     Shader surfaceSelfOccluding;
     bool previouslyActive = false;
-        
+
     internal void Initialize(ovrAvatarRenderPart_SkinnedMeshRender skinnedMeshRender, Shader surface, Shader surfaceSelfOccluding, int thirdPersonLayer, int firstPersonLayer)
     {
-        this.surfaceSelfOccluding = surfaceSelfOccluding != null ? surfaceSelfOccluding :  Shader.Find("OvrAvatar/AvatarSurfaceShaderSelfOccluding");
+        this.surfaceSelfOccluding = surfaceSelfOccluding != null ? surfaceSelfOccluding : Shader.Find("OvrAvatar/AvatarSurfaceShaderSelfOccluding");
         this.surface = surface != null ? surface : Shader.Find("OvrAvatar/AvatarSurfaceShader");
         this.mesh = CreateSkinnedMesh(skinnedMeshRender.meshAssetID, skinnedMeshRender.visibilityMask, thirdPersonLayer, firstPersonLayer);
         bones = mesh.bones;
@@ -27,7 +26,7 @@ public class OvrAvatarSkinnedMeshRenderComponent : OvrAvatarRenderComponent
         UpdateMeshMaterial(visibilityMask, mesh);
         bool isActive = this.gameObject.activeSelf;
 
-        if( mesh != null )
+        if (mesh != null)
         {
             bool changedMaterial = CAPI.ovrAvatarSkinnedMeshRender_MaterialStateChanged(renderPart);
             if (changedMaterial || (!previouslyActive && isActive))

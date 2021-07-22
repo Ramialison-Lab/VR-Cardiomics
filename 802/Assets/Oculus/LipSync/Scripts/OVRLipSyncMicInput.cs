@@ -22,10 +22,10 @@ limitations under the License.
 ************************************************************************************/
 
 using System;
-using UnityEngine;
 using System.Diagnostics;
-using Debug = UnityEngine.Debug;
 using System.Threading;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -320,7 +320,8 @@ public class OVRLipSyncMicInput : MonoBehaviour
         Stopwatch timer = Stopwatch.StartNew();
 
         // Wait until the recording has started
-        while (!(Microphone.GetPosition(selectedDevice) > 0) && timer.Elapsed.TotalMilliseconds < 1000) {
+        while (!(Microphone.GetPosition(selectedDevice) > 0) && timer.Elapsed.TotalMilliseconds < 1000)
+        {
             Thread.Sleep(50);
         }
 

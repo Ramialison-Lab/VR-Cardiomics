@@ -24,12 +24,10 @@ permissions and limitations under the License.
 #define REQUIRES_XR_SDK
 #endif
 
-using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
 using Assets.OVR.Scripts;
-using Assets.Oculus.VR;
-using Assets.Oculus.VR.Editor;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 ///Scans the project and warns about the following conditions:
@@ -73,240 +71,240 @@ using Assets.Oculus.VR.Editor;
 [InitializeOnLoadAttribute]
 public class OVRLint : EditorWindow
 {
-	//TODO: The following require reflection or static analysis.
-	///Use of ONSP reflections (Mobile)
-	///Use of LoadLevelAsync / LoadLevelAdditiveAsync (on Mobile, this kills frame rate so dramatically it's probably better to just go to black and load synchronously)
-	///Use of Linq in non-editor assemblies (common cause of GCs).  Minor: use of foreach.
-	///Use of Unity WWW (exceptionally high overhead for large file downloads, but acceptable for tiny gets).
-	///Declared but empty Awake/Start/Update/OnCollisionEnter/OnCollisionExit/OnCollisionStay.  Also OnCollision* star methods that declare the Collision  argument but do not reference it (omitting it short-circuits the collision contact calculation).
+    //TODO: The following require reflection or static analysis.
+    ///Use of ONSP reflections (Mobile)
+    ///Use of LoadLevelAsync / LoadLevelAdditiveAsync (on Mobile, this kills frame rate so dramatically it's probably better to just go to black and load synchronously)
+    ///Use of Linq in non-editor assemblies (common cause of GCs).  Minor: use of foreach.
+    ///Use of Unity WWW (exceptionally high overhead for large file downloads, but acceptable for tiny gets).
+    ///Declared but empty Awake/Start/Update/OnCollisionEnter/OnCollisionExit/OnCollisionStay.  Also OnCollision* star methods that declare the Collision  argument but do not reference it (omitting it short-circuits the collision contact calculation).
 
-	private static List<FixRecord> mRecords = new List<FixRecord>();
-	private static List<FixRecord> mRuntimeEditModeRequiredRecords = new List<FixRecord>();
-	private Vector2 mScrollPosition;
+    private static List<FixRecord> mRecords = new List<FixRecord>();
+    private static List<FixRecord> mRuntimeEditModeRequiredRecords = new List<FixRecord>();
+    private Vector2 mScrollPosition;
 
-	[MenuItem("Oculus/Tools/OVR Performance Lint Tool")]
-	static void Init()
-	{
-		// Get existing open window or if none, make a new one:
-		EditorWindow.GetWindow(typeof(OVRLint));
-		OVRPlugin.SendEvent("perf_lint", "activated");
-		OVRLint.RunCheck();
-	}
+    [MenuItem("Oculus/Tools/OVR Performance Lint Tool")]
+    static void Init()
+    {
+        // Get existing open window or if none, make a new one:
+        EditorWindow.GetWindow(typeof(OVRLint));
+        OVRPlugin.SendEvent("perf_lint", "activated");
+        OVRLint.RunCheck();
+    }
 
-	OVRLint()
-	{
-		EditorApplication.playModeStateChanged += HandlePlayModeState;
-	}
+    OVRLint()
+    {
+        EditorApplication.playModeStateChanged += HandlePlayModeState;
+    }
 
-	private static void HandlePlayModeState(PlayModeStateChange state)
-	{
-		if (state == PlayModeStateChange.EnteredEditMode)
-		{
-			ApplyEditModeRequiredFix();
-		}
-	}
+    private static void HandlePlayModeState(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.EnteredEditMode)
+        {
+            ApplyEditModeRequiredFix();
+        }
+    }
 
-	private static void ApplyEditModeRequiredFix()
-	{
-		// Apply runtime fixes that require edit mode when applying fix
-		foreach (FixRecord record in mRuntimeEditModeRequiredRecords)
-		{
-			record.fixMethod(null, false, 0);
-			OVRPlugin.SendEvent("perf_lint_apply_fix", record.category);
-			record.complete = true;
-		}
-		mRuntimeEditModeRequiredRecords.Clear();
-	}
+    private static void ApplyEditModeRequiredFix()
+    {
+        // Apply runtime fixes that require edit mode when applying fix
+        foreach (FixRecord record in mRuntimeEditModeRequiredRecords)
+        {
+            record.fixMethod(null, false, 0);
+            OVRPlugin.SendEvent("perf_lint_apply_fix", record.category);
+            record.complete = true;
+        }
+        mRuntimeEditModeRequiredRecords.Clear();
+    }
 
-	void OnGUI()
-	{
-		GUILayout.Label("OVR Performance Lint Tool", EditorStyles.boldLabel);
-		if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.ExpandWidth(false)))
-		{
-			RunCheck();
-		}
+    void OnGUI()
+    {
+        GUILayout.Label("OVR Performance Lint Tool", EditorStyles.boldLabel);
+        if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.ExpandWidth(false)))
+        {
+            RunCheck();
+        }
 
-		string lastCategory = "";
+        string lastCategory = "";
 
-		mScrollPosition = EditorGUILayout.BeginScrollView(mScrollPosition);
+        mScrollPosition = EditorGUILayout.BeginScrollView(mScrollPosition);
 
-		for (int x = 0; x < mRecords.Count; x++)
-		{
-			FixRecord record = mRecords[x];
+        for (int x = 0; x < mRecords.Count; x++)
+        {
+            FixRecord record = mRecords[x];
 
-			if (!record.category.Equals(lastCategory))  // new category
-			{
-				lastCategory = record.category;
-				EditorGUILayout.Separator();
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Label(lastCategory, EditorStyles.label, GUILayout.Width(200));
-				bool moreThanOne = (x + 1 < mRecords.Count && mRecords[x + 1].category.Equals(lastCategory));
-				if (record.buttonNames != null && record.buttonNames.Length > 0)
-				{
-					if (moreThanOne)
-					{
-						GUILayout.Label("Apply to all:", EditorStyles.label, GUILayout.Width(75));
-						for (int y = 0; y < record.buttonNames.Length; y++)
-						{
-							if (GUILayout.Button(record.buttonNames[y], EditorStyles.toolbarButton, GUILayout.Width(200)))
-							{
-								List<FixRecord> recordsToProcess = new List<FixRecord>();
+            if (!record.category.Equals(lastCategory))  // new category
+            {
+                lastCategory = record.category;
+                EditorGUILayout.Separator();
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(lastCategory, EditorStyles.label, GUILayout.Width(200));
+                bool moreThanOne = (x + 1 < mRecords.Count && mRecords[x + 1].category.Equals(lastCategory));
+                if (record.buttonNames != null && record.buttonNames.Length > 0)
+                {
+                    if (moreThanOne)
+                    {
+                        GUILayout.Label("Apply to all:", EditorStyles.label, GUILayout.Width(75));
+                        for (int y = 0; y < record.buttonNames.Length; y++)
+                        {
+                            if (GUILayout.Button(record.buttonNames[y], EditorStyles.toolbarButton, GUILayout.Width(200)))
+                            {
+                                List<FixRecord> recordsToProcess = new List<FixRecord>();
 
-								for (int z = x; z < mRecords.Count; z++)
-								{
-									FixRecord thisRecord = mRecords[z];
-									bool isLast = false;
-									if (z + 1 >= mRecords.Count || !mRecords[z + 1].category.Equals(lastCategory))
-									{
-										isLast = true;
-									}
+                                for (int z = x; z < mRecords.Count; z++)
+                                {
+                                    FixRecord thisRecord = mRecords[z];
+                                    bool isLast = false;
+                                    if (z + 1 >= mRecords.Count || !mRecords[z + 1].category.Equals(lastCategory))
+                                    {
+                                        isLast = true;
+                                    }
 
-									if (!thisRecord.complete)
-									{
-										recordsToProcess.Add(thisRecord);
-									}
+                                    if (!thisRecord.complete)
+                                    {
+                                        recordsToProcess.Add(thisRecord);
+                                    }
 
-									if (isLast)
-									{
-										break;
-									}
-								}
+                                    if (isLast)
+                                    {
+                                        break;
+                                    }
+                                }
 
-								UnityEngine.Object[] undoObjects = new UnityEngine.Object[recordsToProcess.Count];
-								for (int z = 0; z < recordsToProcess.Count; z++)
-								{
-									undoObjects[z] = recordsToProcess[z].targetObject;
-								}
-								Undo.RecordObjects(undoObjects, record.category + " (Multiple)");
-								for (int z = 0; z < recordsToProcess.Count; z++)
-								{
-									FixRecord thisRecord = recordsToProcess[z];
-									thisRecord.fixMethod(thisRecord.targetObject, (z + 1 == recordsToProcess.Count), y);
-									OVRPlugin.SendEvent("perf_lint_apply_fix", thisRecord.category);
-									thisRecord.complete = true;
-								}
-							}
-						}
-					}
-				}
-				EditorGUILayout.EndHorizontal();
-				if (moreThanOne || record.targetObject)
-				{
-					GUILayout.Label(record.message);
-				}
-			}
+                                UnityEngine.Object[] undoObjects = new UnityEngine.Object[recordsToProcess.Count];
+                                for (int z = 0; z < recordsToProcess.Count; z++)
+                                {
+                                    undoObjects[z] = recordsToProcess[z].targetObject;
+                                }
+                                Undo.RecordObjects(undoObjects, record.category + " (Multiple)");
+                                for (int z = 0; z < recordsToProcess.Count; z++)
+                                {
+                                    FixRecord thisRecord = recordsToProcess[z];
+                                    thisRecord.fixMethod(thisRecord.targetObject, (z + 1 == recordsToProcess.Count), y);
+                                    OVRPlugin.SendEvent("perf_lint_apply_fix", thisRecord.category);
+                                    thisRecord.complete = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+                if (moreThanOne || record.targetObject)
+                {
+                    GUILayout.Label(record.message);
+                }
+            }
 
-			EditorGUILayout.BeginHorizontal();
-			GUI.enabled = !record.complete;
-			if (record.targetObject)
-			{
-				EditorGUILayout.ObjectField(record.targetObject, record.targetObject.GetType(), true);
-			}
-			else
-			{
-				GUILayout.Label(record.message);
-			}
-			if (record.buttonNames != null)
-			{
-				for (int y = 0; y < record.buttonNames.Length; y++)
-				{
-					if (GUILayout.Button(record.buttonNames[y], EditorStyles.toolbarButton, GUILayout.Width(200)))
-					{
-						if (record.targetObject != null)
-						{
-							Undo.RecordObject(record.targetObject, record.category);
-						}
+            EditorGUILayout.BeginHorizontal();
+            GUI.enabled = !record.complete;
+            if (record.targetObject)
+            {
+                EditorGUILayout.ObjectField(record.targetObject, record.targetObject.GetType(), true);
+            }
+            else
+            {
+                GUILayout.Label(record.message);
+            }
+            if (record.buttonNames != null)
+            {
+                for (int y = 0; y < record.buttonNames.Length; y++)
+                {
+                    if (GUILayout.Button(record.buttonNames[y], EditorStyles.toolbarButton, GUILayout.Width(200)))
+                    {
+                        if (record.targetObject != null)
+                        {
+                            Undo.RecordObject(record.targetObject, record.category);
+                        }
 
-						if (record.editModeRequired)
-						{
-							// Add to the fix record list that requires edit mode
-							mRuntimeEditModeRequiredRecords.Add(record);
-						}
-						else
-						{
-							// Apply the fix directly
-							record.fixMethod(record.targetObject, true, y);
-							OVRPlugin.SendEvent("perf_lint_apply_fix", record.category);
-							record.complete = true;
-						}
+                        if (record.editModeRequired)
+                        {
+                            // Add to the fix record list that requires edit mode
+                            mRuntimeEditModeRequiredRecords.Add(record);
+                        }
+                        else
+                        {
+                            // Apply the fix directly
+                            record.fixMethod(record.targetObject, true, y);
+                            OVRPlugin.SendEvent("perf_lint_apply_fix", record.category);
+                            record.complete = true;
+                        }
 
-						if (mRuntimeEditModeRequiredRecords.Count != 0)
-						{
-							// Stop the scene to apply edit mode required records
-							EditorApplication.ExecuteMenuItem("Edit/Play");
-						}
-					}
-				}
+                        if (mRuntimeEditModeRequiredRecords.Count != 0)
+                        {
+                            // Stop the scene to apply edit mode required records
+                            EditorApplication.ExecuteMenuItem("Edit/Play");
+                        }
+                    }
+                }
 
-			}
-			GUI.enabled = true;
-			EditorGUILayout.EndHorizontal();
-		}
+            }
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
+        }
 
-		EditorGUILayout.EndScrollView();
-	}
+        EditorGUILayout.EndScrollView();
+    }
 
 
-	public static int RunCheck()
-	{
-		mRecords.Clear();
-		mRuntimeEditModeRequiredRecords.Clear();
+    public static int RunCheck()
+    {
+        mRecords.Clear();
+        mRuntimeEditModeRequiredRecords.Clear();
 
-		CheckStaticCommonIssues();
+        CheckStaticCommonIssues();
 #if UNITY_ANDROID
 		CheckStaticAndroidIssues();
 #endif
 
-		if (EditorApplication.isPlaying)
-		{
-			CheckRuntimeCommonIssues();
+        if (EditorApplication.isPlaying)
+        {
+            CheckRuntimeCommonIssues();
 #if UNITY_ANDROID
 			CheckRuntimeAndroidIssues();
 #endif
-		}
+        }
 
-		mRecords.Sort(delegate (FixRecord record1, FixRecord record2)
-		{
-			return record1.category.CompareTo(record2.category);
-		});
-		return mRecords.Count;
-	}
+        mRecords.Sort(delegate (FixRecord record1, FixRecord record2)
+        {
+            return record1.category.CompareTo(record2.category);
+        });
+        return mRecords.Count;
+    }
 
-	static void AddFix(string category, string message, FixMethodDelegate method, UnityEngine.Object target, bool editModeRequired, params string[] buttons)
-	{
-		OVRPlugin.SendEvent("perf_lint_add_fix", category);
-		mRecords.Add(new FixRecord(category, message, method, target, editModeRequired, buttons));
-	}
+    static void AddFix(string category, string message, FixMethodDelegate method, UnityEngine.Object target, bool editModeRequired, params string[] buttons)
+    {
+        OVRPlugin.SendEvent("perf_lint_add_fix", category);
+        mRecords.Add(new FixRecord(category, message, method, target, editModeRequired, buttons));
+    }
 
-	static void CheckStaticCommonIssues()
-	{
-		if (OVRManager.IsUnityAlphaOrBetaVersion())
-		{
-			AddFix("General", OVRManager.UnityAlphaOrBetaVersionWarningMessage, null, null, false);
-		}
+    static void CheckStaticCommonIssues()
+    {
+        if (OVRManager.IsUnityAlphaOrBetaVersion())
+        {
+            AddFix("General", OVRManager.UnityAlphaOrBetaVersionWarningMessage, null, null, false);
+        }
 
-		if (QualitySettings.anisotropicFiltering != AnisotropicFiltering.Enable && QualitySettings.anisotropicFiltering != AnisotropicFiltering.ForceEnable)
-		{
-			AddFix("Optimize Aniso", "Anisotropic filtering is recommended for optimal image sharpness and GPU performance.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				// Ideally this would be multi-option: offer Enable or ForceEnable.
-				QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
-			}, null, false, "Fix");
-		}
+        if (QualitySettings.anisotropicFiltering != AnisotropicFiltering.Enable && QualitySettings.anisotropicFiltering != AnisotropicFiltering.ForceEnable)
+        {
+            AddFix("Optimize Aniso", "Anisotropic filtering is recommended for optimal image sharpness and GPU performance.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                // Ideally this would be multi-option: offer Enable or ForceEnable.
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
+            }, null, false, "Fix");
+        }
 
 #if UNITY_ANDROID
 		int recommendedPixelLightCount = 1;
 #else
-		int recommendedPixelLightCount = 3;
+        int recommendedPixelLightCount = 3;
 #endif
 
-		if (QualitySettings.pixelLightCount > recommendedPixelLightCount)
-		{
-			AddFix("Optimize Pixel Light Count", "For GPU performance set no more than " + recommendedPixelLightCount + " pixel lights in Quality Settings (currently " + QualitySettings.pixelLightCount + ").", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				QualitySettings.pixelLightCount = recommendedPixelLightCount;
-			}, null, false, "Fix");
-		}
+        if (QualitySettings.pixelLightCount > recommendedPixelLightCount)
+        {
+            AddFix("Optimize Pixel Light Count", "For GPU performance set no more than " + recommendedPixelLightCount + " pixel lights in Quality Settings (currently " + QualitySettings.pixelLightCount + ").", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                QualitySettings.pixelLightCount = recommendedPixelLightCount;
+            }, null, false, "Fix");
+        }
 
 #if false
 		// Should we recommend this?  Seems to be mutually exclusive w/ dynamic batching.
@@ -319,14 +317,14 @@ public class OVRLint : EditorWindow
 		}
 #endif
 
-		if ((!PlayerSettings.MTRendering || !PlayerSettings.GetMobileMTRendering(BuildTargetGroup.Android)))
-		{
-			AddFix("Optimize MT Rendering", "For CPU performance, please enable multithreaded rendering.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				PlayerSettings.SetMobileMTRendering(BuildTargetGroup.Standalone, true);
-				PlayerSettings.SetMobileMTRendering(BuildTargetGroup.Android, true);
-			}, null, false, "Fix");
-		}
+        if ((!PlayerSettings.MTRendering || !PlayerSettings.GetMobileMTRendering(BuildTargetGroup.Android)))
+        {
+            AddFix("Optimize MT Rendering", "For CPU performance, please enable multithreaded rendering.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                PlayerSettings.SetMobileMTRendering(BuildTargetGroup.Standalone, true);
+                PlayerSettings.SetMobileMTRendering(BuildTargetGroup.Android, true);
+            }, null, false, "Fix");
+        }
 
 #if UNITY_ANDROID
 		if (!PlayerSettings.use32BitDisplayBuffer)
@@ -339,271 +337,271 @@ public class OVRLint : EditorWindow
 #endif
 
 #if !UNITY_ANDROID && !USING_XR_SDK && !REQUIRES_XR_SDK
-		if (!PlayerSettings.VROculus.dashSupport)
-		{
-			AddFix("Enable Dash Integration", "We recommend to enable Dash Integration for better user experience.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				PlayerSettings.VROculus.dashSupport = true;
-			}, null, false, "Fix");
-		}
+        if (!PlayerSettings.VROculus.dashSupport)
+        {
+            AddFix("Enable Dash Integration", "We recommend to enable Dash Integration for better user experience.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                PlayerSettings.VROculus.dashSupport = true;
+            }, null, false, "Fix");
+        }
 
-		if (!PlayerSettings.VROculus.sharedDepthBuffer)
-		{
-			AddFix("Enable Depth Buffer Sharing", "We recommend to enable Depth Buffer Sharing for better user experience on Oculus Dash.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				PlayerSettings.VROculus.sharedDepthBuffer = true;
-			}, null, false, "Fix");
-		}
+        if (!PlayerSettings.VROculus.sharedDepthBuffer)
+        {
+            AddFix("Enable Depth Buffer Sharing", "We recommend to enable Depth Buffer Sharing for better user experience on Oculus Dash.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                PlayerSettings.VROculus.sharedDepthBuffer = true;
+            }, null, false, "Fix");
+        }
 #endif
 
-		BuildTargetGroup target = EditorUserBuildSettings.selectedBuildTargetGroup;
-		var tier = UnityEngine.Rendering.GraphicsTier.Tier1;
-		var tierSettings = UnityEditor.Rendering.EditorGraphicsSettings.GetTierSettings(target, tier);
+        BuildTargetGroup target = EditorUserBuildSettings.selectedBuildTargetGroup;
+        var tier = UnityEngine.Rendering.GraphicsTier.Tier1;
+        var tierSettings = UnityEditor.Rendering.EditorGraphicsSettings.GetTierSettings(target, tier);
 
-		if ((tierSettings.renderingPath == RenderingPath.DeferredShading ||
-			tierSettings.renderingPath == RenderingPath.DeferredLighting))
-		{
-			AddFix("Optimize Rendering Path", "For CPU performance, please do not use deferred shading.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				tierSettings.renderingPath = RenderingPath.Forward;
-				UnityEditor.Rendering.EditorGraphicsSettings.SetTierSettings(target, tier, tierSettings);
-			}, null, false, "Use Forward");
-		}
+        if ((tierSettings.renderingPath == RenderingPath.DeferredShading ||
+            tierSettings.renderingPath == RenderingPath.DeferredLighting))
+        {
+            AddFix("Optimize Rendering Path", "For CPU performance, please do not use deferred shading.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                tierSettings.renderingPath = RenderingPath.Forward;
+                UnityEditor.Rendering.EditorGraphicsSettings.SetTierSettings(target, tier, tierSettings);
+            }, null, false, "Use Forward");
+        }
 
-		if (PlayerSettings.stereoRenderingPath == StereoRenderingPath.MultiPass)
-		{
-			AddFix("Optimize Stereo Rendering", "For CPU performance, please enable single-pass or instanced stereo rendering.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				PlayerSettings.stereoRenderingPath = StereoRenderingPath.Instancing;
-			}, null, false, "Fix");
-		}
+        if (PlayerSettings.stereoRenderingPath == StereoRenderingPath.MultiPass)
+        {
+            AddFix("Optimize Stereo Rendering", "For CPU performance, please enable single-pass or instanced stereo rendering.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                PlayerSettings.stereoRenderingPath = StereoRenderingPath.Instancing;
+            }, null, false, "Fix");
+        }
 
-		if (LightmapSettings.lightmaps.Length > 0 && LightmapSettings.lightmapsMode != LightmapsMode.NonDirectional)
-		{
-			AddFix("Optimize Lightmap Directionality", "Switching from directional lightmaps to non-directional lightmaps can save a small amount of GPU time.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
-			}, null, false, "Switch to non-directional lightmaps");
-		}
+        if (LightmapSettings.lightmaps.Length > 0 && LightmapSettings.lightmapsMode != LightmapsMode.NonDirectional)
+        {
+            AddFix("Optimize Lightmap Directionality", "Switching from directional lightmaps to non-directional lightmaps can save a small amount of GPU time.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
+            }, null, false, "Switch to non-directional lightmaps");
+        }
 
-		if (Lightmapping.realtimeGI)
-		{
-			AddFix("Disable Realtime GI", "Disabling real-time global illumination can improve GPU performance.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				Lightmapping.realtimeGI = false;
-			}, null, false, "Set Lightmapping.realtimeGI = false.");
-		}
+        if (Lightmapping.realtimeGI)
+        {
+            AddFix("Disable Realtime GI", "Disabling real-time global illumination can improve GPU performance.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                Lightmapping.realtimeGI = false;
+            }, null, false, "Set Lightmapping.realtimeGI = false.");
+        }
 
-		var lights = GameObject.FindObjectsOfType<Light>();
-		for (int i = 0; i < lights.Length; ++i)
-		{
-			if (lights [i].type != LightType.Directional && !lights [i].bakingOutput.isBaked && IsLightBaked(lights[i]))
-			{
-				AddFix("Unbaked Lights", "The following lights in the scene are marked as Baked, but they don't have up to date lightmap data. Generate the lightmap data, or set it to auto-generate, in Window->Lighting->Settings.", null, lights[i], false, null);
-			}
+        var lights = GameObject.FindObjectsOfType<Light>();
+        for (int i = 0; i < lights.Length; ++i)
+        {
+            if (lights[i].type != LightType.Directional && !lights[i].bakingOutput.isBaked && IsLightBaked(lights[i]))
+            {
+                AddFix("Unbaked Lights", "The following lights in the scene are marked as Baked, but they don't have up to date lightmap data. Generate the lightmap data, or set it to auto-generate, in Window->Lighting->Settings.", null, lights[i], false, null);
+            }
 
-			if (lights[i].shadows != LightShadows.None && !IsLightBaked(lights[i]))
-			{
-				AddFix("Optimize Shadows", "For CPU performance, consider disabling shadows on realtime lights.", delegate (UnityEngine.Object obj, bool last, int selected)
-				{
-					Light thisLight = (Light)obj;
-					thisLight.shadows = LightShadows.None;
-				}, lights[i], false, "Set \"Shadow Type\" to \"No Shadows\"");
-			}
-		}
+            if (lights[i].shadows != LightShadows.None && !IsLightBaked(lights[i]))
+            {
+                AddFix("Optimize Shadows", "For CPU performance, consider disabling shadows on realtime lights.", delegate (UnityEngine.Object obj, bool last, int selected)
+                {
+                    Light thisLight = (Light)obj;
+                    thisLight.shadows = LightShadows.None;
+                }, lights[i], false, "Set \"Shadow Type\" to \"No Shadows\"");
+            }
+        }
 
-		var sources = GameObject.FindObjectsOfType<AudioSource>();
-		if (sources.Length > 16)
-		{
-			List<AudioSource> playingAudioSources = new List<AudioSource>();
-			foreach (var audioSource in sources)
-			{
-				if (audioSource.isPlaying)
-				{
-					playingAudioSources.Add(audioSource);
-				}
-			}
+        var sources = GameObject.FindObjectsOfType<AudioSource>();
+        if (sources.Length > 16)
+        {
+            List<AudioSource> playingAudioSources = new List<AudioSource>();
+            foreach (var audioSource in sources)
+            {
+                if (audioSource.isPlaying)
+                {
+                    playingAudioSources.Add(audioSource);
+                }
+            }
 
-			if (playingAudioSources.Count > 16)
-			{
-				// Sort playing audio sources by priority
-				playingAudioSources.Sort(delegate (AudioSource x, AudioSource y)
-				{
-					return x.priority.CompareTo(y.priority);
-				});
-				for (int i = 16; i < playingAudioSources.Count; ++i)
-				{
-					AddFix("Optimize Audio Source Count", "For CPU performance, please disable all but the top 16 AudioSources.", delegate (UnityEngine.Object obj, bool last, int selected)
-					{
-						AudioSource audioSource = (AudioSource)obj;
-						audioSource.enabled = false;
-					}, playingAudioSources[i], false, "Disable");
-				}
-			}
-		}
+            if (playingAudioSources.Count > 16)
+            {
+                // Sort playing audio sources by priority
+                playingAudioSources.Sort(delegate (AudioSource x, AudioSource y)
+                {
+                    return x.priority.CompareTo(y.priority);
+                });
+                for (int i = 16; i < playingAudioSources.Count; ++i)
+                {
+                    AddFix("Optimize Audio Source Count", "For CPU performance, please disable all but the top 16 AudioSources.", delegate (UnityEngine.Object obj, bool last, int selected)
+                    {
+                        AudioSource audioSource = (AudioSource)obj;
+                        audioSource.enabled = false;
+                    }, playingAudioSources[i], false, "Disable");
+                }
+            }
+        }
 
-		var clips = GameObject.FindObjectsOfType<AudioClip>();
-		for (int i = 0; i < clips.Length; ++i)
-		{
-			if (clips[i].loadType == AudioClipLoadType.DecompressOnLoad)
-			{
-				AddFix("Audio Loading", "For fast loading, please don't use decompress on load for audio clips", delegate (UnityEngine.Object obj, bool last, int selected)
-				{
-					AudioClip thisClip = (AudioClip)obj;
-					if (selected == 0)
-					{
-						SetAudioLoadType(thisClip, AudioClipLoadType.CompressedInMemory, last);
-					}
-					else
-					{
-						SetAudioLoadType(thisClip, AudioClipLoadType.Streaming, last);
-					}
+        var clips = GameObject.FindObjectsOfType<AudioClip>();
+        for (int i = 0; i < clips.Length; ++i)
+        {
+            if (clips[i].loadType == AudioClipLoadType.DecompressOnLoad)
+            {
+                AddFix("Audio Loading", "For fast loading, please don't use decompress on load for audio clips", delegate (UnityEngine.Object obj, bool last, int selected)
+                {
+                    AudioClip thisClip = (AudioClip)obj;
+                    if (selected == 0)
+                    {
+                        SetAudioLoadType(thisClip, AudioClipLoadType.CompressedInMemory, last);
+                    }
+                    else
+                    {
+                        SetAudioLoadType(thisClip, AudioClipLoadType.Streaming, last);
+                    }
 
-				}, clips[i], false, "Change to Compressed in Memory", "Change to Streaming");
-			}
+                }, clips[i], false, "Change to Compressed in Memory", "Change to Streaming");
+            }
 
-			if (clips[i].preloadAudioData)
-			{
-				AddFix("Audio Preload", "For fast loading, please don't preload data for audio clips.", delegate (UnityEngine.Object obj, bool last, int selected)
-				{
-					SetAudioPreload(clips[i], false, last);
-				}, clips[i], false, "Fix");
-			}
-		}
+            if (clips[i].preloadAudioData)
+            {
+                AddFix("Audio Preload", "For fast loading, please don't preload data for audio clips.", delegate (UnityEngine.Object obj, bool last, int selected)
+                {
+                    SetAudioPreload(clips[i], false, last);
+                }, clips[i], false, "Fix");
+            }
+        }
 
-		if (Physics.defaultContactOffset < 0.01f)
-		{
-			AddFix("Optimize Contact Offset", "For CPU performance, please don't use default contact offset below 0.01.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				Physics.defaultContactOffset = 0.01f;
-			}, null, false, "Fix");
-		}
+        if (Physics.defaultContactOffset < 0.01f)
+        {
+            AddFix("Optimize Contact Offset", "For CPU performance, please don't use default contact offset below 0.01.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                Physics.defaultContactOffset = 0.01f;
+            }, null, false, "Fix");
+        }
 
-		if (Physics.sleepThreshold < 0.005f)
-		{
-			AddFix("Optimize Sleep Threshold", "For CPU performance, please don't use sleep threshold below 0.005.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				Physics.sleepThreshold = 0.005f;
-			}, null, false, "Fix");
-		}
+        if (Physics.sleepThreshold < 0.005f)
+        {
+            AddFix("Optimize Sleep Threshold", "For CPU performance, please don't use sleep threshold below 0.005.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                Physics.sleepThreshold = 0.005f;
+            }, null, false, "Fix");
+        }
 
-		if (Physics.defaultSolverIterations > 8)
-		{
-			AddFix("Optimize Solver Iterations", "For CPU performance, please don't use excessive solver iteration counts.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				Physics.defaultSolverIterations = 8;
-			}, null, false, "Fix");
-		}
+        if (Physics.defaultSolverIterations > 8)
+        {
+            AddFix("Optimize Solver Iterations", "For CPU performance, please don't use excessive solver iteration counts.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                Physics.defaultSolverIterations = 8;
+            }, null, false, "Fix");
+        }
 
-		var materials = Resources.FindObjectsOfTypeAll<Material>();
-		for (int i = 0; i < materials.Length; ++i)
-		{
-			if (materials[i].shader.name.Contains("Parallax") || materials[i].IsKeywordEnabled("_PARALLAXMAP"))
-			{
-				AddFix("Optimize Shading", "For GPU performance, please don't use parallax-mapped materials.", delegate (UnityEngine.Object obj, bool last, int selected)
-				{
-					Material thisMaterial = (Material)obj;
-					if (thisMaterial.IsKeywordEnabled("_PARALLAXMAP"))
-					{
-						thisMaterial.DisableKeyword("_PARALLAXMAP");
-					}
+        var materials = Resources.FindObjectsOfTypeAll<Material>();
+        for (int i = 0; i < materials.Length; ++i)
+        {
+            if (materials[i].shader.name.Contains("Parallax") || materials[i].IsKeywordEnabled("_PARALLAXMAP"))
+            {
+                AddFix("Optimize Shading", "For GPU performance, please don't use parallax-mapped materials.", delegate (UnityEngine.Object obj, bool last, int selected)
+                {
+                    Material thisMaterial = (Material)obj;
+                    if (thisMaterial.IsKeywordEnabled("_PARALLAXMAP"))
+                    {
+                        thisMaterial.DisableKeyword("_PARALLAXMAP");
+                    }
 
-					if (thisMaterial.shader.name.Contains("Parallax"))
-					{
-						var newName = thisMaterial.shader.name.Replace("-ParallaxSpec", "-BumpSpec");
-						newName = newName.Replace("-Parallax", "-Bump");
-						var newShader = Shader.Find(newName);
-						if (newShader)
-						{
-							thisMaterial.shader = newShader;
-						}
-						else
-						{
-							Debug.LogWarning("Unable to find a replacement for shader " + materials[i].shader.name);
-						}
-					}
-				}, materials[i], false, "Fix");
-			}
-		}
+                    if (thisMaterial.shader.name.Contains("Parallax"))
+                    {
+                        var newName = thisMaterial.shader.name.Replace("-ParallaxSpec", "-BumpSpec");
+                        newName = newName.Replace("-Parallax", "-Bump");
+                        var newShader = Shader.Find(newName);
+                        if (newShader)
+                        {
+                            thisMaterial.shader = newShader;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Unable to find a replacement for shader " + materials[i].shader.name);
+                        }
+                    }
+                }, materials[i], false, "Fix");
+            }
+        }
 
-		var renderers = GameObject.FindObjectsOfType<Renderer>();
-		for (int i = 0; i < renderers.Length; ++i)
-		{
-			if (renderers[i].sharedMaterial == null)
-			{
-				AddFix("Instanced Materials", "Please avoid instanced materials on renderers.", null, renderers[i], false);
-			}
-		}
+        var renderers = GameObject.FindObjectsOfType<Renderer>();
+        for (int i = 0; i < renderers.Length; ++i)
+        {
+            if (renderers[i].sharedMaterial == null)
+            {
+                AddFix("Instanced Materials", "Please avoid instanced materials on renderers.", null, renderers[i], false);
+            }
+        }
 
-		var overlays = GameObject.FindObjectsOfType<OVROverlay>();
-		if (overlays.Length > 4)
-		{
-			AddFix("Optimize VR Layer Count", "For GPU performance, please use 4 or fewer VR layers.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				for (int i = 4; i < OVROverlay.instances.Length; ++i)
-				{
-					OVROverlay.instances[i].enabled = false;
-				}
-			}, null, false, "Fix");
-		}
+        var overlays = GameObject.FindObjectsOfType<OVROverlay>();
+        if (overlays.Length > 4)
+        {
+            AddFix("Optimize VR Layer Count", "For GPU performance, please use 4 or fewer VR layers.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                for (int i = 4; i < OVROverlay.instances.Length; ++i)
+                {
+                    OVROverlay.instances[i].enabled = false;
+                }
+            }, null, false, "Fix");
+        }
 
-		var splashScreen = PlayerSettings.virtualRealitySplashScreen;
-		if (splashScreen != null)
-		{
-			if (splashScreen.filterMode != FilterMode.Trilinear)
-			{
-				AddFix("Optimize VR Splash Filtering", "For visual quality, please use trilinear filtering on your VR splash screen.", delegate (UnityEngine.Object obj, bool last, int EditorSelectedRenderState)
-				{
-					var assetPath = AssetDatabase.GetAssetPath(splashScreen);
-					var importer = (TextureImporter)TextureImporter.GetAtPath(assetPath);
-					importer.filterMode = FilterMode.Trilinear;
-					AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-				}, null, false, "Fix");
-			}
+        var splashScreen = PlayerSettings.virtualRealitySplashScreen;
+        if (splashScreen != null)
+        {
+            if (splashScreen.filterMode != FilterMode.Trilinear)
+            {
+                AddFix("Optimize VR Splash Filtering", "For visual quality, please use trilinear filtering on your VR splash screen.", delegate (UnityEngine.Object obj, bool last, int EditorSelectedRenderState)
+                {
+                    var assetPath = AssetDatabase.GetAssetPath(splashScreen);
+                    var importer = (TextureImporter)TextureImporter.GetAtPath(assetPath);
+                    importer.filterMode = FilterMode.Trilinear;
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }, null, false, "Fix");
+            }
 
-			if (splashScreen.mipmapCount <= 1)
-			{
-				AddFix("Generate VR Splash Mipmaps", "For visual quality, please use mipmaps with your VR splash screen.", delegate (UnityEngine.Object obj, bool last, int EditorSelectedRenderState)
-				{
-					var assetPath = AssetDatabase.GetAssetPath(splashScreen);
-					var importer = (TextureImporter)TextureImporter.GetAtPath(assetPath);
-					importer.mipmapEnabled = true;
-					AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-				}, null, false, "Fix");
-			}
-		}
-	}
+            if (splashScreen.mipmapCount <= 1)
+            {
+                AddFix("Generate VR Splash Mipmaps", "For visual quality, please use mipmaps with your VR splash screen.", delegate (UnityEngine.Object obj, bool last, int EditorSelectedRenderState)
+                {
+                    var assetPath = AssetDatabase.GetAssetPath(splashScreen);
+                    var importer = (TextureImporter)TextureImporter.GetAtPath(assetPath);
+                    importer.mipmapEnabled = true;
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }, null, false, "Fix");
+            }
+        }
+    }
 
-	static void CheckRuntimeCommonIssues()
-	{
-		if (!OVRPlugin.occlusionMesh)
-		{
-			AddFix("Occlusion Mesh", "Enabling the occlusion mesh saves substantial GPU resources, generally with no visual impact. Enable unless you have an exceptional use case.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				OVRPlugin.occlusionMesh = true;
-			}, null, false, "Set OVRPlugin.occlusionMesh = true");
-		}
+    static void CheckRuntimeCommonIssues()
+    {
+        if (!OVRPlugin.occlusionMesh)
+        {
+            AddFix("Occlusion Mesh", "Enabling the occlusion mesh saves substantial GPU resources, generally with no visual impact. Enable unless you have an exceptional use case.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                OVRPlugin.occlusionMesh = true;
+            }, null, false, "Set OVRPlugin.occlusionMesh = true");
+        }
 
-		if (OVRManager.instance != null && !OVRManager.instance.useRecommendedMSAALevel)
-		{
-			AddFix("Optimize MSAA", "OVRManager can select the optimal antialiasing for the installed hardware at runtime. Recommend enabling this.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				var ovrManagers = GameObject.FindObjectsOfType<OVRManager>();
-				foreach (var ovrManager in ovrManagers)
-				{
-					ovrManager.useRecommendedMSAALevel = true;
-				}
-			}, null, true, "Stop Play and Fix");
-		}
+        if (OVRManager.instance != null && !OVRManager.instance.useRecommendedMSAALevel)
+        {
+            AddFix("Optimize MSAA", "OVRManager can select the optimal antialiasing for the installed hardware at runtime. Recommend enabling this.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                var ovrManagers = GameObject.FindObjectsOfType<OVRManager>();
+                foreach (var ovrManager in ovrManagers)
+                {
+                    ovrManager.useRecommendedMSAALevel = true;
+                }
+            }, null, true, "Stop Play and Fix");
+        }
 
-		if (UnityEngine.XR.XRSettings.eyeTextureResolutionScale > 1.5)
-		{
-			AddFix("Optimize Render Scale", "Render scale above 1.5 is extremely expensive on the GPU, with little if any positive visual benefit.", delegate (UnityEngine.Object obj, bool last, int selected)
-			{
-				UnityEngine.XR.XRSettings.eyeTextureResolutionScale = 1.5f;
-			}, null, false, "Fix");
-		}
-	}
+        if (UnityEngine.XR.XRSettings.eyeTextureResolutionScale > 1.5)
+        {
+            AddFix("Optimize Render Scale", "Render scale above 1.5 is extremely expensive on the GPU, with little if any positive visual benefit.", delegate (UnityEngine.Object obj, bool last, int selected)
+            {
+                UnityEngine.XR.XRSettings.eyeTextureResolutionScale = 1.5f;
+            }, null, false, "Fix");
+        }
+    }
 
 #if UNITY_ANDROID
 	static void CheckStaticAndroidIssues()
@@ -820,95 +818,95 @@ public class OVRLint : EditorWindow
 #endif // UNITY_ANDROID
 
 
-	enum LightmapType { Realtime = 4, Baked = 2, Mixed = 1 };
+    enum LightmapType { Realtime = 4, Baked = 2, Mixed = 1 };
 
-	static bool IsLightBaked(Light light)
-	{
-		return light.lightmapBakeType == LightmapBakeType.Baked;
-	}
+    static bool IsLightBaked(Light light)
+    {
+        return light.lightmapBakeType == LightmapBakeType.Baked;
+    }
 
-	static void SetAudioPreload(AudioClip clip, bool preload, bool refreshImmediately)
-	{
-		if (clip != null)
-		{
-			string assetPath = AssetDatabase.GetAssetPath(clip);
-			AudioImporter importer = AssetImporter.GetAtPath(assetPath) as AudioImporter;
-			if (importer != null)
-			{
-				if (preload != importer.preloadAudioData)
-				{
-					importer.preloadAudioData = preload;
+    static void SetAudioPreload(AudioClip clip, bool preload, bool refreshImmediately)
+    {
+        if (clip != null)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(clip);
+            AudioImporter importer = AssetImporter.GetAtPath(assetPath) as AudioImporter;
+            if (importer != null)
+            {
+                if (preload != importer.preloadAudioData)
+                {
+                    importer.preloadAudioData = preload;
 
-					AssetDatabase.ImportAsset(assetPath);
-					if (refreshImmediately)
-					{
-						AssetDatabase.Refresh();
-					}
-				}
-			}
-		}
-	}
+                    AssetDatabase.ImportAsset(assetPath);
+                    if (refreshImmediately)
+                    {
+                        AssetDatabase.Refresh();
+                    }
+                }
+            }
+        }
+    }
 
-	static void SetAudioLoadType(AudioClip clip, AudioClipLoadType loadType, bool refreshImmediately)
-	{
-		if (clip != null)
-		{
-			string assetPath = AssetDatabase.GetAssetPath(clip);
-			AudioImporter importer = AssetImporter.GetAtPath(assetPath) as AudioImporter;
-			if (importer != null)
-			{
-				if (loadType != importer.defaultSampleSettings.loadType)
-				{
-					AudioImporterSampleSettings settings = importer.defaultSampleSettings;
-					settings.loadType = loadType;
-					importer.defaultSampleSettings = settings;
+    static void SetAudioLoadType(AudioClip clip, AudioClipLoadType loadType, bool refreshImmediately)
+    {
+        if (clip != null)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(clip);
+            AudioImporter importer = AssetImporter.GetAtPath(assetPath) as AudioImporter;
+            if (importer != null)
+            {
+                if (loadType != importer.defaultSampleSettings.loadType)
+                {
+                    AudioImporterSampleSettings settings = importer.defaultSampleSettings;
+                    settings.loadType = loadType;
+                    importer.defaultSampleSettings = settings;
 
-					AssetDatabase.ImportAsset(assetPath);
-					if (refreshImmediately)
-					{
-						AssetDatabase.Refresh();
-					}
-				}
-			}
-		}
-	}
+                    AssetDatabase.ImportAsset(assetPath);
+                    if (refreshImmediately)
+                    {
+                        AssetDatabase.Refresh();
+                    }
+                }
+            }
+        }
+    }
 
-	public static void SetTextureUseMips(Texture texture, bool useMips, bool refreshImmediately)
-	{
-		if (texture != null)
-		{
-			string assetPath = AssetDatabase.GetAssetPath(texture);
-			TextureImporter tImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-			if (tImporter != null && tImporter.mipmapEnabled != useMips)
-			{
-				tImporter.mipmapEnabled = useMips;
+    public static void SetTextureUseMips(Texture texture, bool useMips, bool refreshImmediately)
+    {
+        if (texture != null)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(texture);
+            TextureImporter tImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (tImporter != null && tImporter.mipmapEnabled != useMips)
+            {
+                tImporter.mipmapEnabled = useMips;
 
-				AssetDatabase.ImportAsset(assetPath);
-				if (refreshImmediately)
-				{
-					AssetDatabase.Refresh();
-				}
-			}
-		}
-	}
+                AssetDatabase.ImportAsset(assetPath);
+                if (refreshImmediately)
+                {
+                    AssetDatabase.Refresh();
+                }
+            }
+        }
+    }
 
-	static T FindComponentInParents<T>(GameObject obj) where T : Component
-	{
-		T component = null;
-		if (obj != null)
-		{
-			Transform parent = obj.transform.parent;
-			if (parent != null)
-			{
-				do
-				{
-					component = parent.GetComponent(typeof(T)) as T;
-					parent = parent.parent;
-				} while (parent != null && component == null);
-			}
-		}
-		return component;
-	}
+    static T FindComponentInParents<T>(GameObject obj) where T : Component
+    {
+        T component = null;
+        if (obj != null)
+        {
+            Transform parent = obj.transform.parent;
+            if (parent != null)
+            {
+                do
+                {
+                    component = parent.GetComponent(typeof(T)) as T;
+                    parent = parent.parent;
+                } while (parent != null && component == null);
+            }
+        }
+        return component;
+    }
 }
 
 #endif

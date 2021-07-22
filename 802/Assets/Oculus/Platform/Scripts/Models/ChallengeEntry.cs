@@ -2,44 +2,44 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
+    using System.Collections.Generic;
 
-  public class ChallengeEntry
-  {
-    public readonly byte[] ExtraData;
-    public readonly int Rank;
-    public readonly long Score;
-    public readonly DateTime Timestamp;
-    public readonly User User;
-
-
-    public ChallengeEntry(IntPtr o)
+    public class ChallengeEntry
     {
-      ExtraData = CAPI.ovr_ChallengeEntry_GetExtraData(o);
-      Rank = CAPI.ovr_ChallengeEntry_GetRank(o);
-      Score = CAPI.ovr_ChallengeEntry_GetScore(o);
-      Timestamp = CAPI.ovr_ChallengeEntry_GetTimestamp(o);
-      User = new User(CAPI.ovr_ChallengeEntry_GetUser(o));
-    }
-  }
+        public readonly byte[] ExtraData;
+        public readonly int Rank;
+        public readonly long Score;
+        public readonly DateTime Timestamp;
+        public readonly User User;
 
-  public class ChallengeEntryList : DeserializableList<ChallengeEntry> {
-    public ChallengeEntryList(IntPtr a) {
-      var count = (int)CAPI.ovr_ChallengeEntryArray_GetSize(a);
-      _Data = new List<ChallengeEntry>(count);
-      for (int i = 0; i < count; i++) {
-        _Data.Add(new ChallengeEntry(CAPI.ovr_ChallengeEntryArray_GetElement(a, (UIntPtr)i)));
-      }
 
-      TotalCount = CAPI.ovr_ChallengeEntryArray_GetTotalCount(a);
-      _PreviousUrl = CAPI.ovr_ChallengeEntryArray_GetPreviousUrl(a);
-      _NextUrl = CAPI.ovr_ChallengeEntryArray_GetNextUrl(a);
+        public ChallengeEntry(IntPtr o)
+        {
+            ExtraData = CAPI.ovr_ChallengeEntry_GetExtraData(o);
+            Rank = CAPI.ovr_ChallengeEntry_GetRank(o);
+            Score = CAPI.ovr_ChallengeEntry_GetScore(o);
+            Timestamp = CAPI.ovr_ChallengeEntry_GetTimestamp(o);
+            User = new User(CAPI.ovr_ChallengeEntry_GetUser(o));
+        }
     }
 
-    public readonly ulong TotalCount;
-  }
+    public class ChallengeEntryList : DeserializableList<ChallengeEntry>
+    {
+        public ChallengeEntryList(IntPtr a)
+        {
+            var count = (int)CAPI.ovr_ChallengeEntryArray_GetSize(a);
+            _Data = new List<ChallengeEntry>(count);
+            for (int i = 0; i < count; i++)
+            {
+                _Data.Add(new ChallengeEntry(CAPI.ovr_ChallengeEntryArray_GetElement(a, (UIntPtr)i)));
+            }
+
+            TotalCount = CAPI.ovr_ChallengeEntryArray_GetTotalCount(a);
+            _PreviousUrl = CAPI.ovr_ChallengeEntryArray_GetPreviousUrl(a);
+            _NextUrl = CAPI.ovr_ChallengeEntryArray_GetNextUrl(a);
+        }
+
+        public readonly ulong TotalCount;
+    }
 }

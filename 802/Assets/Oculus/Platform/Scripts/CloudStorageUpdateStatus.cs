@@ -3,22 +3,22 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum CloudStorageUpdateStatus : int
-  {
-    [Description("UNKNOWN")]
-    Unknown,
+    public enum CloudStorageUpdateStatus : int
+    {
+        [Description("UNKNOWN")]
+        Unknown,
 
-    [Description("OK")]
-    Ok,
+        [Description("OK")]
+        Ok,
 
-    [Description("BETTER_VERSION_STORED")]
-    BetterVersionStored,
+        [Description("BETTER_VERSION_STORED")]
+        BetterVersionStored,
 
-    [Description("MANUAL_MERGE_REQUIRED")]
-    ManualMergeRequired,
+        [Description("MANUAL_MERGE_REQUIRED")]
+        ManualMergeRequired,
 
-  }
+    }
 
 }

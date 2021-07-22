@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Keyboard : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class Keyboard : MonoBehaviour
                 buffer = buffer + EventSystem.current.currentSelectedGameObject.name;
                 inputfield.text = buffer;
                 break;
-        }        
+        }
     }
 
     public void keyboardReset()

@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Enable/Disable of tooltip notifications 
 public class HoverManager : MonoBehaviour
 {
     public GameObject infoText;
-    private bool currentOn=false;
-    
+    private bool currentOn = false;
+
     public void enableText()
     {
         currentOn = true;
@@ -22,9 +22,9 @@ public class HoverManager : MonoBehaviour
     IEnumerator ExampleCoroutine()
     {
         yield return new WaitForSeconds(1);
-        if(currentOn == true) infoText.SetActive(true);
+        if (currentOn == true) infoText.SetActive(true);
 
     }
 
-    
+
 }

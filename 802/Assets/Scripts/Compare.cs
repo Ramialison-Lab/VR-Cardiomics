@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
- // Needed to access onscreen elements
-using UnityEngine.Networking; 
+﻿using System;
+// Needed to access onscreen elements
 using System.Collections.Generic;
 using System.Globalization;
-using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
+using UnityEngine.UI;
 
 /*****
  * 
@@ -75,15 +73,15 @@ public class Compare : MonoBehaviour
     // Links the CSV button to the browser
     public void OpenLinkJSPlugin()
     {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         JsOpenWindow(csvUrl);
-        #endif
+#endif
     }
 
     // Processes the clicking for contrasts
     public void click()
     {
-		
+
         if (first == 2)
         {
 
@@ -161,17 +159,17 @@ public class Compare : MonoBehaviour
 
         for (int i = 0; i < pieces1.Count; i++)
         {
-			
+
             int tmp = Array.IndexOf(hp, pieces1[i]);
             System.Text.StringBuilder strBuilder = new System.Text.StringBuilder(pieceString);
             strBuilder[tmp * 2] = '2'; // (*2) to account for the underscores
             pieceString = strBuilder.ToString();
 
         }
-			
+
         for (int i = 0; i < pieces2.Count; i++)
         {
-			
+
             int tmp = Array.IndexOf(hp, pieces2[i]);
             System.Text.StringBuilder strBuilder = new System.Text.StringBuilder(pieceString);
             strBuilder[tmp * 2] = '1';
@@ -365,7 +363,7 @@ public class Compare : MonoBehaviour
 
     // What happens when you click on the '20 more' button
     private void moreBtnActions()
-    { 
+    {
 
         add20(true);
 
@@ -392,7 +390,7 @@ public class Compare : MonoBehaviour
         {
             rows = 20;
         }
-			
+
         if (more)
         { // Destroy the more button
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("moreC");
@@ -483,7 +481,7 @@ public class Compare : MonoBehaviour
             StopCoroutine(cr);
             img.SetActive(false);
         }
-			
+
         BC.interactable = true;
         SB.value = 1;
         dlButton.SetActive(false);

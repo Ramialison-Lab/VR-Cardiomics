@@ -3,22 +3,22 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum PermissionGrantStatus : int
-  {
-    [Description("UNKNOWN")]
-    Unknown,
+    public enum PermissionGrantStatus : int
+    {
+        [Description("UNKNOWN")]
+        Unknown,
 
-    [Description("GRANTED")]
-    Granted,
+        [Description("GRANTED")]
+        Granted,
 
-    [Description("DENIED")]
-    Denied,
+        [Description("DENIED")]
+        Denied,
 
-    [Description("BLOCKED")]
-    Blocked,
+        [Description("BLOCKED")]
+        Blocked,
 
-  }
+    }
 
 }

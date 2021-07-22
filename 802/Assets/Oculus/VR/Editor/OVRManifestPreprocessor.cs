@@ -19,10 +19,10 @@ limitations under the License.
 
 ************************************************************************************/
 
-using UnityEngine;
-using UnityEditor;
 using System.IO;
 using System.Xml;
+using UnityEditor;
+using UnityEngine;
 
 public class OVRManifestPreprocessor
 {

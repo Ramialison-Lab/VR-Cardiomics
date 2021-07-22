@@ -1,10 +1,9 @@
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using Oculus.Avatar;
+using System;
+using UnityEngine;
 
-public class OvrAvatarRenderComponent : MonoBehaviour {
+public class OvrAvatarRenderComponent : MonoBehaviour
+{
 
     private bool firstSkinnedUpdate = true;
     public SkinnedMeshRenderer mesh;
@@ -131,5 +130,5 @@ public class OvrAvatarRenderComponent : MonoBehaviour {
         return mat;
     }
 
-   
+
 }

@@ -12,14 +12,12 @@ permissions and limitations under the License.
 ************************************************************************************/
 
 using UnityEngine;
-using System.Collections;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 /// <summary>
 /// UI pointer driven by gaze input.
 /// </summary>
-public class OVRGazePointer : OVRCursor {
+public class OVRGazePointer : OVRCursor
+{
     private Transform gazeIcon; //the transform that rotates according to our movement
 
     [Tooltip("Should the pointer be hidden when not over interactive objects.")]
@@ -107,7 +105,7 @@ public class OVRGazePointer : OVRCursor {
             if (hideByDefault)
             {
                 // fade the cursor out with time
-                strengthFromShowRequest =  Mathf.Clamp01(1 - (Time.time - lastShowRequestTime) / showTimeoutPeriod);
+                strengthFromShowRequest = Mathf.Clamp01(1 - (Time.time - lastShowRequestTime) / showTimeoutPeriod);
             }
             else
             {
@@ -152,14 +150,14 @@ public class OVRGazePointer : OVRCursor {
 
         _instance = this;
 
-		gazeIcon = transform.Find("GazeIcon");
+        gazeIcon = transform.Find("GazeIcon");
         progressIndicator = transform.GetComponent<OVRProgressIndicator>();
     }
 
-    void Update ()
+    void Update()
     {
-		if (rayTransform == null && Camera.main != null)
-			rayTransform = Camera.main.transform;
+        if (rayTransform == null && Camera.main != null)
+            rayTransform = Camera.main.transform;
 
         // Move the gaze cursor to keep it in the middle of the view
         transform.position = rayTransform.position + rayTransform.forward * depth;
@@ -219,10 +217,10 @@ public class OVRGazePointer : OVRCursor {
         }
 
         Quaternion iconRotation = gazeIcon.rotation;
-		iconRotation.SetLookRotation(transform.rotation * new Vector3(0, 0, 1));
-		gazeIcon.rotation = iconRotation;
+        iconRotation.SetLookRotation(transform.rotation * new Vector3(0, 0, 1));
+        gazeIcon.rotation = iconRotation;
 
-		positionSetsThisFrame = 0;
+        positionSetsThisFrame = 0;
     }
 
     /// <summary>

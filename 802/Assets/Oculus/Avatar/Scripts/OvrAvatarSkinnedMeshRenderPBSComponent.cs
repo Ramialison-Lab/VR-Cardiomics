@@ -1,9 +1,9 @@
-using UnityEngine;
-using System.Collections;
-using System;
 using Oculus.Avatar;
+using System;
+using UnityEngine;
 
-public class OvrAvatarSkinnedMeshRenderPBSComponent : OvrAvatarRenderComponent {
+public class OvrAvatarSkinnedMeshRenderPBSComponent : OvrAvatarRenderComponent
+{
 
     bool isMaterialInitilized = false;
 

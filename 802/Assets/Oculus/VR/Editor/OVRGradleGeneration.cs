@@ -26,34 +26,30 @@ limitations under the License.
 #endif
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using System.Diagnostics;
-using System.Threading;
+using System.IO;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEngine;
 #if UNITY_ANDROID
 using UnityEditor.Android;
 #endif
 
 [InitializeOnLoad]
 public class OVRGradleGeneration
-	: IPreprocessBuildWithReport, IPostprocessBuildWithReport
+    : IPreprocessBuildWithReport, IPostprocessBuildWithReport
 #if UNITY_ANDROID
 	, IPostGenerateGradleAndroidProject
 #endif
 {
-	public OVRADBTool adbTool;
-	public Process adbProcess;
+    public OVRADBTool adbTool;
+    public Process adbProcess;
 
-	public int callbackOrder { get { return 99999; } }
-	static private System.DateTime buildStartTime;
-	static private System.Guid buildGuid;
+    public int callbackOrder { get { return 99999; } }
+    static private System.DateTime buildStartTime;
+    static private System.Guid buildGuid;
 
 #if UNITY_ANDROID
 	private const string prefName = "OVRAutoIncrementVersionCode_Enabled";
@@ -61,18 +57,18 @@ public class OVRGradleGeneration
 	static bool autoIncrementVersion = false;
 #endif
 
-	static OVRGradleGeneration()
-	{
-		EditorApplication.delayCall += OnDelayCall;
-	}
+    static OVRGradleGeneration()
+    {
+        EditorApplication.delayCall += OnDelayCall;
+    }
 
-	static void OnDelayCall()
-	{
+    static void OnDelayCall()
+    {
 #if UNITY_ANDROID
 		autoIncrementVersion = PlayerPrefs.GetInt(prefName, 0) != 0;
 		Menu.SetChecked(menuItemAutoIncVersion, autoIncrementVersion);
 #endif
-	}
+    }
 
 #if UNITY_ANDROID
 	[MenuItem(menuItemAutoIncVersion)]
@@ -89,8 +85,8 @@ public class OVRGradleGeneration
 	}
 #endif
 
-	public void OnPreprocessBuild(BuildReport report)
-	{
+    public void OnPreprocessBuild(BuildReport report)
+    {
 #if UNITY_ANDROID && !(USING_XR_SDK && UNITY_2019_3_OR_NEWER)
 		// Generate error when Vulkan is selected as the perferred graphics API, which is not currently supported in Unity XR
 		if (!PlayerSettings.GetUseDefaultGraphicsAPIs(BuildTarget.Android))
@@ -129,161 +125,161 @@ public class OVRGradleGeneration
 				", you must first \"Remove\" the Oculus XR Plugin package, and then \"Install\" the package at the verified version. Be sure to remove, then install, not just upgrade.");
 #endif
 
-		buildStartTime = System.DateTime.Now;
-		buildGuid = System.Guid.NewGuid();
+        buildStartTime = System.DateTime.Now;
+        buildGuid = System.Guid.NewGuid();
 
-		if (!report.summary.outputPath.Contains("OVRGradleTempExport"))
-		{
-			OVRPlugin.SetDeveloperMode(OVRPlugin.Bool.True);
-			OVRPlugin.AddCustomMetadata("build_type", "standard");
-		}
+        if (!report.summary.outputPath.Contains("OVRGradleTempExport"))
+        {
+            OVRPlugin.SetDeveloperMode(OVRPlugin.Bool.True);
+            OVRPlugin.AddCustomMetadata("build_type", "standard");
+        }
 
-		OVRPlugin.AddCustomMetadata("build_guid", buildGuid.ToString());
-		OVRPlugin.AddCustomMetadata("target_platform", report.summary.platform.ToString());
+        OVRPlugin.AddCustomMetadata("build_guid", buildGuid.ToString());
+        OVRPlugin.AddCustomMetadata("target_platform", report.summary.platform.ToString());
 #if !UNITY_2019_3_OR_NEWER
 		OVRPlugin.AddCustomMetadata("scripting_runtime_version", UnityEditor.PlayerSettings.scriptingRuntimeVersion.ToString());
 #endif
-		if (report.summary.platform == UnityEditor.BuildTarget.StandaloneWindows
-			|| report.summary.platform == UnityEditor.BuildTarget.StandaloneWindows64)
-		{
-			OVRPlugin.AddCustomMetadata("target_oculus_platform", "rift");
-		}
+        if (report.summary.platform == UnityEditor.BuildTarget.StandaloneWindows
+            || report.summary.platform == UnityEditor.BuildTarget.StandaloneWindows64)
+        {
+            OVRPlugin.AddCustomMetadata("target_oculus_platform", "rift");
+        }
 #if BUILDSESSION
 		StreamWriter writer = new StreamWriter("build_session", false);
 		UnityEngine.Debug.LogFormat("Build Session: {0}", buildGuid.ToString());
 		writer.WriteLine(buildGuid.ToString());
 		writer.Close();
 #endif
-	}
+    }
 
-	public void OnPostGenerateGradleAndroidProject(string path)
-	{
-		UnityEngine.Debug.Log("OVRGradleGeneration triggered.");
+    public void OnPostGenerateGradleAndroidProject(string path)
+    {
+        UnityEngine.Debug.Log("OVRGradleGeneration triggered.");
 
-		var targetOculusPlatform = new List<string>();
-		if (OVRDeviceSelector.isTargetDeviceQuestFamily)
-		{
-			targetOculusPlatform.Add("quest");
-		}
-		OVRPlugin.AddCustomMetadata("target_oculus_platform", String.Join("_", targetOculusPlatform.ToArray()));
-		UnityEngine.Debug.LogFormat("QuestFamily = {0}: Quest = {1}, Quest2 = {2}", 
-			OVRDeviceSelector.isTargetDeviceQuestFamily,
-			OVRDeviceSelector.isTargetDeviceQuest,
-			OVRDeviceSelector.isTargetDeviceQuest2);
+        var targetOculusPlatform = new List<string>();
+        if (OVRDeviceSelector.isTargetDeviceQuestFamily)
+        {
+            targetOculusPlatform.Add("quest");
+        }
+        OVRPlugin.AddCustomMetadata("target_oculus_platform", String.Join("_", targetOculusPlatform.ToArray()));
+        UnityEngine.Debug.LogFormat("QuestFamily = {0}: Quest = {1}, Quest2 = {2}",
+            OVRDeviceSelector.isTargetDeviceQuestFamily,
+            OVRDeviceSelector.isTargetDeviceQuest,
+            OVRDeviceSelector.isTargetDeviceQuest2);
 
 #if UNITY_2019_3_OR_NEWER
-		string gradleBuildPath = Path.Combine(path, "../launcher/build.gradle");
+        string gradleBuildPath = Path.Combine(path, "../launcher/build.gradle");
 #else
 		string gradleBuildPath = Path.Combine(path, "build.gradle");
 #endif
-		bool v2SigningEnabled = true;
+        bool v2SigningEnabled = true;
 
-		if (File.Exists(gradleBuildPath))
-		{
-			try
-			{
-				string gradle = File.ReadAllText(gradleBuildPath);
-				int v2Signingindex = gradle.IndexOf("v2SigningEnabled false");
+        if (File.Exists(gradleBuildPath))
+        {
+            try
+            {
+                string gradle = File.ReadAllText(gradleBuildPath);
+                int v2Signingindex = gradle.IndexOf("v2SigningEnabled false");
 
-				if (v2Signingindex != -1)
-				{
-					//v2 Signing flag found, ensure the correct value is set based on platform.
-					if (v2SigningEnabled)
-					{
-						gradle = gradle.Replace("v2SigningEnabled false", "v2SigningEnabled true");
-						System.IO.File.WriteAllText(gradleBuildPath, gradle);
-					}
-				}
-				else
-				{
-					//v2 Signing flag missing, add it right after the key store password and set the value based on platform.
-					int keyPassIndex = gradle.IndexOf("keyPassword");
-					if (keyPassIndex != -1)
-					{
-						int v2Index = gradle.IndexOf("\n", keyPassIndex) + 1;
-						if(v2Index != -1)
-						{
-							gradle = gradle.Insert(v2Index, "v2SigningEnabled " + (v2SigningEnabled ? "true" : "false") + "\n");
-							System.IO.File.WriteAllText(gradleBuildPath, gradle);
-						}
-					}
-				}
-			}
-			catch (System.Exception e)
-			{
-				UnityEngine.Debug.LogWarningFormat("Unable to overwrite build.gradle, error {0}", e.Message);
-			}
-		}
-		else
-		{
-			UnityEngine.Debug.LogWarning("Unable to locate build.gradle");
-		}
+                if (v2Signingindex != -1)
+                {
+                    //v2 Signing flag found, ensure the correct value is set based on platform.
+                    if (v2SigningEnabled)
+                    {
+                        gradle = gradle.Replace("v2SigningEnabled false", "v2SigningEnabled true");
+                        System.IO.File.WriteAllText(gradleBuildPath, gradle);
+                    }
+                }
+                else
+                {
+                    //v2 Signing flag missing, add it right after the key store password and set the value based on platform.
+                    int keyPassIndex = gradle.IndexOf("keyPassword");
+                    if (keyPassIndex != -1)
+                    {
+                        int v2Index = gradle.IndexOf("\n", keyPassIndex) + 1;
+                        if (v2Index != -1)
+                        {
+                            gradle = gradle.Insert(v2Index, "v2SigningEnabled " + (v2SigningEnabled ? "true" : "false") + "\n");
+                            System.IO.File.WriteAllText(gradleBuildPath, gradle);
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogWarningFormat("Unable to overwrite build.gradle, error {0}", e.Message);
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Unable to locate build.gradle");
+        }
 
-		PatchAndroidManifest(path);
-	}
+        PatchAndroidManifest(path);
+    }
 
-	public void PatchAndroidManifest(string path)
-	{
-		string manifestFolder = Path.Combine(path, "src/main");
-		string file = manifestFolder + "/AndroidManifest.xml";
+    public void PatchAndroidManifest(string path)
+    {
+        string manifestFolder = Path.Combine(path, "src/main");
+        string file = manifestFolder + "/AndroidManifest.xml";
 
-		bool patchedSecurityConfig = false;
-		// If Enable NSC Config, copy XML file into gradle project
-		OVRProjectConfig projectConfig = OVRProjectConfig.GetProjectConfig();
-		if (projectConfig != null)
-		{
-			if (projectConfig.enableNSCConfig)
-			{
-				// If no custom xml security path is specified, look for the default location in the integrations package.
-				string securityConfigFile = projectConfig.securityXmlPath;
-				if (string.IsNullOrEmpty(securityConfigFile))
-				{
-					securityConfigFile = GetOculusProjectNetworkSecConfigPath();
-				}
-				else
-				{
-					Uri configUri = new Uri(Path.GetFullPath(securityConfigFile));
-					Uri projectUri = new Uri(Application.dataPath);
-					Uri relativeUri = projectUri.MakeRelativeUri(configUri);
-					securityConfigFile = relativeUri.ToString();
-				}
+        bool patchedSecurityConfig = false;
+        // If Enable NSC Config, copy XML file into gradle project
+        OVRProjectConfig projectConfig = OVRProjectConfig.GetProjectConfig();
+        if (projectConfig != null)
+        {
+            if (projectConfig.enableNSCConfig)
+            {
+                // If no custom xml security path is specified, look for the default location in the integrations package.
+                string securityConfigFile = projectConfig.securityXmlPath;
+                if (string.IsNullOrEmpty(securityConfigFile))
+                {
+                    securityConfigFile = GetOculusProjectNetworkSecConfigPath();
+                }
+                else
+                {
+                    Uri configUri = new Uri(Path.GetFullPath(securityConfigFile));
+                    Uri projectUri = new Uri(Application.dataPath);
+                    Uri relativeUri = projectUri.MakeRelativeUri(configUri);
+                    securityConfigFile = relativeUri.ToString();
+                }
 
-				string xmlDirectory = Path.Combine(path, "src/main/res/xml");
-				try
-				{
-					if (!Directory.Exists(xmlDirectory))
-					{
-						Directory.CreateDirectory(xmlDirectory);
-					}
-					File.Copy(securityConfigFile, Path.Combine(xmlDirectory, "network_sec_config.xml"), true);
-					patchedSecurityConfig = true;
-				}
-				catch (Exception e)
-				{
-					UnityEngine.Debug.LogError(e.Message);
-				}
-			}
-		}
+                string xmlDirectory = Path.Combine(path, "src/main/res/xml");
+                try
+                {
+                    if (!Directory.Exists(xmlDirectory))
+                    {
+                        Directory.CreateDirectory(xmlDirectory);
+                    }
+                    File.Copy(securityConfigFile, Path.Combine(xmlDirectory, "network_sec_config.xml"), true);
+                    patchedSecurityConfig = true;
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError(e.Message);
+                }
+            }
+        }
 
-		OVRManifestPreprocessor.PatchAndroidManifest(file, enableSecurity: patchedSecurityConfig);
-	}
+        OVRManifestPreprocessor.PatchAndroidManifest(file, enableSecurity: patchedSecurityConfig);
+    }
 
-	private static string GetOculusProjectNetworkSecConfigPath()
-	{
-		var so = ScriptableObject.CreateInstance(typeof(OVRPluginUpdaterStub));
-		var script = MonoScript.FromScriptableObject(so);
-		string assetPath = AssetDatabase.GetAssetPath(script);
-		string editorDir = Directory.GetParent(assetPath).FullName;
-		string configAssetPath = Path.GetFullPath(Path.Combine(editorDir, "network_sec_config.xml"));
-		Uri configUri = new Uri(configAssetPath);
-		Uri projectUri = new Uri(Application.dataPath);
-		Uri relativeUri = projectUri.MakeRelativeUri(configUri);
+    private static string GetOculusProjectNetworkSecConfigPath()
+    {
+        var so = ScriptableObject.CreateInstance(typeof(OVRPluginUpdaterStub));
+        var script = MonoScript.FromScriptableObject(so);
+        string assetPath = AssetDatabase.GetAssetPath(script);
+        string editorDir = Directory.GetParent(assetPath).FullName;
+        string configAssetPath = Path.GetFullPath(Path.Combine(editorDir, "network_sec_config.xml"));
+        Uri configUri = new Uri(configAssetPath);
+        Uri projectUri = new Uri(Application.dataPath);
+        Uri relativeUri = projectUri.MakeRelativeUri(configUri);
 
-		return relativeUri.ToString();
-	}
+        return relativeUri.ToString();
+    }
 
-	public void OnPostprocessBuild(BuildReport report)
-	{
+    public void OnPostprocessBuild(BuildReport report)
+    {
 #if UNITY_ANDROID
 		if(autoIncrementVersion)
 		{
@@ -324,13 +320,13 @@ public class OVRGradleGeneration
 			OVRPlugin.AddCustomMetadata("build_output_size", fileInfo.Length.ToString());
 		}
 #endif
-		if (!report.summary.outputPath.Contains("OVRGradleTempExport"))
-		{
-			OVRPlugin.SendEvent("build_complete", (System.DateTime.Now - buildStartTime).TotalSeconds.ToString(), "ovrbuild");
+        if (!report.summary.outputPath.Contains("OVRGradleTempExport"))
+        {
+            OVRPlugin.SendEvent("build_complete", (System.DateTime.Now - buildStartTime).TotalSeconds.ToString(), "ovrbuild");
 #if BUILDSESSION
 			UnityEngine.Debug.LogFormat("build_complete: {0}", (System.DateTime.Now - buildStartTime).TotalSeconds.ToString());
 #endif
-		}
+        }
 
 #if UNITY_ANDROID
 		if (!isExporting)
@@ -381,7 +377,7 @@ public class OVRGradleGeneration
 			}
 		}
 #endif
-	}
+    }
 
 #if UNITY_ANDROID
 	public bool WaitForProcess;

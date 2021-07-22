@@ -2,23 +2,19 @@
 
 namespace Oculus.Platform.Models
 {
-  using System;
-  using System.Collections;
-  using Oculus.Platform.Models;
-  using System.Collections.Generic;
-  using UnityEngine;
+    using System;
 
-  public class SystemPermission
-  {
-    public readonly bool HasPermission;
-    public readonly PermissionGrantStatus PermissionGrantStatus;
-
-
-    public SystemPermission(IntPtr o)
+    public class SystemPermission
     {
-      HasPermission = CAPI.ovr_SystemPermission_GetHasPermission(o);
-      PermissionGrantStatus = CAPI.ovr_SystemPermission_GetPermissionGrantStatus(o);
+        public readonly bool HasPermission;
+        public readonly PermissionGrantStatus PermissionGrantStatus;
+
+
+        public SystemPermission(IntPtr o)
+        {
+            HasPermission = CAPI.ovr_SystemPermission_GetHasPermission(o);
+            PermissionGrantStatus = CAPI.ovr_SystemPermission_GetPermissionGrantStatus(o);
+        }
     }
-  }
 
 }

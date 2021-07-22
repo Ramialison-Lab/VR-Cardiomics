@@ -3,25 +3,25 @@
 namespace Oculus.Platform
 {
 
-  using Description = System.ComponentModel.DescriptionAttribute;
+    using Description = System.ComponentModel.DescriptionAttribute;
 
-  public enum MatchmakingCriterionImportance : int
-  {
-    [Description("REQUIRED")]
-    Required,
+    public enum MatchmakingCriterionImportance : int
+    {
+        [Description("REQUIRED")]
+        Required,
 
-    [Description("HIGH")]
-    High,
+        [Description("HIGH")]
+        High,
 
-    [Description("MEDIUM")]
-    Medium,
+        [Description("MEDIUM")]
+        Medium,
 
-    [Description("LOW")]
-    Low,
+        [Description("LOW")]
+        Low,
 
-    [Description("UNKNOWN")]
-    Unknown,
+        [Description("UNKNOWN")]
+        Unknown,
 
-  }
+    }
 
 }

@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
-using System.Collections.Generic;
-using System;
 
 /*****
  * 
@@ -49,7 +46,7 @@ public class dPanel : MonoBehaviour
         }
 
         // So we dont accidentally try and print more genes than we actually have
-        int max = 20; 
+        int max = 20;
         if (Colour.valuesCount - upTo < 20)
         {
             max = Colour.valuesCount - upTo;
@@ -109,7 +106,7 @@ public class dPanel : MonoBehaviour
 
     public void reset()
     {
-		
+
     }
 
     public static string SentenceCase(string input)

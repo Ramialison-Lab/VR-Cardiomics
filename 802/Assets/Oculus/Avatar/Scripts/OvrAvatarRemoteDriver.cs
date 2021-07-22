@@ -1,8 +1,7 @@
-using UnityEngine;
-using System.Collections;
+using Oculus.Avatar;
 using System;
 using System.Collections.Generic;
-using Oculus.Avatar;
+using UnityEngine;
 
 public class OvrAvatarRemoteDriver : OvrAvatarDriver
 {
@@ -31,7 +30,7 @@ public class OvrAvatarRemoteDriver : OvrAvatarDriver
 
     public override void UpdateTransforms(IntPtr sdkAvatar)
     {
-        switch(Mode)
+        switch (Mode)
         {
             case PacketMode.SDK:
                 UpdateFromSDKPacket(sdkAvatar);
