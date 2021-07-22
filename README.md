@@ -18,5 +18,6 @@ A sample of fake gene expressions is provided under:
 Assets/Resources/fake_mouse_expression_data.txt
 ```
 
-In order to change expression data, import *.txt* file in Ressources folder. The expression data can simply be changed by using the *Scriptholder* Object in Unity. The attached Script *Colour* stores the datapath of the csv file named *CSV name*. Enter the name of the csv file within ressource strucutre or corresponding datapath if stored otherwise. 
+In order to change expression data, import *.txt* file in Ressources folder. The expression data can simply be changed by using the *Scriptholder* Object in Unity. The attached Script *Colour* stores the datapath of the csv file named *CSV name*. Enter the name of the csv file within ressource strucutre or corresponding datapath if stored otherwise.
+
 ![CSVpath](https://user-images.githubusercontent.com/79250095/126587353-91838b1c-c559-4013-af3b-3e2313960c66.PNG)
