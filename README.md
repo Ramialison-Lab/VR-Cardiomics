@@ -1,8 +1,10 @@
-# 3DheartProject
+# 3D-cardiomics-VR
 
 ## Overview
 
-3D-Cardiomics provides a framework to map multi dimensional data (such as intensity and location of gene expression) on to 3D models in a heatmap-like manner in VR. In our use case the intensity is the level of gene expression of those expressed in the adult heart, and the location is this expression level in 18 discrete pieces of the heart as measured by RNA-seq. 
+3D-Cardiomics provides a framework to map multi dimensional data (such as intensity and location of gene expression) on to 3D models in a heatmap-like manner in VR. In our use case the intensity is the level of gene expression of those expressed in the adult heart, and the location is this expression level in 18 discrete pieces of the heart as measured by RNA-seq.
+
+This code supports VR devices as listed below, our [Web applicatipn](https://github.com/Ramialison-Lab/3DCardiomics) and [zSpace](https://github.com/Ramialison-Lab/3DCardiomicsVRzSpace) are available as well.
 
 ## Supported Devices
 
