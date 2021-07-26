@@ -90,7 +90,7 @@ public class Colour : MonoBehaviour
     public Sprite normEnabledSprite;
     public Sprite normDisabledSprite;
 
-    public string csvName = "dataset2207";
+    public string csvName = "fake_mouse_expression_data";
 
     public Sprite colourBlind;
 
