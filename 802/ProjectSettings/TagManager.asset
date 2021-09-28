@@ -12,6 +12,10 @@ TagManager:
   - slice
   - keyboard
   - controllerButton
+  - Detector
+  - object
+  - KeyboardDocking
+  - handleframe
   layers:
   - Default
   - TransparentFX

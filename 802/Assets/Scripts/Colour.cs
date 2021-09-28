@@ -51,6 +51,8 @@ public class Colour : MonoBehaviour
     // The comparison values to the current gene
 
     // Provides easy access to all pieces of the heart to iterate over
+
+    //TBD not generic !!!
     public static string[] hp = new string[18] {
         "A_1", "A_2", "A_3", "A_4",
         "B_1", "B_2", "B_3", "B_4",
@@ -90,21 +92,27 @@ public class Colour : MonoBehaviour
     public Sprite normEnabledSprite;
     public Sprite normDisabledSprite;
 
-    public string csvName = "fake_mouse_expression_data";
+    private UploadFileLog uploadfilelog;
+    // public string csvName = "fake_mouse_expression_data";
+    public string csvName;
 
     public Sprite colourBlind;
 
     public GameObject loadingSpinner;
+    private ObjectManager objectManager;
 
     public Text gText;
     // Allows you access to the geneBtn text
     public Text mText;
     // Mode text
-    private static int alength = 18;
+
+    //TBD generic!!
     public InputField geneCopyField;
     public Text geneText;
     public Text geneOriginalText;
     private LogFile logFile;
+    public String selectModel = "0";
+    public int totalNumberPieces = 0;
 
     public float[] expCopy;
     public float[] expOriginal;
@@ -115,15 +123,27 @@ public class Colour : MonoBehaviour
     private float originalMin;
     private float heatMax;
     private float heatMin;
-    private int counterOriginal, counterCopy = 0;
+    // private int counterOriginal, counterCopy = 0;
 
+    private GameObject model;
 
     // Run on initial load
     void Start()
     {
-        expCopy = new float[alength];
-        expOriginal = new float[alength];
-        expHeatMap = new float[alength];
+        objectManager = GameObject.Find("ScriptHolder").GetComponent<ObjectManager>();
+        objectManager = GameObject.Find("ScriptHolder").GetComponent<ObjectManager>();
+        objectManager.initiateModel();
+
+
+        totalNumberPieces = objectManager.getPiecesOfObject();
+
+        uploadfilelog = gameObject.GetComponent<UploadFileLog>();
+        csvName = uploadfilelog.getFileName();
+        Debug.Log(csvName);
+        expCopy = new float[totalNumberPieces];
+        expOriginal = new float[totalNumberPieces];
+        expHeatMap = new float[totalNumberPieces];
+
 
 
         logFile = FindObjectOfType<LogFile>();
@@ -134,7 +154,6 @@ public class Colour : MonoBehaviour
 
         //LoadDataset();
         LoadDatasetFORWEBPLAYER();
-        resetColour();
 
         // Must be called AFTER LoadDatasetFORWEBPLAYER / LoadDataset
         InitExpressionDataNameIndexMapping();
@@ -146,6 +165,10 @@ public class Colour : MonoBehaviour
 #endif
     }
 
+    public void setSelectModel(string selectModel)
+    {
+        this.selectModel = selectModel;
+    }
 
     // Reset everything to how it was at the start
     public void Reset()
@@ -176,7 +199,7 @@ public class Colour : MonoBehaviour
         var compare = GameObject.Find("Compare").GetComponentInChildren<Compare>();
         var dpanel = GameObject.Find("Dropdown/dList/dContent");
 
-        scripts.GetComponent<Explode>().Reset();
+        // TBD Explode Reset
 
         GameObject.Find("MainCamera").GetComponent<Selection>().Reset();
         if (compare) compare.reset();
@@ -210,7 +233,7 @@ public class Colour : MonoBehaviour
             char delim = ',';
             string[] cols;
             cols = line.Split(delim);
-            float[] floats = new float[18];
+            float[] floats = new float[totalNumberPieces];
 
             // Populate the array with values
             for (int j = 1; j < cols.Length; j++)
@@ -236,7 +259,7 @@ public class Colour : MonoBehaviour
     public void SetMaxValue()
     {
         maxValue = 0;
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < totalNumberPieces; i++)
         {
             maxValue = Mathf.Max(maxValue, values[i].Values.Max());
         }
@@ -273,7 +296,7 @@ public class Colour : MonoBehaviour
             .ToArray();
     }
 
-    public IEnumerator InitValidGeneNames(string csvFilenameBase = "valid_gene_names")
+    public IEnumerator InitValidGeneNames(string csvFilenameBase = "valid_names")
     {
         int yield_every = 1000;
 
@@ -340,11 +363,9 @@ public class Colour : MonoBehaviour
         SetMaxValue();
 
         currentGene = geneName.Trim();
-        string copyGene = geneCopyField.text;
 
         CurrentGeneSet = null;
         int geneIndex = FindIndexOfGene(geneName);
-        int copyGeneIndex = FindIndexOfGene(copyGene.Trim());
 
         // If the gene name was found, load that dataset into the pieces
         if (geneIndex > -1)
@@ -363,7 +384,7 @@ public class Colour : MonoBehaviour
             float lMin = 100;
             if (norm)
             { // Find the local min and max if in normalised mode
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < totalNumberPieces; i++)
                 {
                     if (values[geneIndex].Values[i] > lMax)
                     {
@@ -375,57 +396,16 @@ public class Colour : MonoBehaviour
                     }
                 }
             }
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < totalNumberPieces; i++)
             {
-                colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin);
-                safeOriginal(values[geneIndex].Values[i], lMax, lMin);
-                geneOriginalText.text = SentenceCase(geneName);
-            }
-            logFile.writeToFile(SentenceCase(geneName), false);
+                colourHeartPiece(hp[i], values[geneIndex].Values[i], lMax, lMin, true);
 
-        }
-        else
-        {
-            // Update current gene info
-            gText.text = "Current gene: None";
-            resetColour();
-            //Debug.Log ("Gene with name " + geneName + " not found.");
-            content.GetComponent<PanelScript>().sleep();
-        }
-
-        if (copyGeneIndex > -1)
-        {
-
-            if (panel)
-            {
-                computeDistancesP(copyGeneIndex);
-                //baseGene = currentGene;
+                //TBD  use matching panel for name
+                //geneOriginalText.text = SentenceCase(geneName);
             }
 
-            float lMax = -1;
-            float lMin = 100;
-            if (norm)
-            { // Find the local min and max if in normalised mode
-                for (int i = 0; i < 18; i++)
-                {
-                    if (values[copyGeneIndex].Values[i] > lMax)
-                    {
-                        lMax = values[copyGeneIndex].Values[i];
-                    }
-                    if (values[copyGeneIndex].Values[i] < lMin)
-                    {
-                        lMin = values[copyGeneIndex].Values[i];
-                    }
-                }
-            }
-            for (int i = 0; i < 18; i++)
-            {
-                colourHeartPiece(copyhp[i], values[copyGeneIndex].Values[i], lMax, lMin);
-                safeCopy(values[copyGeneIndex].Values[i], lMax, lMin);
-                GameObject.Find("GeneName").GetComponentInChildren<Text>().text = SentenceCase(copyGene);
-            }
-            logFile.writeToFile(SentenceCase(copyGene), true);
 
+            //logFile.writeToFile(SentenceCase(geneName), false);
 
         }
         else
@@ -438,62 +418,62 @@ public class Colour : MonoBehaviour
         }
     }
 
-    private void safeOriginal(float exp, float lMax, float lMin)
-    {
-        expOriginal[counterOriginal] = exp;
-        counterOriginal++;
+    //private void safeOriginal(float exp, float lMax, float lMin)
+    //{
+    //    expOriginal[counterOriginal] = exp;
+    //    counterOriginal++;
 
-        originalMax = lMax;
-        originalMin = lMin;
-        calculateHeatMapData();
+    //    originalMax = lMax;
+    //    originalMin = lMin;
+    //    calculateHeatMapData();
 
-        if (counterOriginal >= alength)
-        {
-            counterOriginal = 0;
+    //    if (counterOriginal >= totalNumberPieces)
+    //    {
+    //        counterOriginal = 0;
 
-        }
+    //    }
 
-    }
+    //}
 
-    private void safeCopy(float exp, float lMax, float lMin)
-    {
-        expCopy[counterCopy] = exp;
-        counterCopy++;
+    //private void safeCopy(float exp, float lMax, float lMin)
+    //{
+    //    expCopy[counterCopy] = exp;
+    //    counterCopy++;
 
-        copyMax = lMax;
-        copyMin = lMin;
-        calculateHeatMapData();
+    //    copyMax = lMax;
+    //    copyMin = lMin;
+    //    calculateHeatMapData();
 
-        if (counterCopy >= alength)
-        {
-            counterCopy = 0;
-        }
-    }
+    //    if (counterCopy >= totalNumberPieces)
+    //    {
+    //        counterCopy = 0;
+    //    }
+    //}
 
-    public void calculateHeatMapData()
-    {
-        for (int i = 0; i < alength; i++)
-        {
-            expHeatMap[i] = Math.Abs(expOriginal[i] - expCopy[i]);
-        }
+    //public void calculateHeatMapData()
+    //{
+    //    for (int i = 0; i < totalNumberPieces; i++)
+    //    {
+    //        expHeatMap[i] = Math.Abs(expOriginal[i] - expCopy[i]);
+    //    }
 
-        heatMax = Math.Max(copyMax, originalMax);
-        heatMin = Math.Min(copyMin, originalMin);
+    //    heatMax = Math.Max(copyMax, originalMax);
+    //    heatMin = Math.Min(copyMin, originalMin);
 
 
-    }
+    //}
 
-    public void colorHEatMap()
-    {
-        geneOriginalText.text = SentenceCase(currentGene) + " - " + SentenceCase(geneCopyField.text);
-        GetComponent<InputControl>().callResetHeatMap();
+    //public void colorHEatMap()
+    //{
+    //    geneOriginalText.text = SentenceCase(currentGene) + " - " + SentenceCase(geneCopyField.text);
+    //    GetComponent<InputControl>().callResetHeatMap();
 
-        for (int i = 0; i < 18; i++)
-        {
-            colourHeartPiece(hp[i], expHeatMap[i], heatMax, heatMin);
-        }
+    //    for (int i = 0; i < totalNumberPieces; i++)
+    //    {
+    //        colourHeartPiece(hp[i], expHeatMap[i], heatMax, heatMin);
+    //    }
 
-    }
+    //}
 
 
     public IEnumerator ColourByGeneSet(GeneSet geneset)
@@ -502,7 +482,7 @@ public class Colour : MonoBehaviour
         int yield_every = 10;
         float yield_time = 0.05f;
 
-        loadingSpinner.SetActive(true);
+        // loadingSpinner.SetActive(true);
 
         // allGeneNames gets populated on startup - we can't do anything until it's filled
         while (!_allGenes_ready)
@@ -521,7 +501,7 @@ public class Colour : MonoBehaviour
         // valid genes in the uploaded gene set which are absent in the expression data
         var missingGenes = new List<string>();
 
-        var averageValues = new float[18];
+        var averageValues = new float[totalNumberPieces];
 
         int count = 0;
         foreach (string geneName in geneset.Genes)
@@ -549,7 +529,7 @@ public class Colour : MonoBehaviour
                 Debug.LogError("ERROR: Gene '" + geneName + "' is not a valid mouse gene name.");
                 JsAlert(geneName + " is not a valid MGI mouse gene symbol (GRCm38, MGI vM9). " +
                         "Maybe you need to convert your gene identifiers at http://www.informatics.jax.org/batch ?");
-                loadingSpinner.SetActive(false);
+                //loadingSpinner.SetActive(false);
                 //return;
                 yield break;
             }
@@ -567,13 +547,13 @@ public class Colour : MonoBehaviour
 #endif
 
 #if UNITY_EDITOR
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < totalNumberPieces; i++)
             {
                 //   Debug.Log("Gene: " + geneName + ", Piece " + i.ToString() + ", Value: " + expressionForGene[i].ToString());
             }
 #endif
             // sum
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < totalNumberPieces; i++)
             {
                 averageValues[i] += expressionForGene[i];
             }
@@ -592,14 +572,14 @@ public class Colour : MonoBehaviour
         }
 
         // divide by number of genes in the set to obtain the average
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < totalNumberPieces; i++)
         {
             averageValues[i] /= geneset.Genes.Count;
         }
         yield return null;
 
 #if UNITY_EDITOR
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < totalNumberPieces; i++)
         {
             Debug.Log("Piece " + i.ToString() + " average: " + averageValues[i].ToString());
         }
@@ -612,22 +592,22 @@ public class Colour : MonoBehaviour
         maxValue = averageValues.Max();
         var minValue = averageValues.Min();
         // norm = true;
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < totalNumberPieces; i++)
         {
-            colourHeartPiece(hp[i], averageValues[i], maxValue, minValue);
+            colourHeartPiece(hp[i], averageValues[i], maxValue, minValue, true);
             yield return null;
         }
 
         SetGeneSetLabels(geneset.Name, geneset.Description);
 
-        loadingSpinner.SetActive(false);
+        //loadingSpinner.SetActive(false);
     }
 
     public void SetGeneSetLabels(string name, string description)
     {
-        GameObject.Find("GeneSetName").GetComponent<Text>().text = name;
-        var descLabel = GameObject.Find("GeneSetDescription").GetComponent<Text>();
-        descLabel.text = description;
+        //GameObject.Find("GeneSetName").GetComponent<Text>().text = name;
+        //var descLabel = GameObject.Find("GeneSetDescription").GetComponent<Text>();
+        //descLabel.text = description;
 
         /*
         descLabel.alignment = TextAnchor.MiddleRight;
@@ -657,11 +637,11 @@ public class Colour : MonoBehaviour
 
         // Compute mean of I row (CurrentV)
         float valuesImean = 0;
-        for (int j = 0; j < 18; j++)
+        for (int j = 0; j < totalNumberPieces; j++)
         {
             valuesImean = valuesImean + valuesI[j];
         }
-        valuesImean = valuesImean * (1 / (float)18); // Correct
+        valuesImean = valuesImean * (1 / (float)totalNumberPieces); // Correct
 
         for (int i = 0; i < valuesCount; i++)
         {
@@ -674,15 +654,15 @@ public class Colour : MonoBehaviour
 
             // Compute mean of J row (NextV)
             float valuesJmean = 0;
-            for (int j = 0; j < 18; j++)
+            for (int j = 0; j < totalNumberPieces; j++)
             {
                 valuesJmean = valuesJmean + valuesJ[j];
             }
-            valuesJmean = valuesJmean * (1 / (float)18); //Correct
+            valuesJmean = valuesJmean * (1 / (float)totalNumberPieces); //Correct
 
             // Compute Zone1
             float zone1 = 0;
-            for (int j = 0; j < 18; j++)
+            for (int j = 0; j < totalNumberPieces; j++)
             {
                 zone1 = zone1 + ((valuesI[j] - valuesImean) * (valuesJ[j] - valuesJmean));
             }
@@ -690,7 +670,7 @@ public class Colour : MonoBehaviour
 
             // Compute Zone2
             float zone2 = 0;
-            for (int j = 0; j < 18; j++)
+            for (int j = 0; j < totalNumberPieces; j++)
             {
                 zone2 = zone2 + Mathf.Pow((valuesI[j] - valuesImean), 2);
             }
@@ -698,7 +678,7 @@ public class Colour : MonoBehaviour
 
             // Compute Zone3
             float zone3 = 0;
-            for (int j = 0; j < 18; j++)
+            for (int j = 0; j < totalNumberPieces; j++)
             {
                 zone3 = zone3 + Mathf.Pow((valuesJ[j] - valuesJmean), 2);
             }
@@ -732,9 +712,8 @@ public class Colour : MonoBehaviour
     }
 
     // Colours a given heart piece based on the expression value
-    public void colourHeartPiece(string heartPiece, float exp, float lMax, float lMin)
+    public void colourHeartPiece(string heartPiece, float exp, float lMax, float lMin, bool org)
     {
-
         // Declare variables
         float rgb = 255;
         float t;
@@ -788,8 +767,66 @@ public class Colour : MonoBehaviour
         g.SetKeys(gck, new GradientAlphaKey[0]); // Make all colours visible
 
         // Associate a decimal with a colour and change the heart piece
-        GameObject.Find(heartPiece).GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
-        GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t);
+        //GameObject.Find(heartPiece).GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
+
+        //TBD 
+    if(org)
+        {    
+            foreach (GameObject gameObj in GameObject.FindObjectsOfType<GameObject>())
+            {
+                if (gameObj.name == heartPiece)
+                {
+                    if (gameObj.transform.root.name == selectModel)
+                    {                            
+                       // if (SentenceCase(currentGene) != gameObj.transform.root.gameObject.GetComponent<StoreDataManager>().getCurrentGene())
+                        {              
+                            gameObj.transform.root.gameObject.GetComponent<StoreDataManager>().addData(heartPiece, exp.ToString());
+                        }
+                        gameObj.transform.root.gameObject.GetComponent<StoreDataManager>().addName(SentenceCase(currentGene));
+                        // TBD this line blocks code from using A/N view
+                        
+                        gameObj.transform.root.gameObject.GetComponent<StoreDataManager>().setNorm(norm);
+                        gameObj.GetComponent<Renderer>().material.color = g.Evaluate(t);
+
+                        logFile.writeToFile(gameObj.transform.root.name, currentGene, norm);
+                    }
+                }
+            }
+
+        //GameObject.Find(heartPiece).GetComponent<Renderer>().material.color = g.Evaluate(t); 
+        }
+        else if(!org)
+        {
+
+            foreach (GameObject gameObj in GameObject.FindObjectsOfType<GameObject>())
+            {
+                if (gameObj.name == heartPiece && gameObj.transform.root.name == model.name)
+                {
+
+                        gameObj.GetComponent<Renderer>().material.color = g.Evaluate(t);
+                    
+                }
+            }
+        }
+    }
+
+    public void adjustNorm()
+    {
+        norm = !norm;
+
+        if (!norm)
+        {
+            normButton.image.overrideSprite = normDisabledSprite;
+        }
+        else
+        {
+            normButton.image.overrideSprite = null;
+        }
+    }
+
+    public void setModelGameobject(GameObject model)
+    {
+        this.model = model;
     }
 
     // Resets the colour of all the heart pieces back to white
@@ -797,7 +834,7 @@ public class Colour : MonoBehaviour
     {
 
         // Resets all heart pieces to white
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < totalNumberPieces; i++)
         {
             GameObject.Find(hp[i]).GetComponent<Renderer>().material.color = Color.white;
         }

@@ -24,21 +24,15 @@ public class PanelScript : MonoBehaviour
     private int upto;
     public ArrayList geneList = new ArrayList();
     private ArrayList plainLevel = new ArrayList();
-    private LogFile logFile;
 
     void Start()
     {
-        logFile = FindObjectOfType<LogFile>();
-
         // LH.SetActive(false);
     }
 
     // Fills the data grid of the 'ListHolder' table and makes it visible
     public void generateTable(int geneId)
     {
-        combinedView.SetActive(true);
-        heatMap.SetActive(true);
-
         upto = 1;
 
         // Destroy all previous cells before making table again
@@ -176,13 +170,6 @@ public class PanelScript : MonoBehaviour
         geneList.Add(similiarity);
     }
 
-    public void writeSimilarGeneToLog()
-    {
-        foreach (string str in geneList)
-        {
-            logFile.exportGenelist(str);
-        }
-    }
 
     public void wake()
     {

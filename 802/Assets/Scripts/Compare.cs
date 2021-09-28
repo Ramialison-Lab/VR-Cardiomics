@@ -81,10 +81,8 @@ public class Compare : MonoBehaviour
     // Processes the clicking for contrasts
     public void click()
     {
-
         if (first == 2)
         {
-
             if (pieces2.Count > 0)
             {
                 // Hide complement button
@@ -120,6 +118,7 @@ public class Compare : MonoBehaviour
         {
             if (first == 0)
             {
+
                 dlButton.SetActive(false);
                 sortButton.SetActive(false);
 

@@ -44,7 +44,7 @@ public class FileUpload : MonoBehaviour
         GeneSet genes = null;
         try
         {
-            loadingSpinner.SetActive(true);
+            //loadingSpinner.SetActive(true);
             var json = JSONObject.Parse(jsonText);
             var filename = json.GetString("filename");
             var data = json.GetString("data");
@@ -58,7 +58,7 @@ public class FileUpload : MonoBehaviour
         }
         catch
         {
-            loadingSpinner.SetActive(false);
+            //loadingSpinner.SetActive(false);
         }
 
         StartCoroutine(GameObject.Find("ScriptHolder").GetComponent<Colour>().ColourByGeneSet(genes));
@@ -69,7 +69,7 @@ public class FileUpload : MonoBehaviour
         GeneSet genes = null;
         try
         {
-            loadingSpinner.SetActive(true);
+            //loadingSpinner.SetActive(true);
 
             TextAsset textAsset = Resources.Load("genesets/" + resourceName) as TextAsset;
             genes = ParseGeneSet(textAsset.text);
@@ -79,7 +79,7 @@ public class FileUpload : MonoBehaviour
         }
         catch
         {
-            loadingSpinner.SetActive(false);
+            //loadingSpinner.SetActive(false);
         }
 
         return genes;
