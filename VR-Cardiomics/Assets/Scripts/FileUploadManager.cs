@@ -11,6 +11,7 @@ public class FileUploadManager : MonoBehaviour
     public GameObject canvas;
     private string path = "Assets/Resources";
     private string nameFile;
+    private int y = 50;
     void Start()
     {
         DirectoryInfo dir = new DirectoryInfo(path);
@@ -28,12 +29,23 @@ public class FileUploadManager : MonoBehaviour
                     nameFile = nameFile.Substring(11);
                     nameFile = nameFile.Remove(nameFile.Length - 4);
 
-                    numberFiles++;
+                    Debug.Log(nameFile);
 
-                    files = Instantiate(filePrefab, canvas.transform);
-                    files.transform.localPosition = new Vector3(150 * numberFiles - 150, 50, 0);
+                    if (nameFile != "valid_names" ) if (nameFile != "GENE-DESCRIPTION-TSV_MGI_9.tsv")
+                    {
+                        numberFiles++;
+                        
+                        
+                        files = Instantiate(filePrefab, canvas.transform);
+                            Debug.Log(numberFiles);
 
-                    files.GetComponentInChildren<Text>().text = nameFile;
+                            if(numberFiles == 4) { numberFiles = -1; y = -250;}
+                            files.transform.localPosition = new Vector3(150 * numberFiles - 150, y, 0);
+                            
+            
+                            files.GetComponentInChildren<Text>().text = nameFile;
+                      
+                    }
                 }
 
             }
